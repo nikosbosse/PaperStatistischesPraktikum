@@ -1,0 +1,44 @@
+\chapter{Implementing Trading Strategies}\label{ch:predictions}
+
+
+\chapter{Trading Strategies}
+intorduction: Idea and Process
+We compare different Trading Strategies. With the Goal of Predicting Stocks this is interesting in and of itself. For the purpose of the project it also serves as a baseline to compare our Trading Strategy against. 
+
+
+
+\subsection{Mean Reversion Models}
+Idea: We compute some mean. Then compare the current value to that mean. We compute a Z-Score --> Decision to buy or sell
+Needed: Economic Theory. Something like. Mean fluctuates around some unknown true value
+
+\subsubsection{Cumulative Mean on Actual Values}
+Idea: 
+Plot: Cumulative Mean vs. Actual Time Series
+--> We see that the cumulative mean does not capture the time series well. Trend is always behind the current development, since we have a trend
+
+Plot / Table: Money we make from this trading strategy --> Comparison to Buy and Hold
+
+\subsubsection{Cumulative Mean on FD of Log Values / on returns of stock}
+Idea: percentage change from daay to day reverts to a mean. 
+
+
+\subsubsection{Comparison of 90d and 30d moving averages}
+Idea: If 30d averages is above 90d average, then sell. And vice versa
+
+\subsubsection{Mean Reversion Portfolio}
+Idea: Look at entire portfolio
+Always sell the two best performing and buy the two current worst performing stocks
+
+
+\subsection{Pairs Trading}
+
+
+
+\section{Trading Strategies Based on Our Predictions}
+
+
+
+\section{Hybrid Trading Strategies}
+Take Mean of different predictions?
+
+

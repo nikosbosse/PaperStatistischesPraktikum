@@ -1,0 +1,104 @@
+\chapter{Predicting Stocks}\label{ch:predictions}
+
+
+\section{Predictions Using Machine Learning}
+
+\section{Predictions Using Time Series}
+\subsection{Idea/Process and Evaluation}
+irgendwas in der Richtung: wir benutzen Time Series Modelle, machen Predictions und gucken uns am Ende dann den Mean Squared Error an. Sinnvollerweise immer die ersten 10 Perioden verwerfen, um den MSE vergleichbar zu machen zwischen allen Gruppen, auch denen, bei denen die ersten paar Perioden nicht definiert sind. 	
+In-Sample vs. Out of Sample Prediction?
+Do we need a Training, Validation and Test Period? Probably yes, since the respective next value was also used for validation, not only testing (we choose the model that minimizes MSE)
+
+\subsection{Data Preparation}
+% Überlegung: Data Preparation Steps hier oder bei Data?
+
+The Data exhibits a trend. We take the log of the data in order to transform the data so that we get an approximate percentage interpretation:
+
+Figure2: Plot of Log closing prices.
+Also ACF and PACF plots
+
+We see that the time series exhibits strong autocorrelation through the first lag. We therefore take first differences. 
+
+The data then looks like this: 
+Figure3: FD of Log closing prices. Entweder alle oder einige zum Beispiel
+fig.savefig('/srv/shared/StatistischesPraktikumReport/Figures/all_log_adjclose_fd_and_qq.png')
+Eventuell auch mit QQ-Plot
+
+Visually the data looks like white noise. Also the mean of those values is close to zero
+
+Table1: means of the values
+
+Looking at the QQ-plot (explanation) we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. 
+
+
+\subsection{Predictions With Random Walks}
+A random walk follows (and is the same as AR(1)??? MA(1))
+XXXXXXXX
+Predictions for period t + 1 are therefore exactly the value at time t. --> We do that on the FD of log-values scale but we could also do it on the real scale
+
+Confidence Intervals are computed as
+XXXXXXXX
+
+Fitting: 
+Our Code fits an RW model, prediicts the next value, compares it to the real value for the MSE and then adds the true value to the time series used for predicting the next value. (we could have done this simpler, by just taking the values of the previous period as prediction for the current one. 
+
+Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
+Table: MSE
+
+\subsection{Predictions With AR(x) Models}
+AR(x) models follow
+XXXXXX
+
+Die Frage ist so ein bisschen, ob wir versuchen sollen, die ganze Zeitreihe mit einem einzelnen Fit zu beschreiben, oder ob wir jede Periode ein neues Modell fitten sollten. 
+Table: MSE
+Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
+
+\subsection{Predictions With ARMA Models}
+ARMA() follows
+XXXXXXX
+
+
+Auto-ARMA
+
+
+\subsection{Predictions With GARCH Models}
+GARCH follows 
+XXXXXXX
+
+Idea behind GARCH
+
+predictions
+fitting
+confidence intervals
+MSE
+
+Plot: Squared time series
+
+
+
+\subsection{Summary of Prediction with Time Series Models}
+Table: MSE all
+Figure: All predicted values?
+
+
+\section{Hybrid Prediction}
+
+\subsection{ARMAX Predictions}
+ARMAX works like this: 
+XXXXXX
+
+Predictions
+Confidence Intervals
+
+
+Predictors can be 
+- Using weather forecasts --> ARMAX
+- Number of Tweets?
+- Sentiments from Machine Learning Algorithm
+- Predictions made by the Algorithm
+
+
+
+\subsection{Weighted Average of Predictions}
+a) of different time series models
+b) of time series and ML models
