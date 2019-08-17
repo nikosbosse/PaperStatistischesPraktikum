@@ -18,15 +18,27 @@ Figure2: Plot of Log closing prices.
 %\input{figrues.pgf}
 
 Also ACF and PACF plots
-\begin{adjustbox}{width=.9\textwidth,center}
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/all_daily_stock_prices.pgf}
-\end{adjustbox}
+    \end{adjustbox}  
+    \caption{Caption}
+    \label{fig:Daily Stock Prices for all Stocks in the Data Set}
+\end{figure}{}
+
+
+
+
 
 
 
 We see that the time series exhibits strong autocorrelation through the first lag. We therefore take first differences. 
 
 The data then looks like this: 
+
+
+
 Figure3: FD of Log closing prices. Entweder alle oder einige zum Beispiel
 fig.savefig('/srv/shared/StatistischesPraktikumReport/Figures/all_log_adjclose_fd_and_qq.png')
 Eventuell auch mit QQ-Plot
