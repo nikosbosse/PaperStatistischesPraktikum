@@ -15,7 +15,11 @@ Do we need a Training, Validation and Test Period? Probably yes, since the respe
 The Data exhibits a trend. We take the log of the data in order to transform the data so that we get an approximate percentage interpretation:
 
 Figure2: Plot of Log closing prices.
+%\input{figrues.pgf}
+
 Also ACF and PACF plots
+\input{figures/all_daily_stock_prices.pgf}
+
 
 We see that the time series exhibits strong autocorrelation through the first lag. We therefore take first differences. 
 
