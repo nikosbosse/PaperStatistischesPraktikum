@@ -12,7 +12,35 @@ Do we need a Training, Validation and Test Period? Probably yes, since the respe
 \subsection{Data Preparation}
 % Überlegung: Data Preparation Steps hier oder bei Data?
 
-The Data exhibits a trend. We take the log of the data in order to transform the data so that we get an approximate percentage interpretation:
+We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all} shows the variance of the time series is not constant over time. 
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/cum_sd_all_stocks.pgf}
+    \end{adjustbox}  
+    \caption{Standard deviation for the time series of stock prices. The value of the graph at point t is calculated as the standard deviation of all recorded values of the respective stocks up to that point t.}
+    \label{fig:cum_sd_all}
+\end{figure}{}
+
+We take the log of the data in order to stabilize the variance and convert the exponential trend to a linear trend. 
+
+ALTERNATIVE: calculate returns and plot variance of returns. 
+
+We look at autocorrelation and partial autocorrelation. 
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/all_autocorr_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for all stocks}
+    \label{fig:acf_pacf_log_adjclose}
+\end{figure}{}
+
+
+
+
+
 
 Figure2: Plot of Log closing prices.
 %\input{figrues.pgf}
@@ -23,8 +51,8 @@ Also ACF and PACF plots
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/all_daily_stock_prices.pgf}
     \end{adjustbox}  
-    \caption{Caption}
-    \label{fig:Daily Stock Prices for all Stocks in the Data Set}
+    \caption{Daily Stock Prices for all Stocks in the Data Set}
+    \label{fig:adj_close_all}
 \end{figure}{}
 
 
