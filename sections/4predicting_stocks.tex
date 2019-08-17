@@ -12,9 +12,11 @@ Do we need a Training, Validation and Test Period? Probably yes, since the respe
 \subsection{Data Preparation}
 % Überlegung: Data Preparation Steps hier oder bei Data?
 
+\subsubsection*{The Original Data}
+
 We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all} shows the variance of the time series is not constant over time. 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/cum_sd_all_stocks.pgf}
@@ -23,6 +25,7 @@ We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all
     \label{fig:cum_sd_all}
 \end{figure}{}
 
+\subsubsection*{The Log-Transformed Data}
 We take the log of the data in order to stabilize the variance and convert the exponential trend to a linear trend. 
 
 ALTERNATIVE: calculate returns and plot variance of returns. 
@@ -37,45 +40,58 @@ We look at autocorrelation and partial autocorrelation.
     \label{fig:acf_pacf_log_adjclose}
 \end{figure}{}
 
+We can see a pattern of autocorrelations and a strong partial autocorrelation at lag 1 that indicated we should use differencing. 
+
+\subsubsection*{First Difference of the Log-Transformed Data}
+Therefore we apply first differencing to the data. 
+We replot the data: 
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/all_fd_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{First difference of log adjusted closing prices}
+    \label{fig:all_fd_log_adjclose}
+\end{figure}{}
+
+Visually the data looks like white noise. Also the mean of those values is close to zero. The data now all seem to have mean zero and there is no trend visible. 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \input{figures/means_fd_log_values.tex}
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}{}
+
+ACF and PACF look more or less fine. 
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/all_autocorr_log_adjclose_fd.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for all stocks}
+    \label{fig:all_autocorr_fd_log_adjclose}
+\end{figure}{}
 
 
+\subsubsection*{Looking at QQ-Plots}
+Looking at the QQ-plot (explanation) we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. 
 
-
-
-Figure2: Plot of Log closing prices.
-%\input{figrues.pgf}
-
-Also ACF and PACF plots
 \begin{figure}[h]
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/all_daily_stock_prices.pgf}
+    %\input{figures/all_qq_plot_fd_log_adjclose.pgf}
     \end{adjustbox}  
-    \caption{Daily Stock Prices for all Stocks in the Data Set}
-    \label{fig:adj_close_all}
+    \caption{QQ-Plots}
+    \label{fig:all_qq_fd_log_adjclose}
 \end{figure}{}
 
 
 
 
 
-
-
-We see that the time series exhibits strong autocorrelation through the first lag. We therefore take first differences. 
-
-The data then looks like this: 
-
-
-
-Figure3: FD of Log closing prices. Entweder alle oder einige zum Beispiel
-fig.savefig('/srv/shared/StatistischesPraktikumReport/Figures/all_log_adjclose_fd_and_qq.png')
-Eventuell auch mit QQ-Plot
-
-Visually the data looks like white noise. Also the mean of those values is close to zero
-
-Table1: means of the values
-
-Looking at the QQ-plot (explanation) we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. 
 
 
 \subsection{Predictions With Random Walks}
