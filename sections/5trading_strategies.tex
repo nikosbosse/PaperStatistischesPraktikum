@@ -1,15 +1,32 @@
-\chapter{Implementing Trading Strategies}\label{ch:predictions}
+\chapter{Trading Strategies}\label{ch:predictions}
 
-
-\chapter{Trading Strategies}
-intorduction: Idea and Process
+\section{Trading Strategies - Introduction and Theory}
+\subsection{Idea and Process}
 We compare different Trading Strategies. With the Goal of Predicting Stocks this is interesting in and of itself. For the purpose of the project it also serves as a baseline to compare our Trading Strategy against. 
 
+\subsection{Mean Reversion Models and Momentum Trading - Theoretical Background}
+
+A vast body of scientific literature has tried to develop models that allow to understand and explain movements in stock markets. An even vaster community of traders has tried to implement these theories to do actual forecasting. While many of the theories are much more complex, to basic ideas can be summarized as "Momentum Based Trading" and "Mean Reversion Based Trading". The former theory hypothesizes that stocks that do well now will likely continue to do so in the future while the latter states that especially good or past performance is an exception and that stocks will eventually return to their average performance. 
 
 
-\subsection{Mean Reversion Models}
+
+Many economic theories like the famous model from Fama and French describe the return of the stocks of a company as the result of market properties like the baseline market return rate and inherent properties of that company, like for example its book-to-market-ratio [Fama and French 1993]. If such a relationship exists than this in turn implies that the actual observed stock movements should be random fluctuations around some much more slowly changing true return rate. Based on this we can construct a trading strategy that is built on the assumption of mean reverting behaviour. 
+One crucial aspect is the time horizon over which mean reversion is to be expected. [Japateesh and CX] looked at portfolios and saw mean reversion over 12 to 48 months. Thaler and Bondt observe mean reversion over the time frame of 36 months. 
+
+
+\section{Trading Strategies - Implementation}
+\subsection{Mean Reversion Portfolio}
+
 Idea: We compute some mean. Then compare the current value to that mean. We compute a Z-Score --> Decision to buy or sell
-Needed: Economic Theory. Something like. Mean fluctuates around some unknown true value
+
+
+
+
+GRAPH: NEGATIVE AUTOCORRELATION OF RETURNS?
+
+
+
+
 
 \subsubsection{Cumulative Mean on Actual Values}
 Idea: 
@@ -26,8 +43,29 @@ Idea: percentage change from daay to day reverts to a mean.
 Idea: If 30d averages is above 90d average, then sell. And vice versa
 
 \subsubsection{Mean Reversion Portfolio}
-Idea: Look at entire portfolio
-Always sell the two best performing and buy the two current worst performing stocks
+Idea: Look at entire portfolio. 
+Early proponents of this idea were [Bondt and Thaler] who analiyzed the hypothesis that markets tend to overreact. They constructed a portfolio where they always included the stocks that had done badly in the past and sold those that did well in the past. 
+
+"if stock prices systematically overshoot, then their reversal should be predictable from past return data alone, with no use of any accounting data such as earnings. [...] Extreme movements in stock prices will be followed by subsequent price movements in the opposite direction."
+
+While their analysis is focused on monthly returns over a much longer time frame, the basic idea that was replicated in our trading strategy was the same. While they found excessive returns of that strategy from 1932 to 1977 our implementation was unforturnately much less successful.
+
+Jagadeesh(1990) suggests that "These papers show that contrarian 
+strategies that select stocks based on their returns in the previous week or month generate significant abnormal returns."
+
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}{}
+
+
+\subsection{Momentum Based Trading}
+The idea was introduced by [Japateesh and CX] in 1993. They found "that strategies which buy stocks that have performed well in the past and sell stocks that have performed poorly in the past generate significant positive returns over 3- to 12-month holding periods." 
 
 
 \subsection{Pairs Trading}
