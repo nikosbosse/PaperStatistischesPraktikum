@@ -8,9 +8,11 @@
 
 \section{Stock Data}
 \subsection{Overview over the Stock Data}
-The stock data comprises 10 stocks of the STOCK INDEX. 
+The stock data comprises 10 selected from the NASDAQ stock index. The stocks were determined as those are the stocks we have Ravenpack data and analyst reports about. 
 
-? Table: The first few entries of that data set
+
+
+
 
 \begin{figure}[h]
     \centering
@@ -24,7 +26,96 @@ The stock data comprises 10 stocks of the STOCK INDEX.
 Those time series exhibit a strong trend and therefore are not homoskedastic. 
 
 
-
-
 \subsection{Data Preparation}
-Eventuell den Teil hier auch einfach zu Prediction with Times Series
+\subsubsection*{The Original Data}
+
+We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all} shows the variance of the time series is not constant over time. 
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/cum_sd_all_stocks.pgf}
+    \end{adjustbox}  
+    \caption{Standard deviation for the time series of stock prices. The value of the graph at point t is calculated as the standard deviation of all recorded values of the respective stocks up to that point t.}
+    \label{fig:cum_sd_all}
+\end{figure}{}
+
+\subsubsection*{The Log-Transformed Data}
+We take the log of the data in order to stabilize the variance and convert the exponential trend to a linear trend. 
+
+ALTERNATIVE: calculate returns and plot variance of returns. 
+
+We look at autocorrelation and partial autocorrelation. In Figure \ref{fig:acf_pacf_log_adjclose_PG} only the ACF and PACF for one example, PG, is shown. The rest can be seen in the appendix in Figure \ref{fig:acf_pacf_log_adjclose}
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/PG_autocorr_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for PG}
+    \label{fig:acf_pacf_log_adjclose_PG}
+\end{figure}{}
+
+
+We can see a pattern of autocorrelations and a strong partial autocorrelation at lag 1 that indicated we should use differencing. 
+
+\subsubsection*{First Difference of the Log-Transformed Data}
+Therefore we apply first differencing to the data. 
+We replot the data (shown in Figure \ref{fig:PG_fd_log_adjclose}. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/PG_fd_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{First difference of log adjusted closing prices of PG}
+    \label{fig:PG_fd_log_adjclose}
+\end{figure}{}
+
+
+Visually the data looks like white noise. Also the mean of those values is close to zero. The data now all seem to have mean zero and there is no trend visible. 
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    \input{figures/means_fd_log_values.tex}
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}{}
+
+Also ACF and PACF look more or less fine. For convenience, only ACF and PACF of PG are shown in figure \ref{fig:PG_autocorr_fd_log_adjclose}. The others are shown in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}.
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/PG_autocorr_log_adjclose_fd.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for PG}
+    \label{fig:PG_autocorr_fd_log_adjclose}
+\end{figure}{}
+
+Also we have ACF and PACF for much longer periods: 
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/PG_autocorr_all_lags_log_adjclose_fd2.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for PG}
+    \label{fig:PG_autocorr_fd_log_adjclose_all_lags}
+\end{figure}{}
+
+
+
+
+\subsubsection*{Looking at QQ-Plots}
+Looking at the QQ-plot (explanation) for PG in \ref{fig:PG_qq_fd_log_adjclose} we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. QQ-plots for all other stocks can be seen in the appendix in figure \ref{fig:all_qq_fd_log_adjclose}
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \includegraphics[]{figures/PG_log_adjclose_fd_and_qq.pdf}
+    %\input{figures/PG_log_adjclose_fd_and_qq.pgf}
+    \end{adjustbox}  
+    \caption{QQ-Plot PG}
+    \label{fig:PG_qq_fd_log_adjclose}
+\end{figure}{}
