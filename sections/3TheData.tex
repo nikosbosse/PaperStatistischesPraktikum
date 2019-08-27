@@ -8,11 +8,17 @@
 
 \section{Stock Data}
 \subsection{Overview over the Stock Data}
-The stock data comprises 10 selected from the NASDAQ stock index. The stocks were determined as those are the stocks we have Ravenpack data and analyst reports about. 
+The stock data comprises 10 selected from the NASDAQ stock index. The stocks were determined as those are the stocks we have Ravenpack data and analyst reports about. The data were downloaded from Yahoo Financial Data Base. Tabel \ref{tab:stocks_overview} provides a small overview over the data. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the Closing Prices of the selected assets. The closing prices have been provided adjusted for dividends by Yahoo. 
 
-
-
-
+\begin{table}[]
+    \centering
+    \begin{adjustbox}{width = 0.9\linewidth}
+    \setlength{\tabcolsep}{10pt}
+    \input{figures/table_overview_stocks2.tex}
+    \end{adjustbox}
+    \caption{Caption}
+    \label{tab:stocks_overview}
+\end{table}{}
 
 \begin{figure}[h]
     \centering
@@ -23,13 +29,7 @@ The stock data comprises 10 selected from the NASDAQ stock index. The stocks wer
     \label{fig:Daily Stock Prices for all Stocks in the Data Set}
 \end{figure}{}
 
-Those time series exhibit a strong trend and therefore are not homoskedastic. 
-
-
-\subsection{Data Preparation}
-\subsubsection*{The Original Data}
-
-We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all} shows the variance of the time series is not constant over time. 
+From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend and are not homoscedastic, i.e. the variance of most stocks increases with time over the observed period. The heteroscedasticity is further illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown. It can be clearly seen that the standard deviations of the time series increase over time. 
 
 \begin{figure}[H]
     \centering
@@ -40,49 +40,57 @@ We can clearly see that the Data exhibits a trend. As Figure \ref{fig:cum_sd_all
     \label{fig:cum_sd_all}
 \end{figure}{}
 
-\subsubsection*{The Log-Transformed Data}
-We take the log of the data in order to stabilize the variance and convert the exponential trend to a linear trend. 
 
-ALTERNATIVE: calculate returns and plot variance of returns. 
+\subsection{Data Transformation}
+As time series analysis is easiest with homoscedastic data that does not exhibit a trend, the data needs to be transformed. There are different ways to proceed that are often equivalent or very similar to each other. Economists usually work with either returns or log-returns. (Daily) returns are usually calculated as
+\begin{equation*}
+    r_t = \frac{r_t}{r_{t-1}}
+\end{equation*}{}
+Figure \ref{fig:returns_all_stocks} shows that the trends in the time series have vanished after looking only at returns. Instead of returns researchers also often use log returns. These are numerically stable and can easily be handled arithmetically. For small returns they are approximately similar to the returns: $ \log(1 + r) \approx r$. 
 
-We look at autocorrelation and partial autocorrelation. In Figure \ref{fig:acf_pacf_log_adjclose_PG} only the ACF and PACF for one example, PG, is shown. The rest can be seen in the appendix in Figure \ref{fig:acf_pacf_log_adjclose}
+\begin{figure}[h]
+    \centering
+    %\begin{adjustbox}{width=.9\textwidth,center}
+    %\input{figures/figures/returns_all_stocks.pgf}
+    %\end{adjustbox}  
+    \caption{Returns of PG}
+    \label{fig:returns_all_stocks}
+\end{figure}{}
 
+%Plot needed?: calculate returns and plot variance of returns. 
+
+Alternatively, a suitable transformations can be achieved by taking the log of the stock prices and then using the first difference of the time series. Logging the time series transforms an exponential trend in the time series into a linear one and also serves to stabilize the variance. However, even after the log-transformation, the log value of a stock at time t is mostly determined by its value at time t-1. Figure \ref{fig:PG_autocorr_log_adjclose} shows this relationship. The autocorrelation at lag j is the correlation between an observation at time t with the observation at t-j. 
+\begin{equation*}
+    \textbf{Autocorrelation}
+\end{equation*}{}
+Partial autocorrelation at lag j is the correlation between $y_t$ and $y_{t-1}$ that is not already explained through lower lags smaller than j.  
+\begin{equation*}
+    \textbf{Partial Autocorrelation}
+\end{equation*}{}
+The (partial) autocorrelation pattern shown in figure \ref{fig:PG_autocorr_log_adjclose} suggests that this dependence can be eliminated through differencing as the influence of the previous value on the current one is removed. This then allows us to analyse the new information in period t independt from the information in period t-1. 
 \begin{figure}[h]
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/PG_autocorr_log_adjclose.pgf}
     \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for PG}
+    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for PG. All ACF and PACF can be seen in the appendix in Figure \ref{fig:acf_pacf_log_adjclose}
+}
     \label{fig:acf_pacf_log_adjclose_PG}
 \end{figure}{}
 
-
-We can see a pattern of autocorrelations and a strong partial autocorrelation at lag 1 that indicated we should use differencing. 
-
-\subsubsection*{First Difference of the Log-Transformed Data}
-Therefore we apply first differencing to the data. 
-We replot the data (shown in Figure \ref{fig:PG_fd_log_adjclose}. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}
+The pattern that emerges after differecing is illustrated in figure \ref{fig:PG_fd_log_adjclose}. Note that taking the first difference of log stock values is equivalent to looking at log returns as $log(r_t) = log(\frac{y_t}{y_{t-1}} = log(y_t) - log(y_{t-1})$. 
 
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/PG_fd_log_adjclose.pgf}
     \end{adjustbox}  
-    \caption{First difference of log adjusted closing prices of PG}
+    \caption{First difference of log adjusted closing prices of PG. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}}
     \label{fig:PG_fd_log_adjclose}
 \end{figure}{}
 
-
 Visually the data looks like white noise. Also the mean of those values is close to zero. The data now all seem to have mean zero and there is no trend visible. 
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{|c|c|}
-    \hline
-    \input{figures/means_fd_log_values.tex}
-    \end{tabular}
-    \caption{Caption}
-    \label{tab:my_label}
-\end{table}{}
+
 
 Also ACF and PACF look more or less fine. For convenience, only ACF and PACF of PG are shown in figure \ref{fig:PG_autocorr_fd_log_adjclose}. The others are shown in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}.
 \begin{figure}[H]
@@ -105,6 +113,18 @@ Also we have ACF and PACF for much longer periods:
 \end{figure}{}
 
 
+
+\subsection{Looking at the Transformed Data}
+Visually the data now looks similar to white noise. It is, however, not quite normally distributed. While the mean of the log returns is close to zero (as shown in table \ref{tab:log return means}, the data are not homoscedastic. As can be seen in figure XXX
+
+\begin{table}[h!]
+    \centering
+    \begin{adjustbox}{width = \linewidth}
+    \input{figures/means_fd_log_values2.tex}
+    \end{adjustbox}
+    \caption{Caption}
+    \label{tab:log return means}
+\end{table}{}
 
 
 \subsubsection*{Looking at QQ-Plots}
