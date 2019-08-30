@@ -82,9 +82,9 @@ Partial autocorrelation between an observation $y_t$ and another observation $y_
 are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the mean squared error of a regression of $y_{t+h}$, and $y_t$ respectively, on $\{ y_{t+1}, ..., y_{t+h-1}\}$. Both $y_t - \hat{y_t}$ and  $y_{t+h} - \hat{y}_{t+h}$ are uncorrelated with $\{ y_{t+1}, ..., y_{t+h-1} \}$. For now, however, it suffices to know that an ACF which is very slowly decaying to zero is an indicator that differencing may be appropriate (see Shumway and Stoffer 2011, p. 145) to make the series stationary. A large partial autocorrelation at lag 1, as shown in figure \ref{fig:acf_pacf_log_adjclose} also supports the conjecture that the dependence of the current on the previous value can be eliminated through differencing. After differencing we arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $. We can see now that the the partial autocorrelation at lag 1 has vanished after differecing and that the autocorrelation has also dropped to insignificance as is illustrated in figure \ref{fig:PG_autocorr_fd_log_adjclose}. We can also see that we have not induced any negative autocorrelation. The data therefore is not overdifferenced. The means of our time series is very close to zero (as shown in table \ref{tab:log return means}). Overall this pattern strongly suggests the time series are stationary now. However we can also perform a formal test whether our data is stationary or not. The augmented Dickey-Fuller test (ADF). P-values of the ADF for all log-returns are smaller than $10^{-12}$ even after correcting for multiple testing so we can safely assume the time series are stationary. 
 
 \begin{figure}[h]
-    \figuretitle{ACF and PACF for prices of stock PG}
     \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
+    \figuretitle{ACF and PACF for prices of stock PG}
+    \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_autocorr_log_adjclose.pgf}
     \end{adjustbox}  
     \caption{Autocorrelation function (ACF) and partial autocorrelation function (PACF) for log-returns of PG. (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:acf_pacf_log_adjclose})}
@@ -92,22 +92,22 @@ are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the me
 \end{figure}{}
 
 \begin{table}[h!]
-    \figuretitle{Means of the log-returns for all Stocks}
     \centering
-    \begin{adjustbox}{width = \linewidth}
+    \figuretitle{Means of the log-returns for all Stocks}
+    \begin{adjustbox}{width = 0.95\linewidth}
     \input{figures/means_fd_log_values2.tex}
     \end{adjustbox}
-    \caption{Caption}
+    \caption{}
     \label{tab:log return means}
 \end{table}{}
 
 \begin{figure}[H]
     \centering
     \figuretitle{ACF and PACF for log-returns of stock PG}
-    \begin{adjustbox}{width=.9\textwidth,center}
+    \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_autocorr_log_adjclose_fd.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the log-returns of stock PG} (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}.). 
+    \end{adjustbox}
+    \caption{Autocorrelation and partial autocorrelation for the log-returns of stock PG (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}).}
     \label{fig:PG_autocorr_fd_log_adjclose}
 \end{figure}{}
 
@@ -119,30 +119,29 @@ are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the me
 
 
 
-The data is, however, not quite normally distributed. While the mean of the log returns is close to zero, the data are not homoscedastic. As can be seen in figure XXX the variance is not constant over time, but increases or decreases quite substantially conditional on the time period observed. This is called conditional heteroscedasticity and is quite common in financial data. (SOURCE)
+The data is, however, not quite normally distributed. While the mean of the log returns is close to zero, we can see by looking at figure \ref{fig:PG_qq_fd_log_adjclose} that the distribution has fat tails: extrem events appear more often than would be expected if the data was normally distributed. 
+
+\begin{figure}[h]
+    \centering
+    \figuretitle{QQ-plot of log-returns of stock PG}
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \includegraphics[]{figures/PG_log_adjclose_fd_and_qq.pdf}
+    %\input{figures/PG_log_adjclose_fd_and_qq.pgf}
+    \end{adjustbox}  
+    \caption{QQ-Plot for log-returns of stock PG. QQ-plots for the other stocks can be seen in the Appendix in figure \ref{fig:all_qq_fd_log_adjclose}.}
+    \label{fig:PG_qq_fd_log_adjclose}
+\end{figure}{}
+
+The data are also not homoscedastic. While stationarity implies that the conditional variance is constant over time, the variance of the time series fluctuates conditional on past observations [Beschreibung nachgucken, QUELLE!]. This conditional heteroskedasticity is quite common in financial data. (SOURCE). The pattern can be observed in figure \ref{fig:PG_squared_log_returns}
 
 
 
 \begin{figure}[h]
     \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
+    \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_squared_log_returns.pgf}
     \end{adjustbox}  
     \caption{Plot of squared log returns of stock PG. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))^2$ and the mean of the log returns is close to zero.}
     \label{fig:PG_squared_log_returns}
 \end{figure}{}
 
-
-
-\subsubsection*{Looking at QQ-Plots}
-Looking at the QQ-plot (explanation) for PG in \ref{fig:PG_qq_fd_log_adjclose} we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. QQ-plots for all other stocks can be seen in the appendix in figure \ref{fig:all_qq_fd_log_adjclose}
-
-\begin{figure}[h]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \includegraphics[]{figures/PG_log_adjclose_fd_and_qq.pdf}
-    %\input{figures/PG_log_adjclose_fd_and_qq.pgf}
-    \end{adjustbox}  
-    \caption{QQ-Plot PG}
-    \label{fig:PG_qq_fd_log_adjclose}
-\end{figure}{}
