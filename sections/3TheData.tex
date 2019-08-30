@@ -132,16 +132,33 @@ The data is, however, not quite normally distributed. While the mean of the log 
     \label{fig:PG_qq_fd_log_adjclose}
 \end{figure}{}
 
-The data are also not homoscedastic. While stationarity implies that the conditional variance is constant over time, the variance of the time series fluctuates conditional on past observations [Beschreibung nachgucken, QUELLE!]. This conditional heteroskedasticity is quite common in financial data. (SOURCE). The pattern can be observed in figure \ref{fig:PG_squared_log_returns}
-
-
+The data are also not homoscedastic. While stationarity implies that the conditional variance is constant over time, the variance of the time series fluctuates conditional on past observations [Beschreibung nachgucken, QUELLE!]. This conditional heteroskedasticity is quite common in financial data. (SOURCE). The pattern can be observed in figure \ref{fig:PG_squared_log_returns}. Figure \ref{fig:ACF_selected_squared_log_returns} shows the ACF and PACF of the squared residuals of some selected stocks. The patterns indicate that at least some of the volatility can be modeled using time series approaches. 
 
 \begin{figure}[h]
     \centering
+    \figuretitle{Squared log-returns of Stock PG}
     \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_squared_log_returns.pgf}
     \end{adjustbox}  
-    \caption{Plot of squared log returns of stock PG. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))^2$ and the mean of the log returns is close to zero.}
+    \caption{Plot of squared log returns of stock PG. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))^2$ and the mean of the log returns is close to zero. The pattern looks similar for all stocks, therefore only one is shown.}
     \label{fig:PG_squared_log_returns}
+\end{figure}{}
+
+
+
+\begin{figure}[H]
+    \centering
+    \figuretitle{ACF / PACF of Squared log-returns of Stocks MMM, GE, JNJ}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/MMM_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/GE_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/JNJ_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \caption{ACF and PACF of squared residuals of stocks MMM, GE and JNJ. We see that some of the squared log-returns exhibit indeed autocorrelation, while others do less so. Strong autocorrelation implies that there is information about the future in the time series that can be modeled.}
+    \label{fig:ACF_selected_squared_log_returns}
 \end{figure}{}
 
