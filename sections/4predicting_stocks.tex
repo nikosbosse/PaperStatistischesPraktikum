@@ -9,32 +9,19 @@ irgendwas in der Richtung: wir benutzen Time Series Modelle, machen Predictions 
 In-Sample vs. Out of Sample Prediction?
 
 
-
-
 \subsection{Theoretical Overview}
 Time series predictions in this paper will be made using Random Walks, autoregressive (AR), moving average (MA) and generalized autoregressive conditional heteroscedasticity (GARCH) models. The following will first give a short theoretical overview. Then different models will be applied to a training data set of two chosen stocks. Then predictions will be made for the other stocks using the above mentioned techniques. 
 
-\subsection{Predictions With Random Walks}
-A random walk follows 
-\begin{align}
-    y_t &= y_{t-1} + w_t \\
-    \intertext{A random walk with drift can be represented as}
-    y_t &= \delta + y_{t-1} + w_t \\
+\subsubsection{Random Walks}
+Random walks serve as the baseline against which every prediction can be compared. Assuming a random walk as the underlying process implies that we know nothing about the future and can do no better than assuming tomorrow's stock price will on average be the same as today. Formally, a random walk follows \begin{align}
+    y_t &= y_{t-1} + w_t \label{eg:rw1}\\
+    \intertext{where $y_t$ is the value of the time series at time t and $w_t$ is a random realisation of a stationary white noise process with mean 0 and variance $\sigma^2$. We can expand equation \ref{eg:rw1} by allowing for a constant trend, a drift. A random walk with drift can be represented as}
+    y_t &= \delta + y_{t-1} + w_t
 \end{align}{}
-where $y_t$ is the value of the time series at time t, $\delta$ is a drift parameter and $w_t$ is a random realisation of a stationary white noise process with mean 0 and variance $\sigma^2$
-Predictions for period t + 1 are therefore exactly the value at time t. --> We do that on the FD of log-values scale but we could also do it on the real scale
+where $\delta$ is a drift parameter. Predictions for period t + 1 are therefore exactly the value at time t. As we have already eliminated the trend by transforming the data to log-returns we will not use the drift representation here. If we did our analysis on the original stock values then a drift would be appropriate. Note that the random walk (with or without drift) is not a stationary process. 
 
-Confidence Intervals are computed as
-XXXXXXXX
-
-Fitting: 
-Our Code fits an RW model, prediicts the next value, compares it to the real value for the MSE and then adds the true value to the time series used for predicting the next value. (we could have done this simpler, by just taking the values of the previous period as prediction for the current one. 
-
-Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
-Table: MSE
-
-\subsection{Predictions With AR(p) Models}
-An autoregressive process of order p follows 
+\subsubsection{Autoregressive Models}
+An autoregressive process of order p (AR(p)) implies that the current value of a time series can be described as a combination of the previous p values plus a random shock. As those previous values intern depend on previous values, the current value is indirectly influenced by its entire past. Formally, an AR(p) process follows 
 \begin{align}
     y_t &= \psi_1 y_{t-1} + \psi_2 y_{t-2} + ... + \psi_p y_{t-p} + w_t \label{eq:AR(p)}
 \intertext{where $y_t$ is stationary, $\psi_1, ..., \psi_p$ are constants and $w_t$ is white noise. The mean of $y_t$ is assumed to be zero. If the mean is $\mu$ instead of zero, equation \ref{eq:AR(p)} can be rewritten as}
@@ -44,29 +31,25 @@ An autoregressive process of order p follows
 \end{align}
 \noindent with $\alpha$ = $\mu (1 - \phi_1 - ... - \phi_p)$.
 
-\subsection{Predictions With MA(q) Models}
-A moving average process of order q can be expressed as
+\subsubsection{Moving Average Models}
+A moving average process of order q implies that the current value of a time series consists of the average of the previous q observations plus a random shock. As the mean of the time series $\mu$ is constant this average can also be simply expressed as an average of the past random shocks $\{w_{t-1}, ... w_{t-q}\} $. In constrast to the AR(p) process, the shocks affect the future directly (and not only indirectly through past values) and only affect the next q values. Formally, the MA(q) process can be expressed as
 \begin{align}
-    y_t = w_t + \theta w_{t-1} + ... + \theta w_{t-q}
+    y_t = \mu + w_t + \theta w_{t-1} + ... + \theta w_{t-q}
 \end{align}{}
 \noindent where $w_t$ represents white noise and $\theta_1, ..., \theta_q$ are parameters and q is the number of lags in the moving average. 
 
 
-Table: MSE
-Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
-
-\subsection{Predictions With ARMA Models}
-ARMA() follows
+\subsubsection{Autoregressive Moving Average Models}
+Autoregressive Moving Average Models of order p and q (ARMA(p,q)) form a combination of the above described AR(p) and MA(q) models. Formally, an ARMA(p,q) process follows
 \begin{align}
     y_t = \phi_1 y_{t-1} + ... + \phi_p y_{t-p} + w_t + \theta_1 w_{t-1} + ... + \theta_q w_{t-q} \\
-    \intertext{if the mean of y_t is $\mu$, then the above results in}
+    \intertext{if the mean of $y_t$ is $\mu$, then the above results in}
     y_t = \alpha + \phi_1 y_{t-1} + ... + \phi_p y_{t-p} + w_t + \theta_1 w_{t-1} + ... + \theta_q w_{t-q}
 \end{align}
 \noindent with $\alpha = \mu (1 - \phi_1 - ... - \phi_p)$.
 
 
-
-\subsection{Predictions With GARCH Models}
+\subsubsection{GARCH Models}
 The GARCH(p,q) model is specified as follows:
 \begin{align}
     r_{t} &= \sigma_t  \upepsilon_t \label{eq:garch1}\\
@@ -78,6 +61,28 @@ In equation \ref{eq:garch1} the returns $r_t$ are modelled as white noise with m
     r_t = x_t + y_t
 \end{equation}{}
 where $x_t$ can be any constant mean, regression or time series process and $y_t$ is a GARCH process that satisfies equations \ref{eq:garch1} and \ref{eq:garch2}. In a similar way, the distribution of ??? $\upepsilon_t$ can be altered. In praxis, researchers often assume a t-distribution instead of a standard normal distribution. ??? is that truly the distribution of epsilon?
+
+
+
+\subsection{Approaching the Training Data}
+To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit. Figure XXX shows the ACF and PACF for the log-returns of INTC and V. 
+
+
+\subsubsection{AR(1)}
+
+
+
+
+
+
+
+
+
+Fitting: 
+Our Code fits an RW model, prediicts the next value, compares it to the real value for the MSE and then adds the true value to the time series used for predicting the next value. (we could have done this simpler, by just taking the values of the previous period as prediction for the current one. 
+
+Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
+Table: MSE
 
 
 
@@ -94,7 +99,7 @@ For the hybrid prediction we tried to predict sentiment scores on news sources. 
 
 Analyst report data beschreiben...
 
-To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \textbf{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
+To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
 The last step is lemmatizing the words using the \textit{textstem} package \citep{textstem}. Lemmatizing words means reducing them to their inflectional forms. Commonly stemming is also applied, because words sometimes have derivationally related forms. This was not done to have more flexibility for the later applied text analysis. Additionally we could have also used the term frequency–inverse document frequency (tf-idf) matrix (ZITIEREN) for further reductions in the number of words. The issue here would have been that highly informative words for the stock sentiment could have been removed. 
 
 \subsection{ARMAX Predictions}
