@@ -1,5 +1,9 @@
 \chapter{The Data}
 
+\section{Stock Selection}
+The stock data comprises 10 selected companies from the NASDAQ stock index. The stocks were determined as those are the stocks we have Ravenpack data and analyst reports about. 
+
+
 \section{Ravenpack Sentiment Data}
 
 
@@ -8,30 +12,33 @@
 
 \section{Stock Data}
 \subsection{Overview over the Stock Data}
-The stock data comprises 10 selected from the NASDAQ stock index. The stocks were determined as those are the stocks we have Ravenpack data and analyst reports about. The data were downloaded from Yahoo Financial Data Base. Tabel \ref{tab:stocks_overview} provides a small overview over the data. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the Closing Prices of the selected assets. The closing prices have been provided adjusted for dividends by Yahoo. 
+The stock data were downloaded from Yahoo Financial Data Base. Table \ref{tab:stocks_overview} provides a small overview over the raw data. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the Closing Prices of the selected assets. The closing prices have been provided adjusted for dividends by Yahoo. Time series analysis is easiest with data that are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see [Shumway and Stoffer 2011]). 
 
 \begin{table}[]
+    \figuretitle{Stock Data}
     \centering
     \begin{adjustbox}{width = 0.9\linewidth}
-    \setlength{\tabcolsep}{10pt}
+    \setlength{\tabcolsep}{15pt}
     \input{figures/table_overview_stocks2.tex}
     \end{adjustbox}
-    \caption{Caption}
+    \caption{}
     \label{tab:stocks_overview}
 \end{table}{}
 
 \begin{figure}[h]
+    \figuretitle{Stock Prices}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/all_in_one_daily_stock_prices.pgf}
     \end{adjustbox}  
-    \caption{Caption}
+    \caption{Time series of the adjusted closing prices of all 10 stocks looked at in this paper}
     \label{fig:Daily Stock Prices for all Stocks in the Data Set}
 \end{figure}{}
 
-From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend and are not homoscedastic, i.e. the variance of most stocks increases with time over the observed period. The heteroscedasticity is further illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown. It can be clearly seen that the standard deviations of the time series increase over time. 
+From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period. This increase in variance is illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown. The data are therefore clearly not stationary. We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. This test, applied to all time series in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
 
 \begin{figure}[H]
+    \figuretitle{'Cumulative' Standard Deviation of Stock Prices}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/cum_sd_all_stocks.pgf}
@@ -40,102 +47,101 @@ From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can b
     \label{fig:cum_sd_all}
 \end{figure}{}
 
-
 \subsection{Data Transformation}
-As time series analysis is easiest with homoscedastic data that does not exhibit a trend, the data needs to be transformed. There are different ways to proceed that are often equivalent or very similar to each other. Economists usually work with either returns or log-returns. (Daily) returns are usually calculated as
+
+In order to obtain weakly stationary time series the data needs to be transformed. There are different ways to proceed that are often equivalent or very similar to each other. Economists usually work with either returns or log-returns, albeit the nomenclature may be a bit confusing. (Daily) returns can be calculated as
 \begin{equation*}
-    r_t = \frac{r_t}{r_{t-1}}
+    r^{\scriptscriptstyle{(1)} }_t = \frac{r_t}{r_{t-1}} \qquad \text{or as} \qquad r^{\scriptscriptstyle{(2)}}_t = \frac{r_t - r_{t-1}}{r_{t-1}} = r^{\scriptscriptstyle{(1)}}_t - 1
 \end{equation*}{}
-Figure \ref{fig:returns_all_stocks} shows that the trends in the time series have vanished after looking only at returns. Instead of returns researchers also often use log returns. These are numerically stable and can easily be handled arithmetically. For small returns they are approximately similar to the returns: $ \log(1 + r) \approx r$. 
-
-\begin{figure}[h]
-    \centering
-    %\begin{adjustbox}{width=.9\textwidth,center}
-    %\input{figures/figures/returns_all_stocks.pgf}
-    %\end{adjustbox}  
-    \caption{Returns of PG}
-    \label{fig:returns_all_stocks}
-\end{figure}{}
-
-%Plot needed?: calculate returns and plot variance of returns. 
-
-Alternatively, a suitable transformations can be achieved by taking the log of the stock prices and then using the first difference of the time series. Logging the time series transforms an exponential trend in the time series into a linear one and also serves to stabilize the variance. However, even after the log-transformation, the log value of a stock at time t is mostly determined by its value at time t-1. Figure \ref{fig:PG_autocorr_log_adjclose} shows this relationship. The autocorrelation at lag j is the correlation between an observation at time t with the observation at t-j. 
-\begin{equation*}
-    \textbf{Autocorrelation}
-\end{equation*}{}
-Partial autocorrelation at lag j is the correlation between $y_t$ and $y_{t-1}$ that is not already explained through lower lags smaller than j.  
-\begin{equation*}
-    \textbf{Partial Autocorrelation}
-\end{equation*}{}
-The (partial) autocorrelation pattern shown in figure \ref{fig:PG_autocorr_log_adjclose} suggests that this dependence can be eliminated through differencing as the influence of the previous value on the current one is removed. This then allows us to analyse the new information in period t independt from the information in period t-1. 
-\begin{figure}[h]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/PG_autocorr_log_adjclose.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for PG. All ACF and PACF can be seen in the appendix in Figure \ref{fig:acf_pacf_log_adjclose}
-}
-    \label{fig:acf_pacf_log_adjclose_PG}
-\end{figure}{}
-
-The pattern that emerges after differecing is illustrated in figure \ref{fig:PG_fd_log_adjclose}. Note that taking the first difference of log stock values is equivalent to looking at log returns as $log(r_t) = log(\frac{y_t}{y_{t-1}} = log(y_t) - log(y_{t-1})$. 
+Usually $r^{\scriptscriptstyle{(2)}}_t$ is used and is called either returns or log-returns, even though no logging takes place. For increased conceptual clarity, $r^{\scriptscriptstyle{(1)}}_t$ will be called returns and $log(r^{\scriptscriptstyle{(1)}}_t)$ will be called log-returns. $r^{\scriptscriptstyle{(2)}}_t$ will not be explicitly used. Log-returns are computationally convenient and numerically stable. For very small values they are also very close to the returns $r^{\scriptscriptstyle{(2)}}_t$ often used in economic literature as $ \log(r^{\scriptscriptstyle{(1)}}_t) \approx r^{\scriptscriptstyle{(1)}}_t - 1 = r^{\scriptscriptstyle{(2)}}_t$ for values of $r^{\scriptscriptstyle{(1)}}_t$ close to 1. Using returns or log-returns instead of stock prices can make the time series stationary. Figure \ref{fig:returns_all_stocks} illustrates that the trends in the time series have vanished after looking at log-returns. The data visually now looks like white noise. 
 
 \begin{figure}[H]
+    \figuretitle{Log-returns of stock PG}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/PG_fd_log_adjclose.pgf}
     \end{adjustbox}  
-    \caption{First difference of log adjusted closing prices of PG. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}}
+    \caption{Log-returns (or equivalently, first differences of the log of adjusted closing prices) of the PG. Visually the data looks similar to white noise. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}}
     \label{fig:PG_fd_log_adjclose}
 \end{figure}{}
 
-Visually the data looks like white noise. Also the mean of those values is close to zero. The data now all seem to have mean zero and there is no trend visible. 
+That this is indeed a suitable transformation can be more intuitively understood by looking at a different route of transforming the data: taking the log of the stock prices and then using the first difference of the logged time series. Logging the time series transforms an exponential trend in the time series into a linear one and also serves to stabilize the variance. However, the trend does not vanish and after the log-transformation, the log value of a stock at time t is still mostly determined by its log-value at time t-1. To remove this effect, the time series needs to be differenced. To put this into a clearer perspective we can look at the autocorrelation and partial autocorrelation function of the series. 
 
-
-Also ACF and PACF look more or less fine. For convenience, only ACF and PACF of PG are shown in figure \ref{fig:PG_autocorr_fd_log_adjclose}. The others are shown in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}.
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/PG_autocorr_log_adjclose_fd.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for PG}
-    \label{fig:PG_autocorr_fd_log_adjclose}
-\end{figure}{}
-
-Also we have ACF and PACF for much longer periods: 
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/PG_autocorr_all_lags_log_adjclose_fd2.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for PG}
-    \label{fig:PG_autocorr_fd_log_adjclose_all_lags}
-\end{figure}{}
-
-
-
-\subsection{Looking at the Transformed Data}
-Visually the data now looks similar to white noise. It is, however, not quite normally distributed. While the mean of the log returns is close to zero (as shown in table \ref{tab:log return means}, the data are not homoscedastic. As can be seen in figure XXX
-
-\begin{table}[h!]
-    \centering
-    \begin{adjustbox}{width = \linewidth}
-    \input{figures/means_fd_log_values2.tex}
-    \end{adjustbox}
-    \caption{Caption}
-    \label{tab:log return means}
-\end{table}{}
-
-
-\subsubsection*{Looking at QQ-Plots}
-Looking at the QQ-plot (explanation) for PG in \ref{fig:PG_qq_fd_log_adjclose} we see that the distribution has fat tails: some of the values are more extreme than we would have expected if the differenced log-values were randomly distributed. QQ-plots for all other stocks can be seen in the appendix in figure \ref{fig:all_qq_fd_log_adjclose}
+The autocorrelation at lag j is the correlation between an observation at time t with the observation at t-j. As the series is assumed to be stationary, the autocorrelation function (ACF) does not depend on t, but only on the number of periods that lie between one observation $y_t$ and another $y_{t+h}$
+\begin{equation}
+    \text{ACF}(h) = corr(y_t, y_{t+h})
+\end{equation}{}
+Partial autocorrelation between an observation $y_t$ and another observation $y_{t+1}$ is the correlation between $y_t$ and $y_{t+h}$ that is not already explained by a linear dependence on the observations in between $y_t$ and $y_{t+h}$. Formally this can be defined as
+\begin{equation}
+    \text{PACF}(h) = corr(y_t - \hat{y}_t, y_{t+h} - \hat{y}_{t+h})
+\end{equation}
+\begin{flalign*}
+    &\text{where} && \hat{y}_{t + h} = \beta_1 y_{t+h-1} + \beta_2 y_{t+h-2} + ... + \beta_{h-1} y_{t+1} &&\\
+    &\text{and} && \hat{y_t} = \beta_1 y_{t+1} + \beta_2 y_{t+2} + ... + \beta_{h-1} y_{t+h-1} &&
+\end{flalign*}{}
+are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the mean squared error of a regression of $y_{t+h}$, and $y_t$ respectively, on $\{ y_{t+1}, ..., y_{t+h-1}\}$. Both $y_t - \hat{y_t}$ and  $y_{t+h} - \hat{y}_{t+h}$ are uncorrelated with $\{ y_{t+1}, ..., y_{t+h-1} \}$. For now, however, it suffices to know that an ACF which is very slowly decaying to zero is an indicator that differencing may be appropriate (see Shumway and Stoffer 2011, p. 145) to make the series stationary. A large partial autocorrelation at lag 1, as shown in figure \ref{fig:acf_pacf_log_adjclose} also supports the conjecture that the dependence of the current on the previous value can be eliminated through differencing. After differencing we arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $. We can see now that the the partial autocorrelation at lag 1 has vanished after differecing and that the autocorrelation has also dropped to insignificance as is illustrated in figure \ref{fig:PG_autocorr_fd_log_adjclose}. We can also see that we have not induced any negative autocorrelation. The data therefore is not overdifferenced. The means of our time series is very close to zero (as shown in table \ref{tab:log return means}). Overall this pattern strongly suggests the time series are stationary now. However we can also perform a formal test whether our data is stationary or not. The augmented Dickey-Fuller test (ADF). P-values of the ADF for all log-returns are smaller than $10^{-12}$ even after correcting for multiple testing so we can safely assume the time series are stationary. 
 
 \begin{figure}[h]
     \centering
+    \figuretitle{ACF and PACF for prices of stock PG}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/PG_autocorr_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation function (ACF) and partial autocorrelation function (PACF) for log-returns of PG. (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:acf_pacf_log_adjclose})}
+    \label{fig:acf_pacf_log_adjclose_PG}
+\end{figure}{}
+
+\begin{table}[h!]
+    \centering
+    \figuretitle{Means of the log-returns for all Stocks}
+    \begin{adjustbox}{width = 0.95\linewidth}
+    \input{figures/means_fd_log_values2.tex}
+    \end{adjustbox}
+    \caption{}
+    \label{tab:log return means}
+\end{table}{}
+
+\begin{figure}[H]
+    \centering
+    \figuretitle{ACF and PACF for log-returns of stock PG}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/PG_autocorr_log_adjclose_fd.pgf}
+    \end{adjustbox}
+    \caption{Autocorrelation and partial autocorrelation for the log-returns of stock PG (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:all_autocorr_fd_log_adjclose}).}
+    \label{fig:PG_autocorr_fd_log_adjclose}
+\end{figure}{}
+
+%Plot needed?: calculate returns and plot variance of returns. 
+
+
+
+
+
+
+
+The data is, however, not quite normally distributed. While the mean of the log returns is close to zero, we can see by looking at figure \ref{fig:PG_qq_fd_log_adjclose} that the distribution has fat tails: extrem events appear more often than would be expected if the data was normally distributed. 
+
+\begin{figure}[h]
+    \centering
+    \figuretitle{QQ-plot of log-returns of stock PG}
     \begin{adjustbox}{width=.9\textwidth,center}
     \includegraphics[]{figures/PG_log_adjclose_fd_and_qq.pdf}
     %\input{figures/PG_log_adjclose_fd_and_qq.pgf}
     \end{adjustbox}  
-    \caption{QQ-Plot PG}
+    \caption{QQ-Plot for log-returns of stock PG. QQ-plots for the other stocks can be seen in the Appendix in figure \ref{fig:all_qq_fd_log_adjclose}.}
     \label{fig:PG_qq_fd_log_adjclose}
 \end{figure}{}
+
+The data are also not homoscedastic. While stationarity implies that the conditional variance is constant over time, the variance of the time series fluctuates conditional on past observations [Beschreibung nachgucken, QUELLE!]. This conditional heteroskedasticity is quite common in financial data. (SOURCE). The pattern can be observed in figure \ref{fig:PG_squared_log_returns}
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/PG_squared_log_returns.pgf}
+    \end{adjustbox}  
+    \caption{Plot of squared log returns of stock PG. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))^2$ and the mean of the log returns is close to zero.}
+    \label{fig:PG_squared_log_returns}
+\end{figure}{}
+
