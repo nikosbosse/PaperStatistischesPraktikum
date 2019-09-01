@@ -1,0 +1,12 @@
+# Fdb version 3
+["pdflatex"] 1567179513 "4predicting_stocks.tex" "4predicting_stocks.pdf" "4predicting_stocks" 1567179514
+  "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1557554374 3332 103109f5612ad95229751940c61aada0 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1557554374 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "/usr/share/texmf-dist/web2c/texmf.cnf" 1557554374 33301 a3134070eacafb10b1f371612ce2650d ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1563537838 7979416 d0e5d5b721f655ce48fe81c1460cd921 ""
+  "4predicting_stocks.aux" 1567179513 8 a94a2480d3289e625eea47cd1b285758 ""
+  "4predicting_stocks.tex" 1567179490 9082 4296a99aadcdd7456b71db6da437c992 ""
+  "figures/INTC_ACF_log_returns.pgf" 0 -1 0 ""
+  (generated)
+  "4predicting_stocks.log"
+  "4predicting_stocks.pdf"
