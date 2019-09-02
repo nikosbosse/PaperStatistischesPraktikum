@@ -67,6 +67,9 @@ where $x_t$ can be any constant mean, regression or time series process and $y_t
 \subsection{Approaching the Training Data}
 To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit. Figure \ref{fig:INTC_V_ACF_log_returns} shows the ACF and PACF for the log-returns of INTC and V. From looking at the plots we can presume that for V, AR and MA models of order one or two might be a reasonable try. For INTC it looks like there is very little information included as none of the lower order lags bears any significance. 
 
+We start by applying a formal test for autocorrelation to the time series, the Box/Pierce and Ljung/Box tests. They have slightly different properties regarding their handling of very large and very small numbers of observations, but for both the null hypothesis is that there is no autocorrelation in the series. Figure \ref{fig:ljungbox} shows the p-values for the first 40 lags. 
+
+
 \begin{figure}[h]
     \centering
     \figuretitle{ACF and PACF of log-returns of Stocks INTC and V}
