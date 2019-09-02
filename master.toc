@@ -1,0 +1,44 @@
+\babel@toc {english}{}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Our Goal / Scope of this report}{1}{section.1.1}% 
+\contentsline {chapter}{\numberline {2}The Data}{1}{chapter.2}% 
+\contentsline {section}{\numberline {2.1}Stock Selection}{1}{section.2.1}% 
+\contentsline {section}{\numberline {2.2}Ravenpack Sentiment Data}{1}{section.2.2}% 
+\contentsline {section}{\numberline {2.3}Analyst Reports}{1}{section.2.3}% 
+\contentsline {section}{\numberline {2.4}Stock Data}{1}{section.2.4}% 
+\contentsline {subsection}{\numberline {2.4.1}Overview over the Stock Data}{1}{subsection.2.4.1}% 
+\contentsline {subsection}{\numberline {2.4.2}Data Transformation}{3}{subsection.2.4.2}% 
+\contentsline {chapter}{\numberline {3}Predicting Stocks}{7}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}Predictions Using Machine Learning}{7}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}Predictions Using Time Series}{7}{section.3.2}% 
+\contentsline {subsection}{\numberline {3.2.1}Idea/Process and Evaluation}{7}{subsection.3.2.1}% 
+\contentsline {subsection}{\numberline {3.2.2}Theoretical Overview}{7}{subsection.3.2.2}% 
+\contentsline {subsubsection}{Random Walks}{7}{subsubsection*.12}% 
+\contentsline {subsubsection}{Autoregressive Models}{7}{subsubsection*.13}% 
+\contentsline {subsubsection}{Moving Average Models}{8}{subsubsection*.14}% 
+\contentsline {subsubsection}{Autoregressive Moving Average Models}{8}{subsubsection*.15}% 
+\contentsline {subsubsection}{GARCH Models}{8}{subsubsection*.16}% 
+\contentsline {subsection}{\numberline {3.2.3}Approaching the Training Data}{9}{subsection.3.2.3}% 
+\contentsline {subsection}{\numberline {3.2.4}Summary of Prediction with Time Series Models}{10}{subsection.3.2.4}% 
+\contentsline {section}{\numberline {3.3}Hybrid Prediction}{10}{section.3.3}% 
+\contentsline {subsection}{\numberline {3.3.1}ARMAX Predictions}{10}{subsection.3.3.1}% 
+\contentsline {subsection}{\numberline {3.3.2}Weighted Average of Predictions}{10}{subsection.3.3.2}% 
+\contentsline {chapter}{\numberline {4}Trading Strategies}{10}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Trading Strategies - Introduction and Theory}{10}{section.4.1}% 
+\contentsline {subsection}{\numberline {4.1.1}Idea and Process}{10}{subsection.4.1.1}% 
+\contentsline {subsection}{\numberline {4.1.2}Mean Reversion Models and Momentum Trading - Theoretical Background}{10}{subsection.4.1.2}% 
+\contentsline {section}{\numberline {4.2}Trading Strategies - Implementation}{11}{section.4.2}% 
+\contentsline {subsection}{\numberline {4.2.1}Mean Reversion Portfolio}{11}{subsection.4.2.1}% 
+\contentsline {subsection}{\numberline {4.2.2}Mean Reversion - single stocks}{12}{subsection.4.2.2}% 
+\contentsline {subsubsection}{Cumulative Mean - Stock prices}{12}{subsubsection*.19}% 
+\contentsline {subsubsection}{Cumulative Mean - Returns}{12}{subsubsection*.21}% 
+\contentsline {subsubsection}{Comparison of 90d and 30d moving averages}{12}{subsubsection*.23}% 
+\contentsline {subsubsection}{Mean Reversion Portfolio}{12}{subsubsection*.24}% 
+\contentsline {subsection}{\numberline {4.2.3}Momentum Based Trading}{14}{subsection.4.2.3}% 
+\contentsline {subsection}{\numberline {4.2.4}Pairs Trading}{14}{subsection.4.2.4}% 
+\contentsline {section}{\numberline {4.3}Trading Strategies Based on Our Predictions}{14}{section.4.3}% 
+\contentsline {section}{\numberline {4.4}Hybrid Trading Strategies}{14}{section.4.4}% 
+\contentsline {chapter}{\numberline {5}Conclusion}{14}{chapter.5}% 
+\contentsline {chapter}{Bibliography}{15}{chapter*.25}% 
+\contentsline {chapter}{\numberline {A}Appendix A name}{16}{appendix.A}% 
+\contentsline {chapter}{Statutory Declaration}{26}{appendix*.38}% 

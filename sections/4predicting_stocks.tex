@@ -65,18 +65,24 @@ where $x_t$ can be any constant mean, regression or time series process and $y_t
 
 
 \subsection{Approaching the Training Data}
-To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit. Figure XXX shows the ACF and PACF for the log-returns of INTC and V. 
+To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit. Figure \ref{fig:INTC_V_ACF_log_returns} shows the ACF and PACF for the log-returns of INTC and V. From looking at the plots we can presume that for V, AR and MA models of order one or two might be a reasonable try. For INTC it looks like there is very little information included as none of the lower order lags bears any significance. 
 
+\begin{figure}[h]
+    \centering
+    \figuretitle{ACF and PACF of log-returns of Stocks INTC and V}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/INTC_ACF_log_returns.pgf}
+    \end{adjustbox}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/V_ACF_log_returns.pgf}
+    \end{adjustbox} 
+    \caption{}
+    \label{fig:INTC_V_ACF_log_returns}
+\end{figure}{}
 
-\subsubsection{AR(1)}
-
-
-
-
-
-
-
-
+    AR1         MA1         ARMA(1,1)   ARMA(2,1)   ARMA(1,2)     
+V   -8887.36    -8888.1     -8894.21    -8892.25 
+In  8701.9      8701.9      -8699.91    -8697.9
 
 Fitting: 
 Our Code fits an RW model, prediicts the next value, compares it to the real value for the MSE and then adds the true value to the time series used for predicting the next value. (we could have done this simpler, by just taking the values of the previous period as prediction for the current one. 
@@ -95,7 +101,14 @@ Figure: All predicted values?
 
 \section{Hybrid Prediction}
 
-For the hybrid prediction we tried to predict sentiment scores on news sources. ...
+The movement of time series data for financial data is influenced bei external effects and information. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we predict sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
+%
+As we were not able to acquire access to a reliable and precise news sources, we tried to implement our approach on the available analyst reports regarding specific stocks. The problem with these reports is, that they are more an indicator of performance over the past month and a prediction about the future performance and don´t cover sudden events. The reports also cluster around (meetings?) with long stretches of no or very few reports in between. This makes it unlikely that they are valuable for trading strategies.
+%
+The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores, like positive and negative, from text data. Many of these require a supervised approach … . Language is very context specific (…) making it unpractical to use other, labelled training data sets, than financial news data(…). With the use of intra day trading and news data one could have also used the movement or volatility of the period close after the news release to get a rough estimate of the impact certain news have. Such an approach was chosen by \citet{robertson2007news}. Our data is only inter day and does not allow for a classification in that way. 
+
+A common approach for unsupervised 
+
 
 Analyst report data beschreiben...
 
