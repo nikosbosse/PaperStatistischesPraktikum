@@ -5,6 +5,9 @@ The stock data comprises 10 selected companies from the NASDAQ stock index. The 
 
 
 \section{Ravenpack Sentiment Data}
+Next to the financial time series data, sentiment data from a financial data provider RavenPack was acquired. According to their website RavenPack is a leading provider of big data analytics for financial services \citep{RavenPack}. Our specific data is from RavenPack News Analytics, a service providing actionable event and sentiment information from TIME to TIME. The sentiment information has intra day precision. As such events are recorded at their time of appearance and not just on a daily basis. The variables consist of an indicator for the estimated positive or negative sentiment score called ESS ranging from 0 to 100 where 50 is neutral. This goes along with an estimated novelty score called ENS (0-100) describing how 'new' the news are and a RELEVANCE (0-100) variable that shows how closely the information is related to the underlying news, this can be converged to the number of news per day. Additionally two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window (AES) and AEV is the sum of events over the past 90 days. All variables have substantial numbers of missing values ...
+
+
 
 
 \section{Analyst Reports}
