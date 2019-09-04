@@ -53,7 +53,7 @@ Autoregressive Moving Average Models of order p and q (ARMA(p,q)) form a combina
 The GARCH(p,q) model is specified as follows:
 \begin{align}
     r_{t} &= \sigma_t  \upepsilon_t \label{eq:garch1}\\
-\intertext{where $\upepsilon_t$ is Gaussian white noise with  $\upepsilon_t ~ \mathcal{N}(0,1)$ and}
+\intertext{where $\upepsilon_t$ is Gaussian white noise with  $\upepsilon_t \sim \mathcal{N}(0,1)$ and}
     \sigma^2_t &= \alpha_0 + \underbrace{\alpha_1 r^2_{t-1} + ... + \alpha_p r^2_{t-p}}_\text{autoregressive part} + \underbrace{\beta_1 \sigma^2_{t-1} + ... + \beta_q \sigma^2_{t-q}}_\text{moving average part} \label{eq:garch2}
 \end{align}{}
 In equation \ref{eq:garch1} the returns $r_t$ are therefore modelled as white noise with mean zero and variance variance $\sigma^2_t$. When compared to white Gaussian noise with constant variance this can produce a leptokurtic (fat-tailed) distribution similar to what we observed in the QQ-Plots in figure XXXXX. Equation \ref{eq:garch1} is called the mean model of the GARCH(p,q) process. This mean model can also be altered as needed. The GARCH model can then be specified in the following way: 
@@ -222,7 +222,7 @@ Financial data often exhibit conditional heteroskedasticity. We therefore want t
 
 We formally test for the presence of a GARCH effect, i.e. autocorrelation in the squared residuals of the time series using the Lagrange Multiplier Test proposed by Engle (SOURCE). For both tests, the null hypothesis of 'No ARCH effect' cannot be rejected with p-values of 0.1160 (V) and 0.2693 (INTC). We nevertheless proceed to fit a GARCH model to the data. There is extensive literature on the optimal order for a GARCH model (e.g. does anything beat GARCH(1,1), does anything not beat GARCH(1,1), does anyone need GARCH(1,1)?). 
 
-For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (the mean is modeled by an ARMA(0,0) process). While we have tried other models such as for example GARCH(3,1) they did not perform significantly better than GARCH(1,1). To avoid issues with numerical instability all log-returns are multiplied by 100 and the new current best BIC become 5025.46 for V and 5205.42 for INTC as shown on the right hand side of \ref{tab:bic_arma}. Table \ref{tab:V_result_GARCH11_100} shows the result for a GARCH(1,1) fit to V, table \ref{tab:INTC_result_GARCH11_100} shows the result for INTC. In both cases the fit improves and the BIC drops considerably. 
+For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (the mean is modeled by an ARMA(0,0) process). While we have tried other models such as for example GARCH(3,1) they did not perform significantly better than GARCH(1,1). To avoid issues with numerical instability all log-returns are multiplied by 100 and the new current best BIC become 5025.46 for V and 5205.42 for INTC as shown on the right hand side of \ref{tab:bic_arma}. Table \ref{tab:V_result_GARCH11_100} shows the result for a GARCH(1,1) fit to V, table \ref{tab:INTC_result_GARCH11_100} shows the result for INTC. In both cases the fit improves and the BIC drops - not very much, but noticeably (from 5025.46 to 4948.68 (V) and from 5205.42 to 5169.75 (INTC)). 
 
 \begin{table}[h]
     \centering
@@ -232,7 +232,7 @@ For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (
     \label{tab:V_result_GARCH11_100}
 \end{table}{}
 
-\begin{table}[h]
+\begin{table}[h!]
     \centering
     \figuretitle{Results for GARCH(1,1) with constant mean fit to the log-returns of V}
     \input{figures/INTC_result_GARCH11_100.tex}
@@ -240,37 +240,88 @@ For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (
     \label{tab:INTC_result_GARCH11_100}
 \end{table}{}
 
+We can relax the assumption of normally distributed error terms $\upepsilon_t$ (see \ref{eq:garch1}) and instead assume a Student t-distribution with fatter tails. This time the BIC drops considerably (from 4948.68 to 4794.91 (V) and from 5169.75 to 4986.41 (INTC)). The results are shown in table \ref{tab:V_result_GARCH11_students_100} and table \ref{tab:INTC_result_GARCH11_students_100}. 
 
-test different mean models for GARCH. 
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for GARCH(1,1) with t-Distribution (V)}
+    \input{figures/V_result_GARCH11_100_students.tex}
+    \caption{}
+    \label{tab:V_result_GARCH11_students_100}
+\end{table}{}
+
+\begin{table}[h!]
+    \centering
+    \figuretitle{Results for GARCH(1,1) with t-Distribution (INTC)}
+    \input{figures/INTC_result_GARCH11_100_students.tex}
+    \caption{}
+    \label{tab:INTC_result_GARCH11_students_100}
+\end{table}{}
+
+Another expansion is the inclusion of asymmetric shocks (see \ref{eq:garch3}). This implies that sudden drops in a stock's value lead to higher volatility than an increase of the same amount would. Results for the GJR-GARCH model are shown in tables \ref{tab:V_result_GARCH11_students_GJR_100} and \ref{tab:INTC_result_GARCH11_students_GJR_100}. For V, the gamma-coefficient is positive and significant, indicating an asymmetric effect of shocks on volatility. BIC drops by a bit from 4794.91 to 4784.75. For INTC, the gamma coefficient is not significant and BIC even slightly increase from 4986.41 to 4993.23.
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (V)}
+    \input{figures/V_result_GARCH11_100_students_GJR.tex}
+    \caption{}
+    \label{tab:V_result_GARCH11_students_GJR_100}
+\end{table}{}
+
+\begin{table}[h!]
+    \centering
+    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (INTC)}
+    \input{figures/INTC_result_GARCH11_100_students_GJR.tex}
+    \caption{}
+    \label{tab:INTC_result_GARCH11_students_GJR_100}
+\end{table}{}
+
+\subsubsection{Forecasting and Forecast Precision}
+To assess the predictive performance of we use the ARMA(0,0) model vor V and INTC as well as the ARMA(1,1) model for V to generate predictions. To do so, we fit an ARMA model to the time series up to time $y_t$, predict the next value $\hat{y}_{t+1}$, then add the true value $y_{t+1}$ to the time series and fit a model that lets us predict $\hat{y}_{t + 2}$ and so forth. For the ARMA(0,0) model, this means predicting the next value on the basis of a cumulative mean of the past log-returns. Estimating an ARMA(1,1) consecutively for V turned out to be problematic because the result was not always a stationary process. Therefore, at some points the estimation of an ARMA(1,1) model was impossible. We therefore had to replace the prediction for those specific points with ARMA(0,0). 
+To compare the results we compared the mean squares error (MSE) as well as a binary prediction accuracy that merely judges whether the direction of the prediction was correct. The predictions of the ARMA(0,0) model with constant mean (which corresponds to a random walk for the stock prices with drift) seem to be better then mere coin tosses. However they do not perform better than the naive strategy of always predicting an upwards movement of the stock (i.e. a positive return). Only the ARMA(1,1) model for V reaches a higher prediction accuracy. This might, however, also be due to chance. Table \ref{tab:V_INTC_ARMA_predictions} shows the results of those predictions. The forecasts are shown in figure \ref{fig:V_INTC_ARMA_predictions_plot}. 
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{lrrr}
+    \toprule
+    {}  & MSE & Binary Accuracy & Naive Binary Accuracy \\
+    \midrule
+    V - ARMA(0,0) & 0.2457 & 54.1528 \% & \textbf{54.2193} \% \\
+    V - ARMA(1,1) & 0.2473 & \textbf{55.8139} & 54.2193 \\
+    INTC - ARMA(0,0) & 0.2760 & 51.7608 & \textbf{52.3588} \\
+    \bottomrule
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:V_INTC_ARMA_predictions}
+\end{table}{}
+
+\begin{figure}
+    \centering
+    %\includegraphics{}
+    \caption{Caption}
+    \label{fig:V_INTC_ARMA_predictions_plot}
+\end{figure}{}
+
+
+\subsubsection{Forecasting Volatility}
+While GARCH models are not able to better predict future returns, they can help predict the volatility of future returns. Figure \ref{fig:} gives an intuition to the usefulness of volatility forecasts. In the figure, the volatility of V predicted by an GJR-GARCH(1,1) process is plotted together with the absolute value of the log-returns of the stock. We can clearly see that periods that visually look more volatile often coincide with a high predicted volatility. 
+
+This is useful for balancing portfolios, pricing options and XXX [THEORY!]. As the main focus of this paper is the prediction of returns, volatility forecasts will not be further discussed in detail. 
 
 
 
 
-3) add TGARCH?
+\subsection{Weighted Average of Predictions}
+a) of different time series models
+b) of time series and ML models
 
 
 
 
 
 
-Fitting: 
-Our Code fits an RW model, prediicts the next value, compares it to the real value for the MSE and then adds the true value to the time series used for predicting the next value. (we could have done this simpler, by just taking the values of the previous period as prediction for the current one. 
-
-Figure: Plot Real vs. Predicted values. (Real values? or FD of log-Values?
-Table: MSE
-
-
-
-
-
-\subsection{Summary of Prediction with Time Series Models}
-Table: MSE all
-Figure: All predicted values?
-
-
-\section{Hybrid Prediction}
-
-The movement of time series data for financial data is influenced bei external effects and information. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we predict sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
+\section{IRGENDWO ANDERS EINFÜGEN}
+The movement of time series data for financial data is influenced by external effects and information. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we predict sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
 %
 As we were not able to acquire access to a reliable and precise news sources, we tried to implement our approach on the available analyst reports regarding specific stocks. The problem with these reports is, that they are more an indicator of performance over the past month and a prediction about the future performance and don´t cover sudden events. The reports also cluster around (meetings?) with long stretches of no or very few reports in between. This makes it unlikely that they are valuable for trading strategies.
 %
@@ -283,23 +334,3 @@ Analyst report data beschreiben...
 
 To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
 The last step is lemmatizing the words using the \textit{textstem} package \citep{textstem}. Lemmatizing words means reducing them to their inflectional forms. Commonly stemming is also applied, because words sometimes have derivationally related forms. This was not done to have more flexibility for the later applied text analysis. Additionally we could have also used the term frequency–inverse document frequency (tf-idf) matrix (ZITIEREN) for further reductions in the number of words. The issue here would have been that highly informative words for the stock sentiment could have been removed. 
-
-\subsection{ARMAX Predictions}
-ARMAX works like this: 
-XXXXXX
-
-Predictions
-Confidence Intervals
-
-
-Predictors can be 
-- Using weather forecasts --> ARMAX
-- Number of Tweets?
-- Sentiments from Machine Learning Algorithm
-- Predictions made by the Algorithm
-
-
-
-\subsection{Weighted Average of Predictions}
-a) of different time series models
-b) of time series and ML models
