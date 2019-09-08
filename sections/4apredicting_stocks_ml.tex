@@ -1,0 +1,110 @@
+\chapter{Predicting Stocks With Machine Learning - Felix} \label{ch:predictions_ml}
+The movement of time series data for financial data is influenced by external effects. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we estimate sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
+%
+As we were not able to acquire access to a reliable and precise news sources, we tried to implement our approach on the available analyst reports regarding the ten specific stocks. The problem with these reports is, that they are more an indicator of performance over the past month and a prediction about the future performance. As such they do not cover sudden events that would be present in the news. The reports also cluster around certain dates with long stretches of no or very few reports in between (ABBILDUNG). This makes it unlikely that they are valuable for trading strategies.
+%
+The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores from flowing text data. Common procedures would be to use a library of previously known positive and negative adjectives or 4-grams. The simplest way to utilize these would be to simply count their appearance, this is known as a bag-of-words method (ZITAT?). Other approaches extract parts of the text at the location of the specific adjectives and use Support Vector Machines or Naive Bayes Classifier to extract sentiment, see \citet{westerski2007sentiment} for further references. Many of these more advanced sentiment classification techniques are supervised, as such the need a labelled data set for initial training. The (NUMBER #) analyst reports are unstructured and not labelled making it unrealistic to use these methods. They also have a very specific format and language, therefore other pretrained models or other labelled training data sets could not be used. Another possibility to custom label the data would have been possible using intra day trading and news data. By looking at the movement or volatility of the period close after the news release approximate sentiment scores can then be computed \citep{robertson2007news}. As the obtained stock data is only inter day we could not apply this method.
+
+To get around these restrictions unsupervised methods where chosen for the estimation of sentiment scores. 
+A common approach for unsupervised 
+
+
+Analyst report data beschreiben...
+
+To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
+The last step is lemmatizing the words using the \textit{textstem} package \citep{textstem}. Lemmatizing words means reducing them to their inflectional forms. Commonly stemming is also applied, because words sometimes have derivationally related forms. This was not done to have more flexibility for the later applied text analysis. Additionally we could have also used the term frequency–inverse document frequency (tf-idf) matrix (ZITIEREN) for further reductions in the number of words. The issue here would have been that highly informative words for the stock sentiment could have been removed. 
+
+\subsection{Feature engineering of sentiment scores}
+
+\subsection{Sentiment Library}
+
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Sun Sep 08 17:25:29 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{rll}
+  \hline
+ & Positiv & Negativ \\ 
+  \hline
+1 & acclaim & abandonment \\ 
+  2 & accomplishment & abdication \\ 
+  3 & advantage & abolish \\ 
+  4 & assure & abrogation \\ 
+  5 & attractiveness & abuse \\ 
+  6 & good & accuse \\ 
+  7 & breakthrough & acquittal \\ 
+  8 & collaborator & adversary \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\subsection{Joint sentiment topic model}
+
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Sun Sep 08 13:29:24 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllllll}
+  \hline
+ & topic1sent1 & topic2sent1 & topic3sent1 & topic28sent1 & topic29sent1 & topic30sent1 \\ 
+  \hline
+1 & disney & report & visa & canaccord & piper & stanley \\ 
+  2 & walt & market & volume & research & jaffray & morgan \\ 
+  3 & network & disclosure & growth & genuity & report & research \\ 
+  4 & park & capital & payment & investment & stock & instrument \\ 
+  5 & medium & ebit & revenue & analyst & analyst & corp \\ 
+  6 & company & stock & transaction & financial & rating & investment \\ 
+  7 & cable & topeka & europe & limit & cover & information \\ 
+  8 & espn & investment & debit & issuer & topeka & limit \\ 
+  9 & entertainment & security & process & person & relative & datum \\ 
+  10 & consumer & recommendation & incentive & author & sell & client \\ 
+  11 & studio & information & credit & relevant & price & stock \\ 
+  12 & resort & page & cross & affiliate & time & industry \\ 
+  13 & revenue & locate & border & company & note & investor \\ 
+  14 & film & issue & network & relate & disclosure & bank \\ 
+  15 & sport & option & fee & discuss & company & international \\ 
+  16 & disneys & company & international & client & distribution & month \\ 
+  17 & content & margin & client & information & person & provide \\ 
+  18 & product & financial & purchase & designate & coverage & coverage \\ 
+  19 & broadcast & appendix & currency & trade & represent & management \\ 
+  20 & advertise & research & card & distribute & locate & financial \\ 
+  21 & star & base & global & month & market & sell \\ 
+  22 & interactive & product & price & broke & horizon & disclosure \\ 
+  23 & growth & instrument & expense & material & page & rate \\ 
+  24 & time & share & datum & dealer & rate & universe \\ 
+  25 & program & analysis & mastercard & australia & revenue & wwwmorganstanleycom \\ 
+  26 & segment & rate & rate & provide & include & regulate \\ 
+  27 & channel & contain & operate & express & fundamental & relevant \\ 
+  28 & include & cover & impact & risk & target & trade \\ 
+  29 & war & client & constant & disclosure & median & msci \\ 
+  30 & theme & express & world & corp & opinion & weight \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+    \item Weil wir nur wenige stocks haben kann es sein das das JST company specifix topics bildet
+    \item Schätzen von neuen texten möglich basierend auf den posterior wort probabilities
+\end{enumerate}
+\subsection{XG-Boost on sentiment data}
+\begin{itemize}
+    \item XGB kann auch einfach nur verwendet werden um zu erkennen welche features wichtig sind
+\end{itemize}
+\subsubsection{XGBoost}
+Here I expalain what XGBoost is an how it works
+
+\subsubsection{Classification results}
+Take Mean of different predictions?
+
+XGBOOST, LightGBM whatever. 
+Theorie, Datenaufbereitung, Ergebnisse
+
+
+
+
+\subsection{XGB-Boost}
+% https://www.kaggle.com/furiousx7/xgboost-time-series
+% related literature at the end
+% Hourly forecasting: https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost/notebook
+% https://www.datacamp.com/community/tutorials/xgboost-in-python
+% missing values in XGB https://github.com/dmlc/xgboost/issues/21

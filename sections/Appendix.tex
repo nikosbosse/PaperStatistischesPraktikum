@@ -1,5 +1,31 @@
 \chapter{Appendix A name}\label{ch:appAlabel}
 
+
+
+% CHAPTER THE DATA
+
+
+\begin{figure}[H]
+    \centering
+    \figuretitle{ACF / PACF of Squared log-returns of Stocks MMM, GE, JNJ}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/MMM_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/GE_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/JNJ_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \caption{ACF and PACF of squared residuals of stocks MMM, GE and JNJ. We see that some of the squared log-returns exhibit indeed autocorrelation, while others do less so. Strong autocorrelation implies that there is information about the future in the time series that can be modeled.}
+    \label{fig:ACF_selected_squared_log_returns}
+\end{figure}{}
+
+
+
+
+
+
 \begin{figure}[h]
     \centering
     \begin{adjustbox}{width=.85\textwidth,center}

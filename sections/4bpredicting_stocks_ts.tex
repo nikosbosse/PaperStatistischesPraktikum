@@ -1,18 +1,12 @@
-\chapter{Predicting Stocks}\label{ch:predictions}
-
-
-\section{Predictions Using Machine Learning}
-
-\section{Predictions Using Time Series}
-\subsection{Idea/Process and Evaluation}
+\chapter{Predictions Using Time Series - Nikos}
+\section{Idea/Process and Evaluation - Nikos}
 irgendwas in der Richtung: wir benutzen Time Series Modelle, machen Predictions und gucken uns am Ende dann den Mean Squared Error an. Sinnvollerweise immer die ersten 10 Perioden verwerfen, um den MSE vergleichbar zu machen zwischen allen Gruppen, auch denen, bei denen die ersten paar Perioden nicht definiert sind. 	
 In-Sample vs. Out of Sample Prediction?
 
-
-\subsection{Theoretical Overview}
+\section{Theoretical Overview - Nikos}
 Time series predictions in this paper will be made using Random Walks, autoregressive (AR), moving average (MA) and generalized autoregressive conditional heteroscedasticity (GARCH) models. The following will first give a short theoretical overview. Then different models will be applied to a training data set of two chosen stocks. Then predictions will be made for the other stocks using the above mentioned techniques. 
 
-\subsubsection{Random Walks}
+\subsection{Random Walks  - Nikos du }
 Random walks serve as the baseline against which every prediction can be compared. Assuming a random walk as the underlying process implies that we know nothing about the future and can do no better than assuming tomorrow's stock price will on average be the same as today. Formally, a random walk follows \begin{align}
     y_t &= y_{t-1} + w_t \label{eg:rw1}\\
     \intertext{where $y_t$ is the value of the time series at time t and $w_t$ is a random realisation of a stationary white noise process with mean 0 and variance $\sigma^2$. We can expand equation \ref{eg:rw1} by allowing for a constant trend, a drift. A random walk with drift can be represented as}
@@ -20,7 +14,7 @@ Random walks serve as the baseline against which every prediction can be compare
 \end{align}{}
 where $\delta$ is a drift parameter. Predictions for period t + 1 are therefore exactly the value at time t. As we have already eliminated the trend by transforming the data to log-returns we will not use the drift representation here. If we did our analysis on the original stock values then a drift would be appropriate. Note that the random walk (with or without drift) is not a stationary process. 
 
-\subsubsection{Autoregressive Models}
+\subsection{Autoregressive Models - Nikos}
 An autoregressive process of order p (AR(p)) implies that the current value of a time series can be described as a combination of the previous p values plus a random shock. As those previous values intern depend on previous values, the current value is indirectly influenced by its entire past. Formally, an AR(p) process follows 
 \begin{align}
     y_t &= \psi_1 y_{t-1} + \psi_2 y_{t-2} + ... + \psi_p y_{t-p} + w_t \label{eq:AR(p)}
@@ -31,7 +25,7 @@ An autoregressive process of order p (AR(p)) implies that the current value of a
 \end{align}
 \noindent with $\alpha$ = $\mu (1 - \phi_1 - ... - \phi_p)$.
 
-\subsubsection{Moving Average Models}
+\subsection{Moving Average Models - Nikos}
 A moving average process of order q implies that the current value of a time series consists of the average of the previous q observations plus a random shock. As the mean of the time series $\mu$ is constant this average can also be simply expressed as an average of the past random shocks $\{w_{t-1}, ... w_{t-q}\} $. In constrast to the AR(p) process, the shocks affect the future directly (and not only indirectly through past values) and only affect the next q values. Formally, the MA(q) process can be expressed as
 \begin{align}
     y_t = \mu + w_t + \theta w_{t-1} + ... + \theta w_{t-q}
@@ -39,7 +33,7 @@ A moving average process of order q implies that the current value of a time ser
 \noindent where $w_t$ represents white noise and $\theta_1, ..., \theta_q$ are parameters and q is the number of lags in the moving average. 
 
 
-\subsubsection{Autoregressive Moving Average Models}
+\subsection{Autoregressive Moving Average Models - Nikos}
 Autoregressive Moving Average Models of order p and q (ARMA(p,q)) form a combination of the above described AR(p) and MA(q) models. Formally, an ARMA(p,q) process follows
 \begin{align}
     y_t = \phi_1 y_{t-1} + ... + \phi_p y_{t-p} + w_t + \theta_1 w_{t-1} + ... + \theta_q w_{t-q} \\
@@ -49,7 +43,7 @@ Autoregressive Moving Average Models of order p and q (ARMA(p,q)) form a combina
 \noindent with $\alpha = \mu (1 - \phi_1 - ... - \phi_p)$.
 
 
-\subsubsection{GARCH Models}
+\subsection{GARCH Models - Nikos}
 The GARCH(p,q) model is specified as follows:
 \begin{align}
     r_{t} &= \sigma_t  \upepsilon_t \label{eq:garch1}\\
@@ -70,11 +64,17 @@ A further expansion is the GJR-GARCH model (SOURCE) where the variance GJR-GARCH
 
 This means that negative shocks may have a different impact on future volatility than positive shocks, e.g. a sudden drop in a stock will cause the stock to be disproportionally more volatile in the near future. 
 
+\section{Full Example Analysis with 'Training Data'  - Nikos}
+Idea: start with a subset of the data and do a full analysis and get a feeling of what might work for the rest. Don't do everything for all to avoid overfitting. We look at V and INTC
 
 
-\subsection{Approaching the Training Data}
-\subsubsection{Data Exploration}
-To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit. Figure \ref{fig:INTC_V_ACF_log_returns} shows the ACF and PACF for the log-returns of INTC and V. From looking at the plots we can presume that for V, AR and MA models of order one or two might be a reasonable try. For INTC it looks like there is very little information included as none of the lower order lags bear any significance. 
+%To get a better feeling about our data and to avoid overfitting we try to explore the two stocks INTC and V. We apply different time series models to the entire time series and check their model fit.
+
+\subsection{Data Exploration - Nikos}
+Eventuell noch plot mit den log-returns / der gesamten Zeitreihe für V und INTC. 
+
+\subsubsection{Looking at Autocorrelation - Nikos}
+Figure \ref{fig:INTC_V_ACF_log_returns} shows the ACF and PACF for the log-returns of INTC and V. From looking at the plots we can presume that for V, AR and MA models of order one or two might be a reasonable try. For INTC it looks like there is very little information included as none of the lower order lags bear any significance. 
 
 We start by applying a formal test for autocorrelation to the time series, the Box/Pierce and Ljung/Box tests. They have slightly different properties regarding their handling of very large and very small numbers of observations, but for both the null hypothesis is that there is no autocorrelation in the series. Figure \ref{fig:ljungbox} shows the p-values for the first 40 lags. The test suggests that for V there may be some significant autocorrelations that could be used for modelling. Compared to the plot of ACF and PACF the test even seems too optimistic. For INTC, the test confirms non-significance for the first few lags. While higher order lags are deemed to be significant by the test modelling a time series process with so many coefficients would be very prone to overfitting. 
 
@@ -104,7 +104,7 @@ We start by applying a formal test for autocorrelation to the time series, the B
     \label{fig:ljungbox}
 \end{figure}{}
 
-\subsubsection{ARMA models}
+\subsection{Applying ARMA models}
 We start by fitting ARMA models to the time series. This turned out to be prone to numerical instability. While the BIC could always be calculated, for some of the models standard errors could not be computed as the software was not able to invert the Hessian matrix. The underlying problem is exacerbated when dealing with GARCH models, as all residuals are squared. The problem was eventually alleviated by multiplying our log-returns by 100 (corresponding to an approximate percentage interpretation). Table \ref{tab:bic_arma} shows the BIC that were obtained from fitting different ARMA(p,q) models to the series of log-returns. 
 
 \begin{table}
@@ -320,17 +320,3 @@ b) of time series and ML models
 
 
 
-\section{IRGENDWO ANDERS EINFÜGEN}
-The movement of time series data for financial data is influenced by external effects and information. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we predict sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
-%
-As we were not able to acquire access to a reliable and precise news sources, we tried to implement our approach on the available analyst reports regarding specific stocks. The problem with these reports is, that they are more an indicator of performance over the past month and a prediction about the future performance and don´t cover sudden events. The reports also cluster around (meetings?) with long stretches of no or very few reports in between. This makes it unlikely that they are valuable for trading strategies.
-%
-The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores, like positive and negative, from text data. Many of these require a supervised approach … . Language is very context specific (…) making it unpractical to use other, labelled training data sets, than financial news data(…). With the use of intra day trading and news data one could have also used the movement or volatility of the period close after the news release to get a rough estimate of the impact certain news have. Such an approach was chosen by \citet{robertson2007news}. Our data is only inter day and does not allow for a classification in that way. 
-
-A common approach for unsupervised 
-
-
-Analyst report data beschreiben...
-
-To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
-The last step is lemmatizing the words using the \textit{textstem} package \citep{textstem}. Lemmatizing words means reducing them to their inflectional forms. Commonly stemming is also applied, because words sometimes have derivationally related forms. This was not done to have more flexibility for the later applied text analysis. Additionally we could have also used the term frequency–inverse document frequency (tf-idf) matrix (ZITIEREN) for further reductions in the number of words. The issue here would have been that highly informative words for the stock sentiment could have been removed. 
