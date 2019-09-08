@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex master"] 1567179543 "master.aux" "master.bbl" "master" 1567179555
+["bibtex master"] 1567363224 "master.aux" "master.bbl" "master" 1567363344
   "/usr/share/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1557554374 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "bib/mybib.bib" 1567168749 13984 069f3750080d5b2889721296e125dbf7 ""
-  "master.aux" 1567179554 17239 a775c1baa52c328f507b3df051c92e35 "pdflatex"
+  "bib/mybib.bib" 1567362751 14687 5cb0395dbb247aa366278ab0d15c3dbd ""
+  "master.aux" 1567363344 17357 4a538645703c6e7fc5cfa81a28c659eb "pdflatex"
   (generated)
   "master.blg"
   "master.bbl"
-["pdflatex"] 1567179543 "master.tex" "master.pdf" "master" 1567179555
+["pdflatex"] 1567363335 "master.tex" "master.pdf" "master" 1567363344
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1557554374 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1557554374 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1557554374 3584 2d666ecf6d466d8b007246bc2f94d9da ""
@@ -301,16 +301,16 @@
   "figures/mean_reversion_portfolio_performance.pgf" 1566834689 166035 69a6494c4a517ad5ab841e5fd7a05a2b ""
   "figures/means_fd_log_values2.tex" 1567168749 259 9dae605fdd471da4a252d3cb75a36593 ""
   "figures/table_overview_stocks2.tex" 1567168749 1083 fb1f1a52fd95c4aa07e9b47daf056fd0 ""
-  "master.aux" 1567179554 17239 a775c1baa52c328f507b3df051c92e35 "pdflatex"
-  "master.bbl" 1567179543 1060 ba3228a56b3259a60bb3750e2ed7fce6 "bibtex master"
-  "master.out" 1567179554 2742 d6974a4e322f551957a60f2d7fc98d9a "pdflatex"
+  "master.aux" 1567363344 17357 4a538645703c6e7fc5cfa81a28c659eb "pdflatex"
+  "master.bbl" 1567363225 1440 a3eb7caa2f6ec929cffd4cbc50c78b06 "bibtex master"
+  "master.out" 1567363344 2742 d6974a4e322f551957a60f2d7fc98d9a "pdflatex"
   "master.tex" 1567168749 1823 2d0996f100c8f3078a8f963bd3ff8ca1 ""
-  "master.toc" 1567179554 3753 b725a919201c1ccff8414005677d6c1e "pdflatex"
+  "master.toc" 1567363344 3753 7bcd536c26d757297e19bd68565c703c "pdflatex"
   "sections/0frontpage.tex" 1565600237 1676 e56d02cf943429c686a71cb0e10d2d9e ""
   "sections/1titlepages.tex" 1565600237 690 949cf0e6b15498f57d64008fc7b57995 ""
   "sections/2introduction.tex" 1565600237 295 4c7fd60aa8f61645d58269cc99553224 ""
   "sections/3TheData.tex" 1567168749 12339 c9a02d74b9636e56af2c3ee48ca483b3 ""
-  "sections/4predicting_stocks.tex" 1567179490 9082 4296a99aadcdd7456b71db6da437c992 ""
+  "sections/4predicting_stocks.tex" 1567363335 11180 480d1bf7e1efc39aadd3257ad6ef0093 ""
   "sections/5trading_strategies.tex" 1567168749 6387 79802c2a338039e5ac472a89af59e8c5 ""
   "sections/Appendix.tex" 1567179490 3131 8f568876a042feb37d6ebd05e837fa32 ""
   "sections/a_gliederung.tex" 1565600237 141 7bf085442d1538100bd1435e70990f9f ""
@@ -320,9 +320,9 @@
   "setup/macros.tex" 1565600237 3478 e155672d9d1a25eb33e5c6da0edfe0d3 ""
   "setup/preamble.tex" 1567168749 6500 a0bb06fe94cf593146cda20bea13add1 ""
   (generated)
-  "master.pdf"
   "master.log"
-  "master.toc"
-  "master.aux"
   "master.out"
+  "master.aux"
   "master.thm"
+  "master.toc"
+  "master.pdf"
