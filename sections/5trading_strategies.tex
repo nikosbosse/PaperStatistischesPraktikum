@@ -97,10 +97,11 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
 
 \begin{figure}[h!]
     \centering
+    \figuretitle{Mean Reversion with 30d and 60d Moving Averages}
     \begin{minipage}[b]{0.49\textwidth}
         \centering
             \begin{adjustbox}{width=\textwidth,center}
-               % \input{figures/all_stock_30d_60d.pgf}
+               \input{figures/all_stock_30d_60d.pgf}
             \end{adjustbox}
         %\caption{Flower one.}
     \end{minipage}
@@ -108,14 +109,13 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
     \begin{minipage}[b]{0.49\textwidth}
         \centering
         \begin{adjustbox}{width=\textwidth,center}
-            \input{figures/all_returns_cum_mean_strategy.pgf}
+            \input{figures/all_60d_30d_strategy.pgf}
         \end{adjustbox}
         %\caption{Flower two.}
     \end{minipage}
-    \caption{Caption}
+    \caption{Mean Reversion with 30d and 60d Moving Averages}
     \label{fig:30d_60d_plot}
 \end{figure}{}
-
 
 \subsubsection{Mean Reversion - Log-Returns}
 The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm looks as follows
