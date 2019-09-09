@@ -1,9 +1,20 @@
-\begin{thebibliography}{4}
+\begin{thebibliography}{6}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Rav()]{RavenPack}
+Ravenpack.
+\newblock \url{https://www.ravenpack.com/}.
+\newblock Accessed: 2019-08-30.
+
+\bibitem[Westerski(2007)]{westerski2007sentiment}
+Adam Westerski.
+\newblock Sentiment analysis: Introduction and the state of the art overview.
+\newblock \emph{Universidad Politecnica de Madrid, Spain}, pages 211--218,
+  2007.
 
 \bibitem[Robertson et~al.(2007)Robertson, Geva, and Wolff]{robertson2007news}
 Calum~S Robertson, Shlomo Geva, and Rodney~C Wolff.
