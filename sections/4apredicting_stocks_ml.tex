@@ -12,7 +12,7 @@ As we were not able to acquire access to a reliable and precise news sources, we
  %   \label{fig:Seasonality in the Reports}
 %\end{figure}{}
 \\  \\
-The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores from flowing text data. Common procedures would be to use a library of previously known positive and negative adjectives or 4-grams. The simplest way to utilize these would be to simply count their appearance, this is known as a bag-of-words method (ZITAT?). Other approaches extract parts of the text at the location of the specific adjectives and use Support Vector Machines or Naive Bayes Classifier to extract sentiment, see \citet{westerski2007sentiment} for further references. Many of these more advanced sentiment classification techniques are supervised, as such the need a labelled data set for initial training. The (NUMBER #) analyst reports are unstructured and not labelled making it unrealistic to use these methods. They also have a very specific format and language, therefore other pretrained models or other labelled training data sets could not be used. Another possibility to custom label the data would have been possible using intra day trading and news data. By looking at the movement or volatility of the period close after the news release approximate sentiment scores can then be computed \citep{robertson2007news}. As the obtained stock data is only inter day we could not apply this method.
+The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores from flowing text data. Common procedures would be to use a library of previously known positive and negative adjectives or 4-grams. The simplest way to utilize these would be to simply count their appearance, this is known as a bag-of-words method (ZITAT?). Other approaches extract parts of the text at the location of the specific adjectives and use Support Vector Machines or Naive Bayes Classifier to extract sentiment, see \citet{westerski2007sentiment} for further references. Many of these more advanced sentiment classification techniques are supervised, as such the need a labelled data set for initial training. The (NUMBER \#) analyst reports are unstructured and not labelled making it unrealistic to use these methods. They also have a very specific format and language, therefore other pretrained models or other labelled training data sets could not be used. Another possibility to custom label the data would have been possible using intra day trading and news data. By looking at the movement or volatility of the period close after the news release approximate sentiment scores can then be computed \citep{robertson2007news}. As the obtained stock data is only inter day we could not apply this method.
 \\ \\
 Two methods to estimate sentiment scores in an unsupervised way will be explored here. One is a library bag-of-words approach that works with simple relative frequencies of positive and negative words. The other approach uses a new method called Joint Sentiment Topic model (JST) \citep{lin2009joint} and relies on a Bayesian method called Latent Dirichilet Allocation (LDA)  \citep{blei2003latent}. For both approaches the text data has to be cleaned which is described in section \ref{cleaningText}, the subsequent analysis of the sentiment scores can be found in section \ref{BoW} and \ref{JST}.
 
@@ -25,7 +25,7 @@ To get reliable sentiment scores text data has to be preprocessed. WHY IMPORTANT
 \includegraphics[width=\textwidth]{figures/ReductionInTotalNWords.png}
 \caption{Reduction in total number of words due to preprocessing the data.}
 \label{fig:TotWord}
-\end{figure} \\ 
+\end{figure}
 
 A common way to look at feature importance in flowing text data is to look at the Term Frequency Inverse Document Frequency (TF-IDF) which puts the feature frequency (FF) also called term frequency (TF) in relation to the inverse document frequency (IDF) \citep{na2004effectiveness}. 
 \begin{equation}
@@ -86,7 +86,9 @@ These results can be used to benchmark the results of the more advanced method.
 To make the computation of the sentiment scores more adaptable to the specific format of the data a new method by \citet{lin2009joint} called Joint Sentiment Topic model (JST) for sentiment analysis is being used. This approach builds upon the idea of \citet{blei2003latent} to use a Bayesian hierarchical model, Latent Dirichilet Allocation (LDA), to compute topics from text data. Latend Dirichilet Allocation is one of the most sophisticated methods in the field of topic modelling. To understand JST we firstly explain the fundamentals and assumptions of LDA. \\ 
 
 % good video: https://www.youtube.com/watch?v=DWJYZq_fQ2A
-The general idea of LDA is that each document can be described by a distribution of topics and each topic can itself be described by a distribution of words \citep{blei2003latent}. This assumes that the words themselves are independent of each other which is in reality not the case but for large data sets this assumption seems to be acceptable. To train a LDA one decides on the number of topics ($T$) that occur within the text documents, but these topics have not been observed, they are latent. The LDA has two dirichilet priors containing hyperparameters $\alpha$ and $\beta$, a high $\alpha$ indicates that each document is likely to contain a mixture of many topics, similarly a high $\beta$ indicates that each topic is a mixture of many different words. LDA backtracks from the document level to identify topics that are likely to have generated this specific corpus of words. The underlying optimisation of the model is done using a Gibbs-Sampler. In the first step each word is assigned probabilities to belong to each of the $T$ topics that sum up to one and each document gets a probability for each topic. The algorithm then iterates over the words topics and documents, updating the underlying probabilities. 
+The general idea of LDA is that each document can be described by a distribution of topics and each topic can itself be described by a distribution of words \citep{blei2003latent}. This assumes that the words themselves are independent of each other which is in reality not the case but for large data sets this assumption seems to be acceptable. To train a LDA one decides on the number of topics ($T$) that occur within the text documents, but these topics have not been observed, they are latent. The LDA has two dirichilet priors containing hyperparameters $\alpha$ and $\beta$, a high $\alpha$ indicates that each document is likely to contain a mixture of many topics, similarly a high $\beta$ indicates that each topic is a mixture of many different words. LDA backtracks from the document level to identify topics that are likely to have generated this specific corpus of words. The underlying optimisation of the model is done using a Gibbs-Sampler. In the first step each word is assigned probabilities to belong to each of the $T$ topics that sum up to one and each document gets a probability for each topic. The algorithm then iterates over the words topics and documents, updating the underlying probabilities. \\ \\
+In the JST the LDA is extended from three hierarchical layers to four. The additional layer models the document sentiment by adding a layer in between the document and topic layer \citep{lin2009joint}. The new sentiment layer can be associated with documents, followed by topics and then words. For a detailed mathematical definition see \citet{lin2009joint}. \\ \\
+To estimate the JST models we used the \textit{rJST} package in R \citep{rJST}. 
 
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
 % Sun Sep 08 22:37:52 2019
@@ -147,20 +149,28 @@ The general idea of LDA is that each document can be described by a distribution
 \subsubsection{XGBoost}
 Here I expalain what XGBoost is an how it works
 
-\subsubsection{Classification results}
+\subsection{Classification results}
 Take Mean of different predictions?
 
 XGBOOST, LightGBM whatever. 
 Theorie, Datenaufbereitung, Ergebnisse
 
-
 The standard evaluation of binary classification results is done using the F1-measure \citep{HADDI201326}. Where the score is a weighted product of precision and recall
-\begin{equation}
+\begin{equation} 
     F-measure = \frac{2*precision * recall}{precision + recall}
 \end{equation}
+
 % https://www.kaggle.com/furiousx7/xgboost-time-series
 % related literature at the end
 % Hourly forecasting: https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost/notebook
 % https://www.datacamp.com/community/tutorials/xgboost-in-python
 % missing values in XGB https://github.com/dmlc/xgboost/issues/21
+
+
+ich glaube bei den daten würde ichd die reihenfolge ändern und mit den stocks anfangen, verwenden wir ja am meisten und dann zu 2.1  würde ich eigentlich nur sagen das wir und auf die stocks beschränkt haben wo wir externe daten für bekommen haben
+
+Man kann 2.1. ja trotzdem kurz an den Anfang nehmen und dann einmal die Tabelle reintun, dann hat man auf einen Blick, welche drin sind. Und danach von mir aus die Stocks?
+
+Bei 3.0.1 und so: ich hatte überlegt, ob man diese data prep unter 2 packt. Da ist das bei den Stock data zumindest drin. Findest du das sinnvoll, oder findest du es anders besser?
+
 
