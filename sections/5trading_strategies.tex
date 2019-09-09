@@ -1,10 +1,12 @@
-\chapter{Trading Strategies}\label{ch:predictions}
+\chapter{\textcolor{red}{Trading Strategies}}\label{ch:predictions}
 
-\section{Trading Strategies - Introduction and Theory}
-\subsection{Idea and Process}
+\section{\textcolor{red}{Trading Strategies - Introduction and Theory}}
+\subsection{\textcolor{red}{Idea and Process}}
 We compare different Trading Strategies. With the Goal of Predicting Stocks this is interesting in and of itself. For the purpose of the project it also serves as a baseline to compare our Trading Strategy against. 
 
-\subsection{Mean Reversion Models and Momentum Trading - Theoretical Background}
+Many of the following strategies crucially depend on the time frame that is used. Some strategies are supposed to work over longer time frames like months and years, others over shorter ones like days or weeks. In this sense, the time frame of a trading strategy is a hyperparameter to be optimized. We decided to use a fixed time frame of one day for all strategies. On the one hand, this allows for direct comparisons and reduces the risk of overfitting. On the other hand, it was simply not feasible for us to do this hyperparameter optimization for every strategy. 
+
+\subsection{\textcolor{red}{Mean Reversion Models and Momentum Trading - Theoretical Background}}
 
 A vast body of scientific literature has tried to develop models that allow to understand and explain movements in stock markets. An even vaster community of traders has tried to implement these theories to do actual forecasting. While many of the theories are much more complex, two basic ideas can be summarized as "Momentum Based Trading" and "Mean Reversion Based Trading". The former theory hypothesizes that stocks that do well now will likely continue to do so in the future while the latter states that especially good or past performance is an exception and that stocks will eventually return to their average performance. A third strategy, Pairs Trading, will be detailed later. 
 
@@ -18,30 +20,47 @@ On the opposite side of the spectrum of trading strategies lies the idea of mome
 PAIRS TRADING
 
 
+\section{\textcolor{red}{Trading Strategies - Implementation}}
+\subsection{\textcolor{red}{Mean Reversion Portfolio}}
+While their analysis is focused on monthly returns over a much longer time frame, the basic idea that was replicated in our trading strategy was the same. The algorithm was implemented as follows: 
 
-\section{Trading Strategies - Implementation}
-\subsection{Mean Reversion Portfolio}
-While their analysis is focused on monthly returns over a much longer time frame, the basic idea that was replicated in our trading strategy was the same. While they found excessive returns of that strategy from 1932 to 1977 our implementation was unforturnately much less successful.
+%\begin{Verbatim}[frame=single]
+\begin{verbatim}
+for day in all_days: 
+    rank portfolio along their returns from the last day
+    Buy the two worst performers
+    sell (short) the two best performers
+\end{verbatim}
+%\end{Verbatim}
 
-\begin{figure}
+While Bondt and Thaler found excessive returns of that strategy from 1932 to 1977 our implementation was unforturnately much less successful. This may be due to the wrong time frame used or it might be due to either chance or alpha decay. If the strategy had indeed once been profitable we would assume enough market participants to trade on it as to render it practically useless. Figure \ref{fig:mean reversion} illustrates the performance of our mean-reversion portfolio against that of a simple buy-and-hold strategy. Interestingly, reverting the algorithm to buy the best performers and short the worst performers to produce a portfolio-based momentum strategy also does not work. 
+
+\begin{figure}[h!]
     \centering
-    \begin{adjustbox}{width=.7\textwidth,center}
+    \begin{adjustbox}{width=.95\textwidth,center}
         \input{figures/mean_reversion_portfolio_performance.pgf}
     \end{adjustbox}  
-    \caption{Caption}
+    \caption{Performance of the mean-reversion portfolio (orange) against the returns of a portfolio that had once been bought in the beginning and kept unchanged throughout (buy-and-hold, blue).}
     \label{fig:mean reversion}
 \end{figure}{}
 
-Implementation algorithm: rank portfolio everyday along their returns from the last day. Then buy the two worst performers and sell the two best performers. Interestingly, reversing that does not produce better results. The time frame is obviously not right. 
+\subsection{\textcolor{red}{Mean Reversion - single stocks}}
+For single stocks, we have tried two different ways to implement a mean reversion strategy. The first strategy looks at whether the current stock price is above or below its past mean. The second one in spirit does the same thing, but with log-returns. 
 
-\subsection{Mean Reversion - single stocks}
+\subsubsection{Mean Reversion - Stock Prices}
+The idea behind this strategy is that there is a true fundamental value underlying the stock that is represented by the mean of past stock prices. The trading strategy looks like this: 
 
-\subsubsection{Cumulative Mean - Stock prices}
-Idea: 
-Plot: Cumulative Mean vs. Actual Time Series
---> We see that the cumulative mean does not capture the time series well. Trend is always behind the current development, since we have a trend
+\begin{verbatim}
+for day in all_days: 
+    cumulative_mean = cumulative mean of stock values until now
+    if value of stock today > cumulative_mean:
+        sell (short) the stock
+    if value of stock today < cumulative_mean:
+        buy the stock
+\end{verbatim}
 
-\begin{figure}
+One obvious problem with this strategy is that any trend in the time series will be very poorly captured. Figure \ref{fig:mean_reversion_cum_mean} illustrates this by showing the time series plotted against their cumulative means (on the left) and the returns generated by trading on this strategy (on the right). 
+\begin{figure}[h!]
     \centering
     \begin{minipage}[b]{0.49\textwidth}
         \centering
@@ -62,25 +81,67 @@ Plot: Cumulative Mean vs. Actual Time Series
     \label{fig:mean_reversion_cum_mean}
 \end{figure}{}
 
-\subsubsection{Cumulative Mean - Returns}
+One can try to alleviate this problem by not using the current value against the cumulative mean, but instead for example 30d and 60d averages. The strategy then looks like this: 
 
-\begin{figure}
+\begin{verbatim}
+for day in all_days: 
+    60d_mean = mean of stock values of the past 90 days
+    30d_mean = mean of stock values of the past 30 days
+    if 30d_mean > 60d_mean:
+        sell (short) the stock
+    if 30d_mean < 60d_mean:
+        buy the stock
+\end{verbatim}
+
+Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as the original time series on the left hand and the returns from the trading strategy on the right hand. While the plots on the left do look much better, the trading strategy is still not able to yield useful results. 
+
+\begin{figure}[h!]
     \centering
-    \begin{adjustbox}{width=.7\textwidth,center}
-        \input{figures/all_returns_cum_mean_returns_strategy.pgf}
-    \end{adjustbox}  
-    \caption{Mean Reversion based on past returns for single stocks}
-    \label{fig:mean_reversion_returns}
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+            \begin{adjustbox}{width=\textwidth,center}
+               % \input{figures/all_stock_30d_60d.pgf}
+            \end{adjustbox}
+        %\caption{Flower one.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \begin{adjustbox}{width=\textwidth,center}
+            \input{figures/all_returns_cum_mean_strategy.pgf}
+        \end{adjustbox}
+        %\caption{Flower two.}
+    \end{minipage}
+    \caption{Caption}
+    \label{fig:30d_60d_plot}
 \end{figure}{}
 
-\subsubsection{Comparison of 90d and 30d moving averages}
-Idea: If 30d averages is above 90d average, then sell. And vice versa
 
-\subsubsection{Mean Reversion Portfolio}
-Idea: Look at entire portfolio. 
+\subsubsection{Mean Reversion - Log-Returns}
+The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm looks as follows
 
+%\begin{Verbatim}[frame=single]
+\begin{verbatim}
+for day in all_days: 
+    cumulative_mean = cumulative mean of the time series until now
+    if return today > cumulative_mean:
+        sell (short) the stock
+    if return today < cumulative_mean:
+        buy the stock
+\end{verbatim}
+%\end{Verbatim}
 
+One can of course easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. 
 
+\begin{figure}[h!]
+    \centering
+    \figuretitle{Returns from a Mean-Reversion Strategy}
+    \begin{adjustbox}{width=.95\textwidth,center}
+        \input{figures/all_returns_cum_mean_returns_strategy.pgf}
+    \end{adjustbox}  
+    \caption{Mean Reversion based on past returns for single stocks. The returns achieved by the strategy are in color, while the return of a simple buy-and-hold strategy, i.e. the return from a single share bought on the first day is shown in blue}
+    \label{fig:mean_reversion_returns}
+\end{figure}{}
 
 \subsection{Momentum Based Trading}
 
