@@ -1,22 +1,42 @@
 \chapter{Predicting Stocks With Machine Learning - Felix} \label{ch:predictions_ml}
 The movement of time series data for financial data is influenced by external effects. To leverage this we tried to add information from news sources to our trading strategies. For the hybrid prediction we estimate sentiment scores on news sources. The original aim was to use financial news data to predict stock price movement and volatility for trading strategies. To achieve this, large amounts of text data would need to be preprocessed and analyzed regarding their connections to specific stocks, their topic and sentiment. The news data would need to be as precise as possible, because […] mention that an effect on the stocks an only be measured up to 20min after the news appear. Other sources say that… .
-%
+\\ \\
 As we were not able to acquire access to a reliable and precise news sources, we tried to implement our approach on the available analyst reports regarding the ten specific stocks. The problem with these reports is, that they are more an indicator of performance over the past month and a prediction about the future performance. As such they do not cover sudden events that would be present in the news. The reports also cluster around certain dates with long stretches of no or very few reports in between (ABBILDUNG). This makes it unlikely that they are valuable for trading strategies.
-%
+%\begin{figure}[h]
+%    \figuretitle{Seasonality in the Reports}
+%    \centering
+%    \begin{adjustbox}{width=.9\textwidth,center}
+%    \input{figures/SeasonalityReports.png}
+%    \end{adjustbox}  
+ %   \caption{BLBLBLA}
+ %   \label{fig:Seasonality in the Reports}
+%\end{figure}{}
+\\  \\
 The goal was to identify the connection of specific articles to listed companies and compute a sentiment score for the article. There are many ways to calculate sentiment scores from flowing text data. Common procedures would be to use a library of previously known positive and negative adjectives or 4-grams. The simplest way to utilize these would be to simply count their appearance, this is known as a bag-of-words method (ZITAT?). Other approaches extract parts of the text at the location of the specific adjectives and use Support Vector Machines or Naive Bayes Classifier to extract sentiment, see \citet{westerski2007sentiment} for further references. Many of these more advanced sentiment classification techniques are supervised, as such the need a labelled data set for initial training. The (NUMBER #) analyst reports are unstructured and not labelled making it unrealistic to use these methods. They also have a very specific format and language, therefore other pretrained models or other labelled training data sets could not be used. Another possibility to custom label the data would have been possible using intra day trading and news data. By looking at the movement or volatility of the period close after the news release approximate sentiment scores can then be computed \citep{robertson2007news}. As the obtained stock data is only inter day we could not apply this method.
+\\ \\
+Two methods to estimate sentiment scores in an unsupervised way will be explored here. One is a library bag-of-words approach that works with simple relative frequencies of positive and negative words. The other approach uses a new method called Joint Sentiment Topic model (JST) (ZITAT) and relies on a Bayesian method called Latent Dirichilet Allocation (LDA)  (ZITAT). For both approaches the text data has to be cleaned which is described in section \ref{cleaningText}, the subsequent analysis of the sentiment scores can be found in section \ref{BoW} and \ref{JST}.
 
-To get around these restrictions unsupervised methods where chosen for the estimation of sentiment scores. 
-A common approach for unsupervised 
-
-
-Analyst report data beschreiben...
-
-To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and tokenized using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. In the next step all links to websites, hyper-references, numbers and words with numbers are removed as well. 
+\subsection{Cleaning of the text data}\label{cleaningText}
+To get reliable sentiment scores text data has to be preprocessed. The preprocessing was done in (??) steps using \texttt{R} \citep{Rproject}. At first words where converted to lowercase and all words where separated using the R package \textit{tidytext} \citep{tidytext}. Next all the stop words where removed using the stop word library from the \textit{tidytext} package, as well as a custom set. This reduces the total number of words from 67M initially to 36M, see (ABBILDUNG BALKEN WORDS). In the next step all links to websites, hyper-references, numbers, words with numbers and punctuation are removed as well. 
 The last step is lemmatizing the words using the \textit{textstem} package \citep{textstem}. Lemmatizing words means reducing them to their inflectional forms. Commonly stemming is also applied, because words sometimes have derivationally related forms. This was not done to have more flexibility for the later applied text analysis. Additionally we could have also used the term frequency–inverse document frequency (tf-idf) matrix (ZITIEREN) for further reductions in the number of words. The issue here would have been that highly informative words for the stock sentiment could have been removed. 
 
-\subsection{Feature engineering of sentiment scores}
 
-\subsection{Sentiment Library}
+%summary(word_cout.x)
+%   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+%    1.0    83.0   145.0   190.6   242.8  1747.0 
+%summary(word_cout.y)
+%   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+%      3    1907    3226    3827    4780   21502 
+
+
+
+\subsection{Sentiment Library}\label{BoW}
+To get around these restrictions unsupervised methods where chosen for the estimation of sentiment scores. 
+The simplest approach for estimating unsupervised sentiment scores is applying a library of as positive and negative words to the data. The resulting polarity towards positive or negative sentiment can then be achieved by simple relative probabilities
+\begin{equation}
+    Polarity = \frac{P - N}{P + N}
+\end{equation}
+of the sum of positive words (P) and negative words (N). 
 
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
 % Sun Sep 08 17:25:29 2019
@@ -24,68 +44,119 @@ The last step is lemmatizing the words using the \textit{textstem} package \cite
 \centering
 \begin{tabular}{rll}
   \hline
- & Positiv & Negativ \\ 
+ & positive & negative \\ 
+ & $n = 218$ & $n = 1282$ \\ 
   \hline
-1 & acclaim & abandonment \\ 
+  1 & acclaim & abandonment \\ 
   2 & accomplishment & abdication \\ 
-  3 & advantage & abolish \\ 
-  4 & assure & abrogation \\ 
-  5 & attractiveness & abuse \\ 
-  6 & good & accuse \\ 
-  7 & breakthrough & acquittal \\ 
-  8 & collaborator & adversary \\ 
+  3 & advantage & abuse \\ 
+  4 & assure & acquittal \\ 
+  5 & attractiveness & catastrophe \\ 
+  6 & delightful & criticize \\ 
+  7 & diligent & degrade \\ 
+  8 & impress & harsh \\ 
+  9 & \vdots & \vdots \\ 
+  
    \hline
 \end{tabular}
 \end{table}
 
-\subsection{Joint sentiment topic model}
+\subsection{Joint sentiment topic model}\label{JST}
 
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Sun Sep 08 13:29:24 2019
+% Sun Sep 08 22:37:30 2019
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllllll}
+\begin{tabular}{rllll}
   \hline
- & topic1sent1 & topic2sent1 & topic3sent1 & topic28sent1 & topic29sent1 & topic30sent1 \\ 
+ & topic1sent1 & topic2sent1 & topic3sent1 & topic30sent1 \\ 
   \hline
-1 & disney & report & visa & canaccord & piper & stanley \\ 
-  2 & walt & market & volume & research & jaffray & morgan \\ 
-  3 & network & disclosure & growth & genuity & report & research \\ 
-  4 & park & capital & payment & investment & stock & instrument \\ 
-  5 & medium & ebit & revenue & analyst & analyst & corp \\ 
-  6 & company & stock & transaction & financial & rating & investment \\ 
-  7 & cable & topeka & europe & limit & cover & information \\ 
-  8 & espn & investment & debit & issuer & topeka & limit \\ 
-  9 & entertainment & security & process & person & relative & datum \\ 
-  10 & consumer & recommendation & incentive & author & sell & client \\ 
-  11 & studio & information & credit & relevant & price & stock \\ 
-  12 & resort & page & cross & affiliate & time & industry \\ 
-  13 & revenue & locate & border & company & note & investor \\ 
-  14 & film & issue & network & relate & disclosure & bank \\ 
-  15 & sport & option & fee & discuss & company & international \\ 
-  16 & disneys & company & international & client & distribution & month \\ 
-  17 & content & margin & client & information & person & provide \\ 
-  18 & product & financial & purchase & designate & coverage & coverage \\ 
-  19 & broadcast & appendix & currency & trade & represent & management \\ 
-  20 & advertise & research & card & distribute & locate & financial \\ 
-  21 & star & base & global & month & market & sell \\ 
-  22 & interactive & product & price & broke & horizon & disclosure \\ 
-  23 & growth & instrument & expense & material & page & rate \\ 
-  24 & time & share & datum & dealer & rate & universe \\ 
-  25 & program & analysis & mastercard & australia & revenue & wwwmorganstanleycom \\ 
-  26 & segment & rate & rate & provide & include & regulate \\ 
-  27 & channel & contain & operate & express & fundamental & relevant \\ 
-  28 & include & cover & impact & risk & target & trade \\ 
-  29 & war & client & constant & disclosure & median & msci \\ 
-  30 & theme & express & world & corp & opinion & weight \\ 
+1 & stockreport & trefis & alstom & piper \\ 
+  2 & pcapitaliq & stacy & aviation & jaffray \\ 
+  3 & andnots & trefiscom & immelt & cfra \\ 
+  4 & hill & coffee & gecc & researchdisclosures \\ 
+  5 & mcgraw & krzanich & turbine & wwwpiperjaffraycom \\ 
+  6 & spias & donut & gecs & contradict \\ 
+  7 & hhhhh & dunkin & cfoa & cfras \\ 
+  8 & spis & synthesize & renewable & attestation \\ 
+  9 & ranking & doughnut & baker & draft \\ 
+  10 & issolely & nanometer & bornstein & conduct \\ 
+  11 & thes & pitzer & grid & presume \\ 
+  12 & adss & ross & hughes & box \\ 
+  13 & mhfre & vivek & locomotive & tolerance \\ 
+  14 & ofissuerswithbuy & henninger & gecas & predetermine \\ 
+  15 & pcapitaliqs & rasgon & subsea & factual \\ 
+  16 & depositary & seymore & alstoms & purport \\ 
+  17 & equitys & arya & simplification & author \\ 
+  18 & glossary & caterpillar & thermal & ranking \\ 
+  19 & malta & otellini & disposition & correspond \\ 
+  20 & mhfspl & witness & appliance & categorise \\ 
+  21 & nyssymboljnj & covello & synchrony & discontinue \\ 
+  22 & intelcorp & wearable & nbcu & suspend \\ 
+  23 & nnmsymbolintc & mcconnell & genx & output \\ 
+  24 & ptyltd & explanation & steam & transfer \\ 
+  25 & americanexpressco & curtis & capital & intelligences \\ 
+  26 & nyssymbolaxp & rival & predix & reference \\ 
+  27 & sample & wong & siemens & minneapolis \\ 
+  28 & nyssymbolutx & crest & mine & mall \\ 
+  29 & arenetoftaxes & airplane & sifi & nicollet \\ 
+  30 & analystjudgment & blayne & avio & trademark \\ 
    \hline
 \end{tabular}
 \end{table}
+
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Sun Sep 08 22:37:52 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+ & topic1sent2 & topic2sent2 & topic3sent2 & topic30sent2 \\ 
+  \hline
+1 & exception & reprint & summit & sterne \\ 
+  2 & israel & morningstars & weaken & agee \\ 
+  3 & israeli & qqqq & trump & leach \\ 
+  4 & italia & equitydisclosures & twitter & package \\ 
+  5 & wwwubscom & trump & link & unilever \\ 
+  6 & bandra & english & cancel & lafley \\ 
+  7 & oddzial & incs & observation & shed \\ 
+  8 & polsce & morn & incl & colgate \\ 
+  9 & odpowiedzialnoscia & australasia & depreciate & clark \\ 
+  10 & ograniczona & ronic & crispidea & diaper \\ 
+  11 & spolka & multiyear & gordon & kimberly \\ 
+  12 & band & language & marketcycles & palmolive \\ 
+  13 & espaa & tolerance & thinkequity & loreal \\ 
+  14 & marketer & excessively & temper & contend \\ 
+  15 & object & republican & stimulus & mcdonald \\ 
+  16 & zurich & securitys & initiate & pantene \\ 
+  17 & image & pres & affiliation & taylor \\ 
+  18 & publisher & analy & beneficiary & lackluster \\ 
+  19 & kurla & mistic & constrain & pringles \\ 
+  20 & maxity & ibbotson & examine & resonate \\ 
+  21 & english & qqqqq & message & headquarter \\ 
+  22 & bahnhofstrasse & roics & streamline & reignite \\ 
+  23 & aeschenvorstadt & body & election & sterneageecom \\ 
+  24 & unregistered & culminate & competency & gamble \\ 
+  25 & tatweer & terminology & instant & groom \\ 
+  26 & autorit & ratingtm & downgrade & kellogg \\ 
+  27 & financiero & worthor & drop & detergent \\ 
+  28 & reside & domicile & diminish & ackman \\ 
+  29 & ubse & cease & span & slim \\ 
+  30 & restriction & mend & cyclicality & feminine \\ 
+   \hline
+\end{tabular}
+\end{table}
+
 
 \begin{enumerate}
     \item Weil wir nur wenige stocks haben kann es sein das das JST company specifix topics bildet
     \item Schätzen von neuen texten möglich basierend auf den posterior wort probabilities
+    \item Histogram of sentiment
 \end{enumerate}
+
+
+
+
 \subsection{XG-Boost on sentiment data}
 \begin{itemize}
     \item XGB kann auch einfach nur verwendet werden um zu erkennen welche features wichtig sind
