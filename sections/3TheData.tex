@@ -8,29 +8,12 @@ The stock data comprises 10 selected companies from the NASDAQ stock index. The 
 Figure / Table: Unsere Unternehmen --> Identifier\_df
 
 
-\section{Ravenpack Sentiment Data - Felix}
-Next to the financial time series data, sentiment data from a financial data provider RavenPack was acquired. According to their website RavenPack is a leading provider of big data analytics for financial services \citep{RavenPack}. Our specific data is from RavenPack News Analytics, a service providing actionable event and sentiment information from TIME to TIME. The sentiment information has intra day precision. As such events are recorded at their time of appearance and not just on a daily basis. The variables consist of an indicator for the estimated positive or negative sentiment score called ESS ranging from 0 to 100 where 50 is neutral. This goes along with an estimated novelty score called ENS (0-100) describing how 'new' the news are and a RELEVANCE (0-100) variable that shows how closely the information is related to the underlying news, this can be converged to the number of news per day. Additionally two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window (AES) and AEV is the sum of events over the past 90 days. All variables have substantial numbers of missing values ...
-
-\section{Analyst Reports - Felix}
-%\textcolor{yellow}{
-As the second external data source for this analysis we used analyst reports provided by Thomson One. originally the aim was to use general financial news but we could not obtain such data. These reports are part of the "company research" data and contain general research documents like SWAT analysis or sector reports. Typical contents are earning per share prognosis or Buy-Hold-Sell-Recommendations. This data is either represented in a structured format or flowing text, mostly both. Analyst reports are written by analysts mostly working for brokers like "Deutsche Bank Research" and are commonly specialized on a specific industry.  Each report is linked to a specific stock and was cleaned to obtain only the flowing text. All illustrations and tables where thereby disregarded. This was done using a PDF-tool which converts PDF to .xlsx based on specific rules like the relationship of words to numbers or special characters. 
-
-\begin{enumerate}
-    \item Missing data
-    \item clustering of the data
-\end{enumerate}
-
-% Gesammelt von Thomson Reuters und auf der Thomson One Plattform als PDF veröffentlicht. Unter der Kategorie „Company Research“ zu finden. Diese beinhaltet allgemeine Research Documents (z.B. auch SWAT Analysen oder Sector Reports). Es lässt sich aber auch auf „reine“ Analyst Reports filtern. Die Analysten arbeiten für unterschiedliche Broker (z.B. Deutsche Bank Research), wobei sie sich tendenziell auf eine Industrie Spezialisieren. In „reinen“ Analysten Reports sind typischerweise Earnings Per Share Prognosen und eine Buy-Hold-Sell-Recommendation enthalten. Diese existieren als strukturierte Daten und können über das sogenannte Institutional Brokers Estimate System (IBES) abgerufen werden. Daneben enthalten sie aber eben auch Fließtext. Wir haben mit einem PDF Tool dieses PDF in .xlsx umgewandelt und basierend auf grundlegenden Regeln (Verhältnis Wörter zu Zahlen oder Sonderzeichen, Anzahl der Wörter, usw.) den Text extrahiert.
-% missing data handling difficult as scored are event specific
 
 \section{Stock Data - Nikos}
 \subsection{Overview over the Stock Data - Nikos}
 The stock data were downloaded from Yahoo Financial Data Base. Table \ref{tab:stocks_overview} provides a small overview over the raw data. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the Closing Prices of the selected assets. The closing prices have been provided adjusted for dividends by Yahoo. 
 
-Time series analysis is easiest with data that are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see [Shumway and Stoffer 2011]). From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period. This increase in variance is illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown. The data are therefore clearly not stationary. We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. This test, applied to all time series in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
-
-
-\begin{table}[]
+\begin{table}[h!]
     \figuretitle{Stock Data}
     \centering
     \begin{adjustbox}{width = 0.9\linewidth}
@@ -41,7 +24,9 @@ Time series analysis is easiest with data that are at least weakly stationary. W
     \label{tab:stocks_overview}
 \end{table}{}
 
-\begin{figure}[h]
+Time series analysis is easiest with data that are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see [Shumway and Stoffer 2011]). From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period (illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown). The data are therefore clearly not stationary. %We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. Applied to all time series, the test in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
+
+\begin{figure}[h!]
     \figuretitle{Stock Prices}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
@@ -51,7 +36,7 @@ Time series analysis is easiest with data that are at least weakly stationary. W
     \label{fig:Daily Stock Prices for all Stocks in the Data Set}
 \end{figure}{}
 
-\begin{figure}[H]
+\begin{figure}[h!]
     \figuretitle{'Cumulative' Standard Deviation of Stock Prices}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
@@ -69,7 +54,7 @@ In order to obtain weakly stationary time series the data needs to be transforme
 \end{equation*}{}
 Usually $r^{\scriptscriptstyle{(2)}}_t$ is used and is called either returns or log-returns, even though no logging takes place. For increased conceptual clarity, in this report $r^{\scriptscriptstyle{(1)}}_t$ will be called returns and $log(r^{\scriptscriptstyle{(1)}}_t)$ will be called log-returns, while $r^{\scriptscriptstyle{(2)}}_t$ will not explicitly be used at all. Log-returns are computationally convenient and numerically stable. For very small values they are also very close to the returns $r^{\scriptscriptstyle{(2)}}_t$ often used in economic literature as $ \log(r^{\scriptscriptstyle{(1)}}_t) \approx r^{\scriptscriptstyle{(1)}}_t - 1 = r^{\scriptscriptstyle{(2)}}_t$ for values of $r^{\scriptscriptstyle{(1)}}_t$ close to 1. Using returns or log-returns instead of stock prices can make the time series stationary. Figure \ref{fig:PG_fd_log_adjclose} illustrates that the trends in the time series have vanished after looking at log-returns. The data visually now looks like white noise. 
 
-\begin{figure}[H]
+\begin{figure}[h!]
     \figuretitle{Log-returns of stock PG}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
@@ -111,7 +96,7 @@ The autocorrelation at lag j is the correlation between an observation at time t
 \end{flalign*}
 are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the mean squared error of a regression of $y_{t+h}$, and $y_t$ respectively, on $\{ y_{t+1}, ..., y_{t+h-1}\}$. Both $y_t - \hat{y_t}$ and  $y_{t+h} - \hat{y}_{t+h}$ are uncorrelated with $\{ y_{t+1}, ..., y_{t+h-1} \}$. 
 
-An ACF which very slowly decays to zero is an indicator that differencing may be appropriate (see Shumway and Stoffer 2011, p. 145) to make the series stationary. A large partial autocorrelation at lag 1, as shown in figure \ref{fig:acf_pacf_log_adjclose_PG} also supports the conjecture that the dependence of the current on the previous value almost exclusively depends on the first lag and can be eliminated through differencing. After differencing we arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $. We can see now in figure \ref{fig:acf_pacf_log_adjclose_PG} that the the partial autocorrelation at lag 1 has vanished after differencing and that the autocorrelation has also dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced. The means of our time series is very close to zero (as shown in table \ref{tab:log return means}). 
+We see in figure \ref{fig:acf_pacf_log_adjclose_PG} that the autocorrelation very slowly decays and that the partial autocorrelation at lag 1 is very large and then cuts off. This indicates that the dependence of the current on the previous value almost exclusively happens through the first lag and that differencing may be appropriate (see Shumway and Stoffer 2011, p. 145) to make the series stationary. After differencing we arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $. We can see now in figure \ref{fig:acf_pacf_log_adjclose_PG} that the the partial autocorrelation at lag 1 has vanished after differencing and that the autocorrelation has also dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced. The means of our time series is very close to zero (as shown in table \ref{tab:log return means}). 
 
 \begin{table}[h!]
     \centering
@@ -125,7 +110,7 @@ An ACF which very slowly decays to zero is an indicator that differencing may be
 
 Overall this pattern strongly suggests the time series are stationary now. We can also perform a formal test whether our data is stationary or not. The augmented Dickey-Fuller test (ADF) EXPLANATION TEST. P-values of the ADF for all log-returns are smaller than $10^{-12}$ even after correcting for multiple testing so we can safely assume the time series are stationary. The data is, however, not normally distributed. By looking at figure \ref{fig:PG_qq_fd_log_adjclose} we can clearly see that the distribution has fat tails: extreme events appear more often than would be expected if the data was normally distributed. 
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \figuretitle{QQ-plot of log-returns of stock PG}
     \begin{adjustbox}{width=.9\textwidth,center}
@@ -138,7 +123,7 @@ Overall this pattern strongly suggests the time series are stationary now. We ca
 
 The time series are also not homoscedastic. While stationarity implies that the unconditional variance is constant over time, the variance of the time series fluctuates conditional on past observations [Beschreibung nachgucken, QUELLE!]. This conditional heteroskedasticity is quite common in financial data. (SOURCE). The pattern can be observed in figure \ref{fig:PG_squared_log_returns}. One can try to model this volatility by assuming a time series model for the conditional variance. This will be discussed in chapter \ref{ch:ts}. %Figure \ref{fig:ACF_selected_squared_log_returns} shows the ACF and PACF of the squared residuals of some selected stocks. The patterns indicate that at least some of the volatility can be modeled using time series approaches. 
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \figuretitle{Squared log-returns of Stock PG}
     \begin{adjustbox}{width=.95\textwidth,center}
@@ -150,3 +135,22 @@ The time series are also not homoscedastic. While stationarity implies that the 
 
 
 
+
+
+
+
+
+\section{Ravenpack Sentiment Data - Felix}
+Next to the financial time series data, sentiment data from a financial data provider RavenPack was acquired. According to their website RavenPack is a leading provider of big data analytics for financial services \citep{RavenPack}. Our specific data is from RavenPack News Analytics, a service providing actionable event and sentiment information from TIME to TIME. The sentiment information has intra day precision. As such events are recorded at their time of appearance and not just on a daily basis. The variables consist of an indicator for the estimated positive or negative sentiment score called ESS ranging from 0 to 100 where 50 is neutral. This goes along with an estimated novelty score called ENS (0-100) describing how 'new' the news are and a RELEVANCE (0-100) variable that shows how closely the information is related to the underlying news, this can be converged to the number of news per day. Additionally two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window (AES) and AEV is the sum of events over the past 90 days. All variables have substantial numbers of missing values ...
+
+\section{Analyst Reports - Felix}
+%\textcolor{yellow}{
+As the second external data source for this analysis we used analyst reports provided by Thomson One. originally the aim was to use general financial news but we could not obtain such data. These reports are part of the "company research" data and contain general research documents like SWAT analysis or sector reports. Typical contents are earning per share prognosis or Buy-Hold-Sell-Recommendations. This data is either represented in a structured format or flowing text, mostly both. Analyst reports are written by analysts mostly working for brokers like "Deutsche Bank Research" and are commonly specialized on a specific industry.  Each report is linked to a specific stock and was cleaned to obtain only the flowing text. All illustrations and tables where thereby disregarded. This was done using a PDF-tool which converts PDF to .xlsx based on specific rules like the relationship of words to numbers or special characters. 
+
+\begin{enumerate}
+    \item Missing data
+    \item clustering of the data
+\end{enumerate}
+
+% Gesammelt von Thomson Reuters und auf der Thomson One Plattform als PDF veröffentlicht. Unter der Kategorie „Company Research“ zu finden. Diese beinhaltet allgemeine Research Documents (z.B. auch SWAT Analysen oder Sector Reports). Es lässt sich aber auch auf „reine“ Analyst Reports filtern. Die Analysten arbeiten für unterschiedliche Broker (z.B. Deutsche Bank Research), wobei sie sich tendenziell auf eine Industrie Spezialisieren. In „reinen“ Analysten Reports sind typischerweise Earnings Per Share Prognosen und eine Buy-Hold-Sell-Recommendation enthalten. Diese existieren als strukturierte Daten und können über das sogenannte Institutional Brokers Estimate System (IBES) abgerufen werden. Daneben enthalten sie aber eben auch Fließtext. Wir haben mit einem PDF Tool dieses PDF in .xlsx umgewandelt und basierend auf grundlegenden Regeln (Verhältnis Wörter zu Zahlen oder Sonderzeichen, Anzahl der Wörter, usw.) den Text extrahiert.
+% missing data handling difficult as scored are event specific

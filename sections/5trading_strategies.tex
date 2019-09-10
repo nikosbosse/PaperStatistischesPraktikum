@@ -24,6 +24,9 @@ PAIRS TRADING
 \subsection{\textcolor{red}{Mean Reversion Portfolio}}
 While their analysis is focused on monthly returns over a much longer time frame, the basic idea that was replicated in our trading strategy was the same. The algorithm was implemented as follows: 
 
+\vspace{2ex}
+\textbf{\small{Algorithm 1 - Mean-Reversion Portfolio}}
+\vspace{-1ex}
 %\begin{Verbatim}[frame=single]
 \begin{verbatim}
 for day in all_days: 
@@ -50,6 +53,9 @@ For single stocks, we have tried two different ways to implement a mean reversio
 \subsubsection{Mean Reversion - Stock Prices}
 The idea behind this strategy is that there is a true fundamental value underlying the stock that is represented by the mean of past stock prices. The trading strategy looks like this: 
 
+\vspace{2ex}
+\textbf{\small{Algorithm 2: Mean-Reversion - Cumulative Mean}}
+\vspace{-1ex}
 \begin{verbatim}
 for day in all_days: 
     cumulative_mean = cumulative mean of stock values until now
@@ -84,6 +90,9 @@ One obvious problem with this strategy is that any trend in the time series will
 
 One can try to alleviate this problem by not using the current value against the cumulative mean, but instead for example 30d and 60d averages. The strategy then looks like this: 
 
+\vspace{2ex}
+\textbf{\small{Algorithm 3: Mean-Reversion Moving Averages}}
+\vspace{-1ex}
 \begin{verbatim}
 for day in all_days: 
     60d_mean = mean of stock values of the past 90 days
@@ -119,20 +128,7 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
 \end{figure}{}
 
 \subsubsection{Mean Reversion - Log-Returns}
-The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm looks as follows
-
-%\begin{Verbatim}[frame=single]
-\begin{verbatim}
-for day in all_days: 
-    cumulative_mean = cumulative mean of the time series until now
-    if return today > cumulative_mean:
-        sell (short) the stock
-    if return today < cumulative_mean:
-        buy the stock
-\end{verbatim}
-%\end{Verbatim}
-
-One can of course easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in figure \ref{fig:mean_reversion_returns}. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
+The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm just replaces the value of the stock in algorithm 2 with log-returns and the cumulative mean with the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in figure \ref{fig:mean_reversion_returns}. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
 
 \begin{figure}[h!]
     \centering
@@ -145,9 +141,24 @@ One can of course easily replace the cumulative mean by e.g. the mean of the pas
 \end{figure}{}
 
 \subsection{Momentum Based Trading}
+Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day and work analogous to algorithms 1 and 3, but only use log-returns and reverse buy and sell. Results are shown in figure \ref{fig:momentum-trading} and are even less convincing than the results for mean-reversion trading. 
+
+\begin{figure}[h!]
+    \centering
+    \figuretitle{\textcolor{red}{MAYBE APPENDIX!}Momentum-Trading Portfolio}
+    \begin{adjustbox}{width=.95\textwidth,center}
+        \input{figures/momentum_portfolio_performance.pgf}
+    \end{adjustbox}  
+    \figuretitle{Momentum-Trading Log-Returns and 30d average}
+    \begin{adjustbox}{width=.95\textwidth,center}
+        %\input{figures/momentum_30d_strategy.pgf}
+    \end{adjustbox}      
+    \caption{Momentum-Trading for portfolio (top) and for log-returns of single stocks (bottom). The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
+    \label{fig:momentum-trading}
+\end{figure}{}
 
 
-\subsection{Pairs Trading}
+\subsection{\textcolor{red}{Pairs Trading}}
 
 
 
