@@ -47,7 +47,7 @@ After these five cleaning steps the number of individual words and items was red
 \caption{Summary statistics for the number of words in each report}
 \end{table}
 
-After validating the cleaned text different uncleaned items where discovered. Apparently some single digit numbers where not removed, some web addresses like "wwwpiperjaffraycom" remain and words consisting entirely of one letter appeared. (SO FAR NO WAY To remove them found)
+After validating the cleaned text different uncleaned items, like woks consisting of multiples of the same letter, where discovered. We did not find a way to remove them.
 
 \subsection{Sentiment Library}\label{BoW}
 The simplest approach for estimating unsupervised sentiment scores is applying a library of as positive and negative words to the data. The resulting polarity towards positive or negative sentiment can then be achieved by simple relative probabilities
@@ -79,6 +79,12 @@ cite specific sentiment library for analysis.
 \end{tabular}
 \end{table}
 These results can be used to benchmark the results of the more advanced method.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/2SentimentsBOW_Histogram.png}
+\caption{Histogram of the sentiment scores computed by the sentiment library}
+\label{fig:BoWSentiment}
+\end{figure}
 
 
 
@@ -88,50 +94,47 @@ To make the computation of the sentiment scores more adaptable to the specific f
 % good video: https://www.youtube.com/watch?v=DWJYZq_fQ2A
 The general idea of LDA is that each document can be described by a distribution of topics and each topic can itself be described by a distribution of words \citep{blei2003latent}. This assumes that the words themselves are independent of each other which is in reality not the case but for large data sets this assumption seems to be acceptable. To train a LDA one decides on the number of topics ($T$) that occur within the text documents, but these topics have not been observed, they are latent. The LDA has two dirichilet priors containing hyperparameters $\alpha$ and $\beta$, a high $\alpha$ indicates that each document is likely to contain a mixture of many topics, similarly a high $\beta$ indicates that each topic is a mixture of many different words. LDA backtracks from the document level to identify topics that are likely to have generated this specific corpus of words. The underlying optimisation of the model is done using a Gibbs-Sampler. In the first step each word is assigned probabilities to belong to each of the $T$ topics that sum up to one and each document gets a probability for each topic. The algorithm then iterates over the words topics and documents, updating the underlying probabilities. \\ \\
 In the JST the LDA is extended from three hierarchical layers to four. The additional layer models the document sentiment by adding a layer in between the document and topic layer \citep{lin2009joint}. The new sentiment layer can be associated with documents, followed by topics and then words. For a detailed mathematical definition see \citet{lin2009joint}. \\ \\
-To estimate the JST models we used the \textit{rJST} package in R \citep{rJST}. 
+To estimate the JST models we used the \textit{rJST} package in R \citep{rJST}. The output are posterior probabilities for sentiments and topics of each document, as well as the posterior probabilities of each word loading onto topics. 
+
+\textit{initial prior information by sentiment dictionary}
+
+EVALUATION of results: The results of the JST model need to be evaluated if the results split the data in reasonable topics and how the distributions of the sentiment scores look. After computing JST models with 10, 20, 30 and 50 topics we decided that the model with 30 topics yields the best results. An overview over the first 15 words for topic one, two, three and thirty can be found in \ref{tab:TopicWordsSent1}. 
+
+JST AND NEW DATA: For a large and diverse enough training data set the returned posterior probabilities of the words can be used to determine the topics and sentiment in new documents. The JST therefore does not need to be retrained at each new observation. 
 
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Sun Sep 08 22:37:52 2019
+% Wed Sep 11 23:03:36 2019
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
   \hline
- & topic1sent2 & topic2sent2 & topic3sent2 & topic30sent2 \\ 
+ & topic1sent1 & topic2sent1 & topic3sent1 & topic30sent1 \\ 
   \hline
-1 & exception & reprint & summit & sterne \\ 
-  2 & israel & morningstars & weaken & agee \\ 
-  3 & israeli & qqqq & trump & leach \\ 
-  4 & italia & equitydisclosures & twitter & package \\ 
-  5 & wwwubscom & trump & link & unilever \\ 
-  6 & bandra & english & cancel & lafley \\ 
-  7 & oddzial & incs & observation & shed \\ 
-  8 & polsce & morn & incl & colgate \\ 
-  9 & odpowiedzialnoscia & australasia & depreciate & clark \\ 
-  10 & ograniczona & ronic & crispidea & diaper \\ 
-  11 & spolka & multiyear & gordon & kimberly \\ 
-  12 & band & language & marketcycles & palmolive \\ 
-  13 & espaa & tolerance & thinkequity & loreal \\ 
-  14 & marketer & excessively & temper & contend \\ 
-  15 & object & republican & stimulus & mcdonald \\ 
-  16 & zurich & securitys & initiate & pantene \\ 
-  17 & image & pres & affiliation & taylor \\ 
-  18 & publisher & analy & beneficiary & lackluster \\ 
-  19 & kurla & mistic & constrain & pringles \\ 
-  20 & maxity & ibbotson & examine & resonate \\ 
-  21 & english & qqqqq & message & headquarter \\ 
-  22 & bahnhofstrasse & roics & streamline & reignite \\ 
-  23 & aeschenvorstadt & body & election & sterneageecom \\ 
-  24 & unregistered & culminate & competency & gamble \\ 
-  25 & tatweer & terminology & instant & groom \\ 
-  26 & autorit & ratingtm & downgrade & kellogg \\ 
-  27 & financiero & worthor & drop & detergent \\ 
-  28 & reside & domicile & diminish & ackman \\ 
-  29 & ubse & cease & span & slim \\ 
-  30 & restriction & mend & cyclicality & feminine \\ 
+1 & buckresearchcom & guggenheim & appointment & macquarie \\ 
+  2 & buckingham & hotel & university & russell \\ 
+  3 & hochstim & wunderlich & reinvest & thai \\ 
+  4 & joseph & room & buysellsignals & mainland \\ 
+  5 & amexs & monitor & retire & organisation \\ 
+  6 & amex & morris & appoint & bandra \\ 
+  7 & attain & suspension & chair & alliance \\ 
+  8 & accumulate & disclosuresaction & council & file \\ 
+  9 & christopher & weekend & board & amendment \\ 
+  10 & retransmit & predictability & career & utility \\ 
+  11 & brad & wknd & elect & remind \\ 
+  12 & wilson & serv & relation & commonwealth \\ 
+  13 & master & madison & bite & refrain \\ 
+  14 & apparel & exploration & mcap & kasikorn \\ 
+  15 & kevin & desk & oversee & endorse \\ 
    \hline
-\end{tabular}
+\end{tabular}\label{tab:TopicWordsSent1}
 \end{table}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=4in]{figures/2SentimentsJST_Histogram.png}
+\caption{Histogram of the sentiment scores computed by the Joined Sentiment Topic model}
+\label{fig:JSTSentiment}
+\end{figure}
 
 \begin{enumerate}
     \item Weil wir nur wenige stocks haben kann es sein das das JST company specifix topics bildet
@@ -165,12 +168,5 @@ The standard evaluation of binary classification results is done using the F1-me
 % Hourly forecasting: https://www.kaggle.com/robikscube/tutorial-time-series-forecasting-with-xgboost/notebook
 % https://www.datacamp.com/community/tutorials/xgboost-in-python
 % missing values in XGB https://github.com/dmlc/xgboost/issues/21
-
-
-ich glaube bei den daten würde ichd die reihenfolge ändern und mit den stocks anfangen, verwenden wir ja am meisten und dann zu 2.1  würde ich eigentlich nur sagen das wir und auf die stocks beschränkt haben wo wir externe daten für bekommen haben
-
-Man kann 2.1. ja trotzdem kurz an den Anfang nehmen und dann einmal die Tabelle reintun, dann hat man auf einen Blick, welche drin sind. Und danach von mir aus die Stocks?
-
-Bei 3.0.1 und so: ich hatte überlegt, ob man diese data prep unter 2 packt. Da ist das bei den Stock data zumindest drin. Findest du das sinnvoll, oder findest du es anders besser?
 
 

@@ -145,12 +145,18 @@ Next to the financial time series data, sentiment data from a financial data pro
 
 \section{Analyst Reports - Felix}
 %\textcolor{yellow}{
-As the second external data source for this analysis we used analyst reports provided by Thomson One. originally the aim was to use general financial news but we could not obtain such data. These reports are part of the "company research" data and contain general research documents like SWAT analysis or sector reports. Typical contents are earning per share prognosis or Buy-Hold-Sell-Recommendations. This data is either represented in a structured format or flowing text, mostly both. Analyst reports are written by analysts mostly working for brokers like "Deutsche Bank Research" and are commonly specialized on a specific industry.  Each report is linked to a specific stock and was cleaned to obtain only the flowing text. All illustrations and tables where thereby disregarded. This was done using a PDF-tool which converts PDF to .xlsx based on specific rules like the relationship of words to numbers or special characters. 
+As the second external data source for this analysis we used analyst reports provided by Thomson One. originally the aim was to use general financial news but we could not obtain such data. These reports are part of the "company research" data and contain general research documents like SWAT analysis or sector reports. Typical contents are earning per share prognosis or Buy-Hold-Sell-Recommendations. This data is either represented in a structured format or flowing text, mostly both. Analyst reports are written by analysts working for brokers like "Deutsche Bank Research" that are commonly specialized on a specific industry.  Each report is linked to a specific stock and was cleaned to obtain only the flowing text. All illustrations and tables where thereby disregarded. This was done using a PDF-tool which converts PDF to .xlsx based on specific rules like the relationship of words to numbers or special characters. \\ 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/MissingDaysPlot.png}
+\caption{Missing Data on a daily base for selected stocks}
+\label{fig:MissingDays}
+\end{figure}
 
-\begin{enumerate}
-    \item Missing data
-    \item clustering of the data
-\end{enumerate}
-
-% Gesammelt von Thomson Reuters und auf der Thomson One Plattform als PDF veröffentlicht. Unter der Kategorie „Company Research“ zu finden. Diese beinhaltet allgemeine Research Documents (z.B. auch SWAT Analysen oder Sector Reports). Es lässt sich aber auch auf „reine“ Analyst Reports filtern. Die Analysten arbeiten für unterschiedliche Broker (z.B. Deutsche Bank Research), wobei sie sich tendenziell auf eine Industrie Spezialisieren. In „reinen“ Analysten Reports sind typischerweise Earnings Per Share Prognosen und eine Buy-Hold-Sell-Recommendation enthalten. Diese existieren als strukturierte Daten und können über das sogenannte Institutional Brokers Estimate System (IBES) abgerufen werden. Daneben enthalten sie aber eben auch Fließtext. Wir haben mit einem PDF Tool dieses PDF in .xlsx umgewandelt und basierend auf grundlegenden Regeln (Verhältnis Wörter zu Zahlen oder Sonderzeichen, Anzahl der Wörter, usw.) den Text extrahiert.
-% missing data handling difficult as scored are event specific
+We used reports in a period from 2012-01-02 to 2017-12-28, but there are a lot of periods of missing data in between. Figure \ref{fig:MissingDays} gives a rough overview of the severity of missing days. On the other hand the reports also follow a seasonal structure over the course of a year. In figure \ref{fig:ClusterReport} one can see that starting with a gap around Christmas reports are released with quarterly peaks.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/SeasonalityReports.png}
+\caption{Clustering of analyst reports around certain dates}
+\label{fig:ClusterReport}
+\end{figure}
