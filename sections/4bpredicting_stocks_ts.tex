@@ -134,7 +134,7 @@ Table \ref{tab:ARMA_log_returns} shows the resulting model outputs. Let us look 
 The bottom table shows the result of the ARMA(0,0) model to the log-returns of Intel. Not even the mean is significant, which is not too surprising, as Intel hardly gained in value in the observed period from 2012 to 2017 (See again figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set}. When exploratively fitting an ARMA(1,0), ARMA(0,1) or ARMA(1,1) model, as expected none of the coefficients reach significance (p-values all > 0.5). 
 
 \subsubsection{\textcolor{yellow}{ARMAX models}}
-We proceed in our analysis by adding our own generated sentiments as well as the ravenpack sentiments as external regressors. However, the availability of external data data points does not perfectly match the stock market observations. Unfortunately, we only have about a third as many analyst reports (and therefore sentiment scores) as stock market observations. In order to obtain an estimable model we decided to discard all observations on days where no analyst reports existed. This also implies that we need to confine our analysis to a constant mean model (ARMA(0,0) as autoregressive and moving-average components do not make sense when many observations in the time series are missing. The time series model hence reduces to a regression with an intercept and the sentiment data as independent variables. While analyst reports were rather scarce, the Ravenpack data often had multiple entries per day with only few days missing. We therefore needed to aggregate sentiments to obtain one single observation per day. 
+We proceed in our analysis by adding our own generated sentiments as well as the ravenpack sentiments as external regressors. However, the availability of external data data points does not perfectly match the stock market observations. Unfortunately, we only have about a third as many analyst reports (and therefore sentiment scores) as stock market observations. In order to obtain an estimable model we decided to discard all observations on days where no analyst reports existed. This also implies that we need to confine our analysis to a constant mean model (ARMA(0,0) as autoregressive and moving-average components do not make sense when many observations in the time series are missing. The time series model hence reduces to a regression with an intercept and the sentiment data as independent variables. While analyst reports were rather scarce, the Ravenpack data often had multiple entries per day with fewer days missing. We therefore needed to aggregate sentiments to obtain one single observation per day. 
 
 \begin{table}[h!]
     \centering
@@ -152,14 +152,34 @@ We proceed in our analysis by adding our own generated sentiments as well as the
     \label{tab:result_ARMAX00_sentiment}
 \end{table}{}
 
-\textit{\textcolor{yellow}{}ARMAX Sentiments Analyst Reports}
-The fact that we need to omit two-thirds of all data points changes the BIC considerably. To be able to compare the models according to BIC we have refit the baseline ARMA(0,0) model to the reduced data and obtained a BIC of -3001.07 for Visa and -4533.63 for Intel  (the difference owing to the different number of observations). Table \ref{tab:result_ARMAX00_sentiment} shows the results of the ARMAX(0,0) model for V and INTC. Even though sent\_mean is not too far from significance for V (and is even closer when only including sent\_mean, with a p-value of 0.067), all models fare worse in terms of BIC than the baseline. 
+\textit{\textcolor{yellow}{ARMAX Sentiments Analyst Reports}}
+
+The fact that we need to omit two-thirds of all data points changes the BIC considerably. To be able to compare the models according to BIC we have refit the baseline ARMA(0,0) model to the reduced data and obtained a BIC of -3001.07 for Visa and -4522.15 for Intel  (the difference owing to the different number of observations). Table \ref{tab:result_ARMAX00_sentiment} shows the results of the ARMAX(0,0) model for Visa and Intel. Both models fare worse in terms of BIC than the baseline. 
+%Even though sent\_mean is not too far from significance for V (and is even closer when only including sent\_mean, with a p-value of 0.067), all models fare worse in terms of BIC than the baseline. 
 
 \textit{\textcolor{red}{ARMAX Sentiments Ravenpack}}
 
-In the Ravenpack data for Visa, 21 observations out of 1509 were missing. We decided it might still be interesting to continue having a look at ARMA(1,1) even though the estimation is now mildly distorted by the fact that some values are missing. We computed a new baseline BIC as we did in the previous analysis: The BIC for an ARMA(0,0) model with the 21 omitted values is now -8734.35 and for an ARMA(1,1) model on the same data -8735.23. For INTC there were no missing observations, so the baseline BIC stayed -8692.98. Table \ref{tab:result_ARMAX00_ravenpack} shows the results for the ARMAX(0,0) model fit with Ravenpack sentiments to V and INTC. As with our own sentiment data, including the Ravenpack data did not improve the fit and in all cases BIC worsened. For that reason, we will regard the inclusion of these external data sources into time series models as a failed attempt and do not pursue it further. The ARMAX results with the Ravenpack data are shown in the appendix in Table \ref{tab:result_ARMAX_ravenpack}
+In the Ravenpack data for Visa, for 301 out of 1509 observations there were information on current relevance and no current sentiments scores (leaving only the information about 90 day averages). As the difference between ARMA(0,0) and ARMA(1,1) for Visa was not large anyways, we decided to omit the ARMA(1,1) model for Visa for the same reasons as above. We computed a new baseline BIC as we did in the previous analysis: The BIC for an ARMA(0,0) model with the 301 omitted values is now -7008.87. For INTC there were only 85 missing observations and the baseline BIC for the ARMA(0,0) model is -8238.47. We tried different combinations of regressors. Only a simple model that only included the estimated sentiment score 'ESS' (more precisely, the mean of all sentiments scores of that day) as a regressor, was able to reduce BIC (from -7008.87 to -7015.51 for Vias and from -8238.47 to -8259.24 for Intel). The results for the simple model are shown in table \ref{tab:result_ARMAX_ravenpack_ess}. A full model is shown in Table \ref{tab:result_ARMAX_ravenpack} in the appendix. This result is encouraging as it means that the Ravenpack sentiment scores actually contain relevant information about the market. However, there is one important subtlety hidden in the fact that we were regressing today's log returns against today's sentiment scores. This is fine if we are interested in whether the sentiments do contain any significant information about the target firms. As the log-returns are based on the closing values a significant effect means that information that comes in throughout the day is actually incorporated into the price. However, since we are trying to predict \textit{tomorrow's} log-returns this may also mean that any information has already been priced in at the end of the day. Indeed, when we included yesterday's sentiment scores instead of today's in the regression, the effect was insignificant (p-value = 0.519 for Visa and 0.318 for Intel). We will therefore not include external regressors when trying to predict stock returns in the following. 
 
-We have tried different combinations of regressors to include in the model but only show the full model to avoid redundancy. The results for ARMAX(1,1) for V are not shown as they look similar to a combination of the tables for ARMA(1,1) and ARMAX(0,0) for V. 
+\begin{table}[h!]
+    \centering
+    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of Visa}
+    \vspace{-2ex}
+    \small
+    \input{figures/V_result_ARMAX00_raven2_ess.tex}
+    \vspace{1ex}
+
+    \figuretitle{Full ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of Intel}
+    \vspace{-2ex}
+    \small
+    \input{figures/INTC_result_ARMAX00_raven2_ess.tex}
+    \caption{Results for ARMAX(0,0), i.e. a regression with a constant and the Ravenpack sentiment data as external regressors.}
+    \label{tab:result_ARMAX_ravenpack_ess}
+\end{table}
+
+%As with our own sentiment data, including the Ravenpack data did not improve the fit and in all cases BIC worsened. For that reason, we will regard the inclusion of these external data sources into time series models as a failed attempt and do not pursue it further. The ARMAX results with the Ravenpack data are shown in the appendix in Table \ref{tab:result_ARMAX_ravenpack}
+%We decided it might still be interesting to continue having a look at ARMA(1,1) even though the estimation is now mildly distorted by the fact that some values are missing. 
+%We have tried different combinations of regressors to include in the model but only show the full model to avoid redundancy. The results for ARMAX(1,1) for V are not shown as they look similar to a combination of the tables for ARMA(1,1) and ARMAX(0,0) for V. 
 
 \begin{figure}[h]
     \centering
@@ -179,6 +199,8 @@ We have tried different combinations of regressors to include in the model but o
     \caption{Squared log-returns and ACF and PACF for squared log-returns for V (top-left and middle) and INTC (top right and bottom).}
     \label{fig:V_INTC_squared}
 \end{figure}
+
+%\subsubsection{\textcolor{yellow}{ARMAX models}}
 
 \subsubsection{\textcolor{yellow}{GARCH models}}
 As detailed earlier, financial data often exhibit conditional heteroskedasticity. We therefore want to see whether GARCH models are able to improve the fit. Figure \ref{fig:V_INTC_squared} shows the squared log-returns of V and INTC as well as their ACF and PACF. For both the first lag visually seems to be significant. 
