@@ -1,9 +1,10 @@
-\chapter{Appendix A name}\label{ch:appAlabel}
+\chapter{Appendix}\label{ch:appAlabel}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER THE DATA
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Appendix to Chapter \ref{ch:data}}
 
 \begin{figure}[H]
     \centering
@@ -20,11 +21,6 @@
     \caption{ACF and PACF of squared residuals of stocks MMM, GE and JNJ. We see that some of the squared log-returns exhibit indeed autocorrelation, while others do less so. Strong autocorrelation implies that there is information about the future in the time series that can be modeled.}
     \label{fig:ACF_selected_squared_log_returns}
 \end{figure}{}
-
-
-
-
-
 
 \begin{figure}[h]
     \centering
@@ -68,57 +64,109 @@
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER: Predicting Stocks Machine Learning
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Appendix to Chapter \ref{ch:predictions_ml}}
+
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Sun Sep 08 22:37:30 2019
+% Sat Sep 14 10:48:39 2019
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
   \hline
- & topic1sent1 & topic2sent1 & topic3sent1 & topic30sent1 \\ 
+ & topic1sent2 & topic2sent2 & topic3sent2 & topic30sent2 \\ 
   \hline
-1 & stockreport & trefis & alstom & piper \\ 
-  2 & pcapitaliq & stacy & aviation & jaffray \\ 
-  3 & andnots & trefiscom & immelt & cfra \\ 
-  4 & hill & coffee & gecc & researchdisclosures \\ 
-  5 & mcgraw & krzanich & turbine & wwwpiperjaffraycom \\ 
-  6 & spias & donut & gecs & contradict \\ 
-  7 & hhhhh & dunkin & cfoa & cfras \\ 
-  8 & spis & synthesize & renewable & attestation \\ 
-  9 & ranking & doughnut & baker & draft \\ 
-  10 & issolely & nanometer & bornstein & conduct \\ 
-  11 & thes & pitzer & grid & presume \\ 
-  12 & adss & ross & hughes & box \\ 
-  13 & mhfre & vivek & locomotive & tolerance \\ 
-  14 & ofissuerswithbuy & henninger & gecas & predetermine \\ 
-  15 & pcapitaliqs & rasgon & subsea & factual \\ 
-  16 & depositary & seymore & alstoms & purport \\ 
-  17 & equitys & arya & simplification & author \\ 
-  18 & glossary & caterpillar & thermal & ranking \\ 
-  19 & malta & otellini & disposition & correspond \\ 
-  20 & mhfspl & witness & appliance & categorise \\ 
-  21 & nyssymboljnj & covello & synchrony & discontinue \\ 
-  22 & intelcorp & wearable & nbcu & suspend \\ 
-  23 & nnmsymbolintc & mcconnell & genx & output \\ 
-  24 & ptyltd & explanation & steam & transfer \\ 
-  25 & americanexpressco & curtis & capital & intelligences \\ 
-  26 & nyssymbolaxp & rival & predix & reference \\ 
-  27 & sample & wong & siemens & minneapolis \\ 
-  28 & nyssymbolutx & crest & mine & mall \\ 
-  29 & arenetoftaxes & airplane & sifi & nicollet \\ 
-  30 & analystjudgment & blayne & avio & trademark \\ 
+1 & risk & market & research & opinion \\ 
+  2 & price & capital & investment & information \\ 
+  3 & industry & research & analyst & analysis \\ 
+  4 & target & bank & financial & otherwise \\ 
+  5 & factor & report & company & herein \\ 
+  6 & company & investment & limit & write \\ 
+  7 & include & rate & affiliate & investment \\ 
+  8 & earnings & client & issuer & datum \\ 
+  9 & multiple & affiliate & investor & without \\ 
+  10 & valuation & issuer & relevant & call \\ 
+  11 & market & service & relate & provide \\ 
+  12 & specific & subject & service & value \\ 
+  13 & condition & analyst & information & advice \\ 
+  14 & upon & financial & month & unless \\ 
+  15 & subject & distribution & client & decision \\ 
    \hline
-\end{tabular}\label{tab:sent1}
+\end{tabular}\label{tab:postProbSent2}
 \end{table}
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER: Predicting Stocks Time Series
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Appendix to Chapter \ref{ch:ts}}
+% ============ GARCH Models =================%
+\begin{table}[h!]
+    \centering
+    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of V}
+    \vspace{-2ex}
+    \small
+    \input{figures/V_result_ARMAX00_raven.tex}
+    \vspace{1ex}
+        \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
+    \vspace{-2ex}
+    \small
+    \input{figures/V_result_ARMAX11_raven.tex}
+    \vspace{1ex}
+    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
+    \vspace{-2ex}
+    \small
+    \input{figures/INTC_result_ARMAX00_raven.tex}
+    \caption{Results for ARMAX(0,0), i.e. a regression with a constant and the Ravenpack sentiment data as external regressors.}
+    \label{tab:result_ARMAX_ravenpack}
+\end{table}{}
+
+
+
+\begin{table}[h!]
+    \centering
+    \figuretitle{Results for GARCH(1,1) with t-Distribution (V)}
+    \vspace{-2ex}
+    \small
+    \input{figures/V_result_GARCH11_100_students.tex}
+    \vspace{1ex}
+    \figuretitle{Results for GARCH(1,1) with t-Distribution (INTC)}
+    \vspace{-2ex}
+    \small
+    \input{figures/INTC_result_GARCH11_100_students.tex}
+    \caption{}
+    \label{tab:result_GARCH11_students_100}
+\end{table}{}
+
+
+
+\begin{table}[h!]
+    \centering
+    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (V)}
+    \vspace{-2ex}
+    \small
+    \input{figures/V_result_GARCH11_100_students_GJR.tex}
+    \newline
+    \vspace{1ex}
+    \newline
+    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (INTC)}
+    \vspace{-2ex}
+    \small
+    \input{figures/INTC_result_GARCH11_100_students_GJR.tex}
+    \caption{}
+    \label{tab:result_GARCH11_students_GJR_100}
+\end{table}{}
+
+%========================================================% 
 
 
 
 
-
-% =============================================
-% =============================================
 
 \begin{table}[h]
     \centering

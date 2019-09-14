@@ -1,6 +1,6 @@
 \chapter{\textcolor{yellow}{Predictions Using Time Series} - Nikos} \label{ch:ts}
 
-The following chapter will first give a theoretical overview over different time series models and concepts. Then those models will be used to analyze a subset of the data (consisting of two stocks, Visa and Intel) in order to get a thorough understanding for the ways in which stock market data can or cannot be approached. Lastly time series predictions are generated and evaluated for all stocks
+The following chapter will first give a theoretical overview over different time series models and concepts. Then those models will be used to analyze a subset of the data (consisting of two stocks, Visa and Intel) in order to get a thorough understanding for the ways in which stock market data can or cannot be approached. Lastly time series predictions are generated and evaluated for all stocks.
 
 \section{\textcolor{yellow}{Theoretical Overview} - Nikos}
 Time series predictions in this paper will be made using Random Walks, autoregressive (AR), moving average (MA) and generalized autoregressive conditional heteroscedasticity (GARCH) models. Those models are explained in the following.
@@ -19,43 +19,43 @@ An autoregressive process of order p (AR(p)) implies that the current value of a
     y_t &= \psi_1 y_{t-1} + \psi_2 y_{t-2} + ... + \psi_p y_{t-p} + w_t \label{eq:AR(p)}
 \intertext{where $y_t$ is stationary, $\psi_1, ..., \psi_p$ are constants and $w_t$ is white noise. The mean of $y_t$ is assumed to be zero. If the mean is $\mu$ instead of zero, equation \ref{eq:AR(p)} can be rewritten as}
     y_t - \mu &= \phi_1 (y_{t-1} - \mu) + \phi_2 (y_{t-2} - \mu) + ... + \phi_p (y_{t-p} - \mu) + w_t \label{eq:AR(p)2} \\
-\intertext{This can also be expressed as}
+\intertext{which can also be expressed as}
     y_t &= \alpha + \phi_1 y_{t-1} + \phi_2 y_{t-2} + ... + \phi_p y_{t-p} + w_t
 \end{align}
-\noindent with $\alpha$ = $\mu (1 - \phi_1 - ... - \phi_p)$.
+with $\alpha$ = $\mu (1 - \phi_1 - ... - \phi_p)$.
 
 \subsection{\textcolor{yellow}{Moving Average Models - Nikos}}
-A moving average process of order q implies that the current value of a time series consists of the average of the previous q observations plus a random shock. As the mean of the time series $\mu$ is constant this average can also be simply expressed as an average of the past random shocks $\{w_{t-1}, ... w_{t-q}\} $. In contrast to the AR(p) process, the shocks affect the future directly (and not only indirectly through past values) and only affect the next q values. Formally, the MA(q) process can be expressed as
+A moving average process of order q implies that the current value of a time series consists of the average of the previous q observations plus a random shock. As the mean of the time series $\mu$ is constant, this average can also be simply expressed as an average of the past random shocks $\{w_{t-1}, ... w_{t-q}\} $. In contrast to the AR(p) process, the shocks affect the future directly (and not only indirectly through past values) and only affect the next q values. Formally, the MA(q) process can be expressed as
 \begin{align}
     y_t = \mu + w_t + \theta w_{t-1} + ... + \theta w_{t-q}
 \end{align}{}
 \noindent where $w_t$ represents white noise and $\theta_1, ..., \theta_q$ are parameters and q is the number of lags in the moving average. 
 
 
-\subsection{Autoregressive Moving Average Models - Nikos}
+\subsection{\textcolor{yellow}{Autoregressive Moving Average Models - Nikos}}
 Autoregressive Moving Average Models of order p and q (ARMA(p,q)) form a combination of the above described AR(p) and MA(q) models. Formally, an ARMA(p,q) process follows
 \begin{align}
     y_t = \phi_1 y_{t-1} + ... + \phi_p y_{t-p} + w_t + \theta_1 w_{t-1} + ... + \theta_q w_{t-q} \\
     \intertext{if the mean of $y_t$ is $\mu$, then the above results in}
     y_t = \alpha + \phi_1 y_{t-1} + ... + \phi_p y_{t-p} + w_t + \theta_1 w_{t-1} + ... + \theta_q w_{t-q}
 \end{align}
-\noindent with $\alpha = \mu (1 - \phi_1 - ... - \phi_p)$.
+with $\alpha = \mu (1 - \phi_1 - ... - \phi_p)$. An ARMA(1,0) corresponds to an AR(1) and an ARMA(0,1) to an MA(1) model. Note that an ARMA(0,0) model for log-returns, a so-called constant-mean model, corresponds to a random walk with drift for the log time series (an on average constant log-return implies $\log{y_{t+1}} - \log{y_t} = c - w_t \Leftrightarrow \log{y_{t+1}} = c + \log{y_t} + w_t$). 
 
 
-\subsection{GARCH Models - Nikos}
-The GARCH(p,q) model is specified as follows:
+\subsection{\textcolor{yellow}{GARCH Models - Nikos}} \label{sec:garch}
+We have seen in Figure \ref{fig:PG_squared_log_returns} that the variance of our time series is not constant over time. This conditional heteroscedasticity can be modelled with a class of models called General Autoregressive Conditional Heteroscedasticity models (GARCH) (see \citep{engle_autoregressive_1982} and \citep{bollerslev_generalized_1986}). While GARCH models cannot themselves forecast future returns of a time series, they can forecast the uncertainty with which a forecast can be made. The GARCH(p,q) model is specified as follows:
 \begin{align}
     r_{t} &= \sigma_t  \upepsilon_t \label{eq:garch1}\\
 \intertext{where $\upepsilon_t$ is Gaussian white noise with  $\upepsilon_t \sim \mathcal{N}(0,1)$ and}
     \sigma^2_t &= \alpha_0 + \underbrace{\alpha_1 r^2_{t-1} + ... + \alpha_p r^2_{t-p}}_\text{autoregressive part} + \underbrace{\beta_1 \sigma^2_{t-1} + ... + \beta_q \sigma^2_{t-q}}_\text{moving average part} \label{eq:garch2}
-\end{align}{}
+\end{align}
 In equation \ref{eq:garch1} the returns $r_t$ are therefore modelled as white noise with mean zero and variance variance $\sigma^2_t$. When compared to white Gaussian noise with constant variance this can produce a leptokurtic (fat-tailed) distribution similar to what we observed in the QQ-Plots in figure \ref{fig:PG_squared_log_returns}. Equation \ref{eq:garch1} is called the mean model of the GARCH(p,q) process. This mean model can also be altered as needed. The GARCH model can then be specified in the following way: 
 \begin{equation}
     r_t = x_t + y_t
 \end{equation}{}
-where $x_t$ can be any constant mean, regression or time series process and $y_t$ is a GARCH process that satisfies equations \ref{eq:garch1} and \ref{eq:garch2}. In a similar way, the distribution of $\upepsilon_t$ can be altered. In praxis, researchers often assume a t-distribution instead of a standard normal distribution. 
+where $x_t$ can be any constant mean, regression or time series process and $y_t$ is a GARCH process that satisfies equations \ref{eq:garch1} and \ref{eq:garch2}. In a similar way, the distribution of $\upepsilon_t$ can be altered. Researchers often assume a t-distribution instead of a standard normal distribution. 
 
-A further expansion is the GJR-GARCH model (SOURCE). The GJR-GARCH model includes a separate term for past negative shocks. GJR-GARCH(1,1,1) is specified as follows
+\citet{glosten_relation_1993} further expanded the model by including a separate term for past negative shocks. The model is sometimes called GJR-GARCH after the authors Glosten, Jagannathan, and Runkle. GJR-GARCH(1,1,1) is specified as follows:
 
 \begin{equation}
     \sigma^2_t = \alpha_0 + \alpha_1 \upepsilon^2_{t-1} + \gamma_1 \epsilon^2_{t-1} I(\upepsilon^2_{t-1} < 0) + \beta_1 \sigma^2_{t-1} \label{eg:garch3}
@@ -63,11 +63,11 @@ A further expansion is the GJR-GARCH model (SOURCE). The GJR-GARCH model include
 
 where $I(\upepsilon^2_{t-1} < 0)$ is an indicator function that is one if $\upepsilon^2_{t-1}$ is negative and zero else. This means that negative shocks may have a different impact on future volatility than positive shocks, e.g. a sudden drop in a stock will cause the stock to be disproportionally more volatile in the near future. 
 
-\section{\textcolor{red}{Full Example Analysis with Training Data  - Nikos}}
-In the following we will analyze the stocks of Visa (V) and Intel (INTC) in depth. 
+\section{\textcolor{yellow}{Full Analysis for two Stocks  - Nikos}}
+In the following we will, representative for all, analyze the stocks of Visa (V) and Intel (INTC) in depth to get a thorough understanding for the possibilities and limits of time series analysis. 
 
-\subsection{\textcolor{red}{Data Exploration and Autocorrelation- Nikos}}
-The entire time series could be seen back in figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set}. The plots of the log-returns look very similar to the plot in figure \ref{fig:PG_squared_log_returns} and are therefore not shown. Figure \ref{fig:INTC_V_ACF_log_returns} shows the ACF and PACF for the log-returns of INTC and V. From looking at the plots we can presume that for V, AR and MA models of order one or two might be a reasonable try. For INTC it looks like there is very little information included as none of the lower order lags bear any significance. 
+\subsection{\textcolor{yellow}{Exploring the Time Series and their Autocorrelation Structure -  Nikos}}
+The entire time series could be seen back in figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set}. The plots of the log-returns look very similar to the plot in figure \ref{fig:PG_squared_log_returns} and are therefore not shown. Looking at the ACF and PACF in figure \ref{fig:INTC_V_ACF_log_returns} we can see some significant autocorrelation for Visa and practically none for Intel. We may therefore start by assuming that for Visa, AR and MA models of order one or two might be a reasonable try. For Intel it looks like we cannot find any exploitable information in the time series data. 
 
 \begin{figure}[h!]
     \centering
@@ -82,7 +82,7 @@ The entire time series could be seen back in figure \ref{fig:Daily Stock Prices 
     \label{fig:INTC_V_ACF_log_returns}
 \end{figure}{}
 
-We start by applying a formal test for autocorrelation to the time series, the Box/Pierce and Ljung/Box tests. EXPLANATION / Source. They have slightly different properties regarding their handling of very large and very small numbers of observations, but for both the null hypothesis is that there is no autocorrelation in the series. Figure \ref{fig:ljungbox} shows the p-values for the first 40 lags. The test suggests that for V there may be some significant autocorrelations that could be used for modeling. Compared to the plot of ACF and PACF however, the test seems overly optimistic. For INTC, the test confirms non-significance for the first few lags. While higher order lags may be significant, modeling a time series process with that many coefficients is almost certain to overfit the data. 
+To complement our visual impression we formally check for autocorrelation by applying a portmanteau test for autocorrelation to the time series. The Box/Pierce and Ljung/Box tests both test the null hypothesis of zero autocorrelation in a pre-specified number of lags and only subtly differ in their test statistics (see \citep{ljung_measure_1978}). For large sample sizes researchers usually go with the Ljung/Box test, but we decided to apply both to see whether they yield different results. Figure \ref{fig:ljungbox} shows the p-values for the first 40 lags for both tests. The test supports the conjecture that there may be some significant autocorrelations that could be used for modeling the log-returns of Visa. Compared to the plot of ACF and PACF however, the test seems overly optimistic. For Intel, the test confirms non-significance for the first few lags. While higher order lags may be significant, modeling a time series process with that many coefficients is almost certain to overfit the data. 
 
 \begin{figure}[h!]
     \centering
@@ -96,17 +96,17 @@ We start by applying a formal test for autocorrelation to the time series, the B
 \end{figure}{}
 
 \subsection{\textcolor{yellow}{Applying ARMA models}}
-We start by fitting ARMA models to the time series. This turned out to be prone to numerical instability. While the BIC could always be calculated, for some of the models standard errors could not be computed as the algorithm was not able to invert the Hessian matrix. The underlying problem is exacerbated when dealing with GARCH models, as all residuals are squared. We eventually managed to alleviate the problem by multiplying log-returns by 100 (corresponding to an approximate percentage interpretation). Table \ref{tab:bic_arma} shows the BIC that were obtained from fitting different ARMA(p,q) models to the series of log-returns. To allow for comparison later on, models were fitted once with the original log-returns and once with the log-returns multiplied by 100. 
+We start by assessing the fit of different ARMA models to the time series. We did this in python with the StatsModels module (see XXXX). The process turned out to be a bit problematic for two reasons: First, fitting turned out to be prone to numerical instability. For some of the models standard errors could not be computed as the algorithm was not able to invert the Hessian matrix. The underlying problem is exacerbated when dealing with GARCH models later on, as all residuals are squared. We eventually managed to alleviate this problem by multiplying log-returns by 100 (corresponding to an approximate percentage interpretation). Secondly, the function \texttt{ARMA\_model.fit()} from statsmodels was not able to fit all combinations returning an error that "computed initial AR coefficients are not stationary". Maybe this problem could have been solved by supplying specific starting values for the optimization, but we were able to circumvent it by using the function \texttt{arma\_order\_select\_ic} instead which produced AIC and BIC values for all models. We chose BIC over AIC as the former more heavily penalizes additional parameters and we are quite concerned about overfitting. Table \ref{tab:bic_arma} shows the BIC that were obtained from the different ARMA(p,q) models. To allow for comparison later on, models were fitted once with the original log-returns and once with the log-returns multiplied by 100. 
 
 \begin{table}[h!]
     \centering
     \small
     \input{figures/table_bic_arma.tex}
-    \caption{BIC presented for different combinations of ARMA(p,q) fit to the log-returns of V (top) and INTC (bottom). On the right side, those returns were multiplied by 100 in order to allow for comparison with the GARCH models later on.}
+    \caption{BIC presented for different combinations of ARMA(p,q) fit to the log-returns of Visa (top) and Intel (bottom). On the right side, those returns were multiplied by 100 in order to allow for comparison with the GARCH models later on.}
     \label{tab:bic_arma}
 \end{table}{}
 
-For V the best model according to BIC is ARMA(1,1). However the difference to ARMA(0,0) seems as good as negligible. In order to avoid the peril of reading too much into random chance, it may therefore be more prudent to stick with a constant mean model (ARMA(0,0)). Recall that commons sense suggests that the past should not contain exploitable information about the future, which, however is an implication of assuming an ARMA(1,1) model. We will fit this model nevertheless, along with the constant mean model. For INTC the lowest BIC is reached by ARMA(0,0) which corresponds to our observation that there is no significant lower-level autocorrelation. 
+For Visa the best model according to BIC is ARMA(1,1). However the difference to ARMA(0,0) seems as good as negligible. In order to avoid the peril of reading too much into random chance, it may therefore be more prudent to stick with a constant mean model (ARMA(0,0)). Recall that commons sense suggests that the past should not contain exploitable information about the future, which, however is an implication of assuming an ARMA(1,1) model. We will fit this model nevertheless, along with the constant mean model. For Intel the lowest BIC is reached by ARMA(0,0) which corresponds to our observation that there is no significant lower-level autocorrelation. 
 
 \begin{table}[h!]
     \centering
@@ -115,79 +115,53 @@ For V the best model according to BIC is ARMA(1,1). However the difference to AR
     \small
     \input{figures/V_result_ARMA00.tex}
     \vspace{1ex}
-    
     \figuretitle{Results for an ARMA(1,1) process fit to the log-returns of V}
     \vspace{-2ex}
     %\begin{adjustbox}{width = 0.75\linewidth}
     \small
     \input{figures/V_result_ARMA11.tex}
     %\end{adjustbox}
-    \vspace{-2ex}
-    \caption{Results for the ARMA(0,0) and ARMA(1,1) model fit to the log-returns of V.}
-    \label{tab:V_ARMA_log_returns}
-\end{table}
-
-Table \ref{tab:V_ARMA_log_returns} shows the results of both models for V. The change in AIC is larger than the change in BIC as the latter more heavily penalizes the number of parameters included in the estimation. Notably, even though the difference in BIC is quite small, the AR(1) and MA(1) are estimated very significantly and are high in relative magnitude. However, note that their effects go in opposing directions in similar magnitude and may as well cancel each other out. This interpretation may be somewhat plausible as the individual effects of the AR(1) and MA(1) terms are about an order of magnitude smaller (albeit still significant) and go in the same direction when estimating ARMA(1,0) and ARMA(0,1) models separately (-0.0736 for the AR(1) and -0.0809 for the MA(1) term in separate models). 
-Table \ref{tab:INTC_ARMA00_log_returns} shows the result of the ARMA(0,0) model to the log-returns of INTC. Not even the mean is significant, which is not too surprising, as Intel hardly gained in value in the observed period from 2012 to 2017 (See again figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set}. When exploratively fitting an ARMA(1,0), ARMA(0,1) or ARMA(1,1) model, as expected none of the coefficients reach significance (p-values all > 0.5). 
-
-\begin{table}[h!]
-    \centering
+    \vspace{1ex}
     \figuretitle{Results for an ARMA(0,0) process fit to the log-returns of INTC}
     \vspace{-2ex}
     \small
     \input{figures/INTC_result_ARMA00.tex}
-    \caption{Results for an ARMA(0,0) process fit to the log-returns of INTC}
-    \vspace{-2ex}
-    \label{tab:INTC_ARMA00_log_returns}
-\end{table}{}
+    \caption{Results for the ARMA(0,0) (top) and ARMA(1,1) model (middle) fit to the log-returns of Visa and for the ARMA(0,0) model (bottom) fit to Intel}
+    \label{tab:ARMA_log_returns}
+\end{table}
 
-\subsubsection{\textcolor{yellow}[ARMAX models]}
-We proceed in our analysis by adding our own generated sentiments as well as the ravenpack sentiments as external regressors. To make matters more complicated the stock market observations don't perfectly match the external data data points. We have about a third as many analyst reports (and therefore sentiment scores) as stock market observations. In order to obtain an estimable model we decided to discard all observations on days where no analyst reports existed. This also implies that we need to confine our analysis to a constant mean model (ARMA(0,0) as autoregressive and moving-average components do not make sense when many observations in the time series are missing. The time series model hence reduces to a regression with an intercept and the sentiment data as independent variables. While analyst reports were rather scarce, the Ravenpack data usually had multiple entries per day with only few days missing. We therefore needed to aggregate sentiments to obtain one single observation per day. 
+Table \ref{tab:ARMA_log_returns} shows the resulting model outputs. Let us look at the models for Visa first (top and middle). We can see that the change in AIC is larger than the change in BIC as the latter more heavily penalizes the number of parameters included in the estimation. Notably, even though the difference in BIC is quite small, the AR(1) and MA(1) are estimated very significantly and are high in relative magnitude. However, note that their effects go in opposing directions in similar magnitude and may as well cancel each other out. This interpretation may be somewhat plausible as the individual effects of the AR(1) and MA(1) terms are about an order of magnitude smaller (albeit still significant) and go in the same direction when estimating ARMA(1,0) and ARMA(0,1) models separately (-0.0736 for the AR(1) and -0.0809 for the MA(1) term in separate models (not shown)). 
+The bottom table shows the result of the ARMA(0,0) model to the log-returns of Intel. Not even the mean is significant, which is not too surprising, as Intel hardly gained in value in the observed period from 2012 to 2017 (See again figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set}. When exploratively fitting an ARMA(1,0), ARMA(0,1) or ARMA(1,1) model, as expected none of the coefficients reach significance (p-values all > 0.5). 
 
-
-\textit{ARMAX Sentiments Analyst Reports}
-
-The fact that we need to omit two-thirds of all data points changes the BIC considerably. To be able to compare the models according to BIC we have refit the baseline ARMA(0,0) model to the reduced data and obtained a BIC of -3001.07 for V and -4533.63 for INTC (the difference owing to the different number of observations). Table \ref{tab:result_ARMAX00_sentiment} shows the results of the ARMAX model for V and INTC. Even though sent\_mean is not too far from significance for V (and is even closer when only including sent\_mean, with a p-value of 0.067), all models fare worse in terms of BIC than the baseline. 
+\subsubsection{\textcolor{yellow}{ARMAX models}}
+We proceed in our analysis by adding our own generated sentiments as well as the ravenpack sentiments as external regressors. However, the availability of external data data points does not perfectly match the stock market observations. Unfortunately, we only have about a third as many analyst reports (and therefore sentiment scores) as stock market observations. In order to obtain an estimable model we decided to discard all observations on days where no analyst reports existed. This also implies that we need to confine our analysis to a constant mean model (ARMA(0,0) as autoregressive and moving-average components do not make sense when many observations in the time series are missing. The time series model hence reduces to a regression with an intercept and the sentiment data as independent variables. While analyst reports were rather scarce, the Ravenpack data often had multiple entries per day with only few days missing. We therefore needed to aggregate sentiments to obtain one single observation per day. 
 
 \begin{table}[h!]
     \centering
-    \figuretitle{ARMAX(0,0) with analyst report sentiments fit to the log-returns of V}
+    \figuretitle{ARMAX(0,0) with analyst report sentiments fit to the log-returns of Visa}
     \vspace{-2ex}
     \small
     \input{figures/V_result_ARMAX00_sentiment.tex}
     \vspace{1ex}
     
-    \figuretitle{ARMAX(0,0) with analyst report sentiments fit to the log-returns of INTC}
+    \figuretitle{ARMAX(0,0) with analyst report sentiments fit to the log-returns of Intel}
     \vspace{-2ex}
     \small
     \input{figures/INTC_result_ARMAX00_sentiment.tex}
-    \caption{Results for ARMAX(0,0), i.e. a regression with a constant and our own sentiment data as external regressors.}
+    \caption{Results for ARMAX(0,0), i.e. a regression with a constant and our own sentiment data as external regressors. ARMAX(1,1) was not fitted as modelling dependence on specific lags does not make senese if those lags do not reliably exist in the data.}
     \label{tab:result_ARMAX00_sentiment}
 \end{table}{}
 
-\textit{ARMAX Sentiments Ravenpack}
+\textit{\textcolor{yellow}{}ARMAX Sentiments Analyst Reports}
+The fact that we need to omit two-thirds of all data points changes the BIC considerably. To be able to compare the models according to BIC we have refit the baseline ARMA(0,0) model to the reduced data and obtained a BIC of -3001.07 for Visa and -4533.63 for Intel  (the difference owing to the different number of observations). Table \ref{tab:result_ARMAX00_sentiment} shows the results of the ARMAX(0,0) model for V and INTC. Even though sent\_mean is not too far from significance for V (and is even closer when only including sent\_mean, with a p-value of 0.067), all models fare worse in terms of BIC than the baseline. 
 
-In the Ravenpack data for V, 21 observations out of 1509 were missing. We decided it might still be interesting to continue having a look at ARMA(1,1) even though the estimation is now mildly distorted by the fact that some values are missing. We computed a new baseline BIC as we did in the previous analysis. The BIC for an ARMA(0,0) model with the 21 omitted values is now -8734.35 and for an ARMA(1,1) model on the same data -8735.23. For INTC there were no missing observations, so the baseline BIC stayed -8692.98. Table \ref{tab:result_ARMAX00_ravenpack} shows the results for the ARMAX(0,0) model fit with Ravenpack sentiments to V and INTC. We have tried different combinations of regressors to include in the model but only show the full model to avoid redundancy. The results for ARMAX(1,1) for V are not shown as they look similar to a combination of the tables for ARMA(1,1) and ARMAX(0,0) for V. In all cases the external information worsened BIC and did not improve the fit. For the following GARCH analysis we will therefore not include external information. 
+\textit{\textcolor{red}{ARMAX Sentiments Ravenpack}}
 
-\begin{table}[h!]
-    \centering
-    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of V}
-    \vspace{-2ex}
-    \small
-    \input{figures/V_result_ARMAX00_raven.tex}
+In the Ravenpack data for Visa, 21 observations out of 1509 were missing. We decided it might still be interesting to continue having a look at ARMA(1,1) even though the estimation is now mildly distorted by the fact that some values are missing. We computed a new baseline BIC as we did in the previous analysis: The BIC for an ARMA(0,0) model with the 21 omitted values is now -8734.35 and for an ARMA(1,1) model on the same data -8735.23. For INTC there were no missing observations, so the baseline BIC stayed -8692.98. Table \ref{tab:result_ARMAX00_ravenpack} shows the results for the ARMAX(0,0) model fit with Ravenpack sentiments to V and INTC. As with our own sentiment data, including the Ravenpack data did not improve the fit and in all cases BIC worsened. For that reason, we will regard the inclusion of these external data sources into time series models as a failed attempt and do not pursue it further. The ARMAX results with the Ravenpack data are shown in the appendix in Table \ref{tab:result_ARMAX_ravenpack}
 
-    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
-    \vspace{-2ex}
-    \small
-    \input{figures/INTC_result_ARMAX00_raven.tex}
-    \caption{Results for ARMAX(0,0), i.e. a regression with a constant and the Ravenpack sentiment data as external regressors.}
-    \label{tab:INTC_result_ARMAX00_ravenpack}
-\end{table}{}
+We have tried different combinations of regressors to include in the model but only show the full model to avoid redundancy. The results for ARMAX(1,1) for V are not shown as they look similar to a combination of the tables for ARMA(1,1) and ARMAX(0,0) for V. 
 
-\subsubsection{\textcolor{red}{GARCH models}}
-Financial data often exhibit conditional heteroskedasticity. We therefore want to see whether GARCH models are able to improve the fit. Figure \ref{fig:V_INTC_squared} shows the squared log-returns of V and INTC as well as their ACF and PACF. For both the first lag visually seems to be significant. 
-
-\begin{figure}[h!]
+\begin{figure}[h]
     \centering
     \figuretitle{Squared log-returns V and INTC}
     \begin{adjustbox}{width=.95\textwidth,center}
@@ -202,13 +176,14 @@ Financial data often exhibit conditional heteroskedasticity. We therefore want t
     \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/INTC_ACF_squared_log_returns.pgf}
     \end{adjustbox}
-    \caption{Squared log-returns and ACF and PACF for squared log-returns for V (top-left and middle) and INTC (top right and bottom). }
+    \caption{Squared log-returns and ACF and PACF for squared log-returns for V (top-left and middle) and INTC (top right and bottom).}
     \label{fig:V_INTC_squared}
-\end{figure}{}
+\end{figure}
 
-We formally test for the presence of a GARCH effect, i.e. autocorrelation in the squared residuals of the time series using the Lagrange Multiplier Test proposed by Engle (SOURCE). For both tests, the null hypothesis of 'No ARCH effect' cannot be rejected with p-values of 0.1160 (V) and 0.2693 (INTC). We nevertheless proceed to fit a GARCH model to the data. There is extensive literature on the optimal order for a GARCH model (e.g. does anything beat GARCH(1,1), does anything not beat GARCH(1,1), does anyone need GARCH(1,1)?). 
+\subsubsection{\textcolor{yellow}{GARCH models}}
+As detailed earlier, financial data often exhibit conditional heteroskedasticity. We therefore want to see whether GARCH models are able to improve the fit. Figure \ref{fig:V_INTC_squared} shows the squared log-returns of V and INTC as well as their ACF and PACF. For both the first lag visually seems to be significant. 
 
-For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (the mean is modeled by an ARMA(0,0) process). While we have tried other models such as for example GARCH(3,1) they did not perform significantly better than GARCH(1,1). To avoid issues with numerical instability all log-returns are multiplied by 100 and the new baseline BIC become 5025.46 for V (ARMA(1,1)) and 5205.42 for INTC (ARMA(0,0)) as shown on the right hand side of \ref{tab:bic_arma}. Table \ref{tab:V_result_GARCH11_100} shows the result for a GARCH(1,1) fit to V, table \ref{tab:INTC_result_GARCH11_100} shows the result for INTC. In both cases the fit improves and the BIC drops - not too much, but noticeably (from 5025.46 to 4948.68 (V) and from 5205.42 to 5169.75 (INTC)). 
+We formally test for the presence of a GARCH effect, i.e. autocorrelation in the squared residuals of the time series using the Lagrange Multiplier Test proposed by \citet{engle_autoregressive_1982} for ARCH and \citet{lee_lagrange_1991} for GARCH effects. For both tests, the null hypothesis of 'No ARCH effect' cannot be rejected with p-values of 0.1160 (V) and 0.2693 (INTC). We nevertheless proceed to fit a GARCH model to the data to see the results. Most often one will find a GARCH(1,1) model in financial literature. While there is extensive debate about the merits of this model (e.g. does anything beat GARCH(1,1) (\cite{hansen_forecast_2005}), does anything not beat GARCH(1,1)? \citep{alexios_does_2013}, does anyone need GARCH(1,1)? (\citep{reschenhofer_does_2013})), we will for simplicity stick to the GARCH(1,1) with a constant mean model (the mean is modeled by an ARMA(0,0) process). Other models such as for example GARCH(3,1) did not perform significantly better than GARCH(1,1). To avoid issues with numerical instability all log-returns are multiplied by 100 and the new baseline BIC become 5025.46 for Visa (ARMA(1,1)) and 5205.42 for Intel (ARMA(0,0)) as shown on the right hand side of table \ref{tab:bic_arma}. Table \ref{tab:V_result_GARCH11_100} shows the result for a GARCH(1,1) fit to Visa, table \ref{tab:INTC_result_GARCH11_100} shows the result for Intel. In both cases the fit improves and the BIC drops - not too much, but noticeably (from 5025.46 to 4948.68 (Visa) and from 5205.42 to 5169.75 (Intel)). 
 
 \begin{table}[h!]
     \centering
@@ -228,43 +203,30 @@ For simplicity, we will stick to a GARCH(1,1) model with a constant mean model (
     \label{tab:INTC_result_GARCH11_100}
 \end{table}{}
 
-We now relax the assumption of normally distributed error terms $\upepsilon_t$ (see \ref{eq:garch1}) and instead assume a Student t-distribution with fatter tails. This time the BIC drops considerably (from 4948.68 to 4794.91 (V) and from 5169.75 to 4986.41 (INTC)). The results are shown in table \ref{tab:result_GARCH11_students_100}. 
+We now relax the assumption of normally distributed error terms $\upepsilon_t$ (see \ref{eq:garch1}) and instead assume a Student t-distribution with fatter tails. This time the BIC drops considerably (from 4948.68 to 4794.91 (V) and from 5169.75 to 4986.41 (INTC)). The results are shown in table \ref{tab:result_GARCH11_students_100} in the appendix. 
 
-\begin{table}[h!]
-    \centering
-    \figuretitle{Results for GARCH(1,1) with t-Distribution (V)}
-    \vspace{-2ex}
-    \small
-    \input{figures/V_result_GARCH11_100_students.tex}
-    \vspace{1ex}
-    \figuretitle{Results for GARCH(1,1) with t-Distribution (INTC)}
-    \vspace{-2ex}
-    \small
-    \input{figures/INTC_result_GARCH11_100_students.tex}
-    \caption{}
-    \label{tab:result_GARCH11_students_100}
-\end{table}{}
+%\begin{table}[h!]
+%    \centering
+%    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (V)}
+%    \vspace{-2ex}
+%    \small
+%    \input{figures/V_result_GARCH11_100_students_GJR.tex}
+%    \newline
+%    \vspace{1ex}
+%    \newline
+%    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (INTC)}
+%    \vspace{-2ex}
+%    \small
+%    \input{figures/INTC_result_GARCH11_100_students_GJR.tex}
+%    \caption{}
+%    \label{tab:result_GARCH11_students_GJR_100}
+%\end{table}{}
 
-Another expansion is the inclusion of asymmetric shocks (see \ref{eq:garch3}). This assumes that sudden drops in a stock's value lead to higher volatility than an increase of the same amount would. Results for the GJR-GARCH model are shown in table \ref{tab:result_GARCH11_students_GJR_100}. For V, the gamma-coefficient is positive and significant, indicating an asymmetric effect of shocks on volatility exists. The BIC drops accordingly by a small bit from 4794.91 to 4784.75. For INTC, the gamma coefficient is not significant and BIC even slightly increase from 4986.41 to 4993.23.
+Another expansion is the inclusion of asymmetric shocks (see \ref{eq:garch3}). This assumes that sudden drops in a stock's value lead to higher volatility than an increase of the same amount would. Results for the GJR-GARCH model with t-distributed residuals are shown in table \ref{tab:result_GARCH11_students_GJR_100} in the appendix. For Visa, the gamma-coefficient is positive and significant, indicating an asymmetric effect of shocks on volatility exists. The BIC drops accordingly by a small bit from 4794.91 to 4784.75. For Intel, the gamma coefficient is not significant and BIC even slightly increase from 4986.41 to 4993.23.
 
-\begin{table}[h!]
-    \centering
-    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (V)}
-    \vspace{-2ex}
-    \small
-    \input{figures/V_result_GARCH11_100_students_GJR.tex}
-    \vspace{1ex}
-    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (INTC)}
-    \vspace{-2ex}
-    \small
-    \input{figures/INTC_result_GARCH11_100_students_GJR.tex}
-    \caption{}
-    \label{tab:result_GARCH11_students_GJR_100}
-\end{table}{}
-
-\subsubsection{Forecasting and Forecast Precision}
-To assess the predictive performance we use the ARMA(0,0) model for V and INTC as well as the ARMA(1,1) model for V to generate predictions. To do so, we fit an ARMA model to the time series up to time $y_t$, predict the next value $\hat{y}_{t+1}$, then add the true value $y_{t+1}$ to the time series and fit a model that lets us predict $\hat{y}_{t + 2}$ and so forth. For the ARMA(0,0) model, this means predicting the next value on the basis of a cumulative mean of the past log-returns. Estimating an ARMA(1,1) consecutively for V turned out to be problematic because the result was not always a stationary process. Therefore, at some points the estimation of an ARMA(1,1) model was impossible. We therefore had to replace the prediction for those specific points with ARMA(0,0). 
-To compare the results we compared the Error Sum of Squares (SSE) as well as a binary prediction accuracy that merely judges whether the direction of the prediction was correct. The predictions of the ARMA(0,0) model with constant mean (which corresponds to a random walk for the stock prices with drift) seem to be better then mere coin tosses. However they do not perform better than the naive strategy of always predicting an upwards movement of the stock (i.e. a positive return). Only the ARMA(1,1) model for V reaches a higher prediction accuracy. This might, however, also be due to chance. Table \ref{tab:V_INTC_ARMA_predictions} shows the results of those predictions. The forecasts are shown in figure \ref{fig:V_INTC_ARMA_predictions_plot}. 
+\subsubsection{Forecasting and Forecast Precision for Visa and Intel}
+To assess the predictive performance we use the ARMA(0,0) model for Visa and Intel as well as the ARMA(1,1) model for Visa to generate predictions. To do so, we fit an ARMA model to the time series up to time $y_t$, predict the next value $\hat{y}_{t+1}$, then add the true value $y_{t+1}$ to the time series and fit a model that lets us predict $\hat{y}_{t + 2}$ and so forth. For the ARMA(0,0) model, this means essentially predicting the next value on the basis of a cumulative mean of the past log-returns. Estimating an ARMA(1,1) model iteratively for V turned out to be problematic because the result was not always a stationary process. Therefore, at some points the estimation of an ARMA(1,1) model was impossible. We therefore had to replace the prediction for those specific points with the ones made by ARMA(0,0). 
+To compare the results we looked at the Error Sum of Squares (SSE) as well as a binary prediction accuracy that merely judges whether the direction of the prediction was correct. The predictions of the ARMA(0,0) model with constant mean (which corresponds to a random walk for the log stock prices with drift) seems to perform better then mere coin tosses. However they do not perform better than the naive strategy of always predicting an upwards movement of the stock (i.e. a positive return). Only the ARMA(1,1) model for V reaches a higher prediction accuracy. This might, however, also be due to chance. Table \ref{tab:V_INTC_ARMA_predictions} shows the results of those predictions. The forecasts are shown in figure \ref{fig:V_INTC_ARMA_predictions_plot}. 
 
 \begin{table}[]
     \centering
@@ -297,7 +259,7 @@ To compare the results we compared the Error Sum of Squares (SSE) as well as a b
 \end{figure}{}
 
 \subsubsection{\textcolor{red}{Forecasting Volatility}}
-While GARCH models are not able to better predict future returns, they can help predict the volatility of future returns. Figure \ref{fig:} gives an intuition to the usefulness of volatility forecasts. In the figure, the volatility of V process is plotted together with the absolute value of the log-returns of the stock. While obviously the scaling does not match and the log-returns themselves do not equal not the actual volatility, this figure serves the point of illustrating how future turbulences in the markets seem at least somewhat predictable. Note that the direction of movement remains still unpredictable, we can merely forecast uncertainty about future returns. 
+While GARCH models are not able to better predict future returns, they can help predict the volatility of future returns. Figure \ref{fig:volatility_pred} gives an intuition to the usefulness of volatility forecasts. In the figure, the volatility of V process is plotted together with the absolute value of the log-returns of the stock. While obviously the log-returns themselves do not equal not the actual volatility, the figure serves the point of illustrating how future turbulences in the markets seem at least somewhat predictable. Note that the direction of movement remains still unpredictable, we can merely forecast uncertainty about future returns. This is nevertheless very useful, e.g. for balancing portfolios, pricing options, and estimating future risks. As the main focus of this paper is the prediction of returns, however, volatility forecasts will not be further discussed in detail.
 
 \begin{figure}[h]
     \centering
@@ -307,20 +269,17 @@ While GARCH models are not able to better predict future returns, they can help 
     \input{figures/INTC_predictions_volatility_GJR_GARCH.pgf}
     \end{adjustbox}
     \caption{Volatility forecasts (shown in blue) are laid over the absolute value of log-returns (in orange) for V (left) and INTC (right). For V, the GJR-GARCH(1,1) model was used, for INTC, the GARCH(1,1) model was used (both using students-t-distributed resiudals).}
-    \label{fig:V_INTC_ARMA_predictions_plot}
+    \label{fig:volatility_pred}
 \end{figure}{}
 
-
-This is useful for balancing portfolios, pricing options and XXX [THEORY!]. As the main focus of this paper is the prediction of returns, volatility forecasts will not be further discussed in detail. 
-
-\subsection{\textcolor{red}{Weighted Average of Predictions}}
-To stabilize predictions and in trying to deal with the inherent uncertainty about the correct model to apply we also considered averaging over predictions generated by different model. In the specific case, we only had identified two feasible models for V over which to average. The resulting SSE, 0.2451 was in between the SSE for ARMA(0,0), 0.2456 and the SSE for ARMA(1,1), 0.2445. The binary prediction accuracy was by chance exactly the same as the prediction accuracy for the naive strategy of always predicting positive returns. 
+%\subsection{\textcolor{red}{Averaging over Predictions}}
+%To stabilize predictions and in trying to deal with the inherent uncertainty about the correct model to apply we also considered averaging over predictions generated by different model. In the specific case, we only had identified two feasible models for V over which to average. The resulting SSE, 0.2451 was in between the SSE for ARMA(0,0), 0.2456 and the SSE for ARMA(1,1), 0.2445. The binary prediction accuracy was by chance exactly the same as the prediction accuracy for the naive strategy of always predicting positive returns. 
 
 \section{\textcolor{red}{Time Series Predictions with the Remaining Stocks - Nikos}}
 
-We now step into the shows of a trader who is trying to predict future stocks. He may have a large toolkit of models to apply to the data, but he cannot know which one is appropriate. He could apply different models to a pre-specified past of a time series, see which one fits best and then stick with it and hope that the future will behave similar to the past. He could iteratively refit the time series every day to produce the next forecast with the current best guess. Or he could pre-select different models and average over the predictions generated by these models. Seen from the angle of economic theory, all three methods somewhat resemble reading the leaves. It remains unclear why the future of the time series should behave like its past. And while the last strategy at least has the beauty of approaching the problem from a Bayesian perspective by averaging over possible future paths, it remains unclear which models should be included and what weight they should be given. But as traders all over the world are indeed trying to tackle the problem in similar ways, we have followed their lead to see what comes out. 
+We now directly step into the shows of a trader who is trying to  predict future stocks. The trader has multiple options: He could apply different models to a pre-specified past of a time series, see which one fits best and then stick with it and hope that the future will behave similar to the past. He could iteratively refit the time series every day to produce the next forecast with the current best guess. Or he could pre-select different models and average over the predictions generated by these models. Seen from the angle of economic theory, all three methods somewhat resemble reading the leaves. It remains unclear why the future of the time series should behave like its past. And while the last strategy at least has the beauty of approaching the problem from a Bayesian perspective by averaging over possible future paths, it remains unclear which models should be included and what weight they should be given. But as traders all over the world are indeed trying to tackle the problem in similar ways, we have followed their lead to see what comes out. 
 
-We have tried all combinations of ARMA(p,q) models that satisfy $p,q < 3$ and $p+q \leq 4$. This restrictions on the one hand reduces excessive overfitting and on the other hand was a necessary requirement as computations already took about 12h to complete. Estimation for some models was problematic (especially ARMA(1,2) and ARMA(1,3) as oftentime the resulting parameters did not produce a stationary model. Predictions were then assumed to be zero. In addition to those models we have written an auto-ARMA function that generates predictions from the ARMA(p,q)-model that fit the past history best in terms of BIC. Yet another set of predictions was generated by averaging over all predictions from the other models. Lastly we also tried always predicting zero for future log-returns. This corresponds to a random walk without drift for the original time series, as predicting a log-return of zero implies a return of $\exp{0} = 1$ which in turn implies that we always predict tomorrow's value of the stock to equal today's value. 
+We tried all combinations of ARMA(p,q) models that satisfy $p,q < 3$ and $p+q \leq 4$. This restriction on the one hand reduces excessive overfitting and on the other hand was a necessary requirement as computations already took about 12h to complete. Estimation for some models was again problematic (especially ARMA(1,2) and ARMA(1,3) as oftentimes the resulting parameters did not produce a stationary model. In this case, predictions were assumed to be zero. In addition to those models we have written an auto-ARMA function that generates predictions from the ARMA(p,q)-model that fit the past history best in terms of BIC. Yet another set of predictions was generated by averaging over all predictions from the other models. Lastly we also tried always predicting zero for future log-returns. This corresponds to assuming a random walk without drift for the original time series, as predicting a log-return of zero implies a return of $\exp{0} = 1$ which in turn implies that we always predict tomorrow's value of the stock to equal today's value. 
 
 \begin{figure}[h!]
     \centering
@@ -338,11 +297,7 @@ We have tried all combinations of ARMA(p,q) models that satisfy $p,q < 3$ and $p
 \end{figure}{}
 
 
-Results are shown in figure \ref{fig:models_ranked} and strongly discourage from trading on time series predictions. We first looked at the SSE for a variety of different models for all 10 stocks. To assess the performance of the different models, they were then given a rank according to their performance on a single stock (judged by SSE). Those ranks were summed up to produce the second plot in figure \ref{fig:models_ranked}. We can see that none of the models consistently beat ARMA(0,0). Even more interestingly, none of the models consistently beat the zero-prediction model. So even though many of the stocks actually exhibit some kind of positive long-term trend, a random walk without drift yields better predictions than a random walk with drift. 
-
-
-
-In addition to the SSE as a criterion we also assessed performance in terms of binary predictions accuracy. In the top plot of figure \ref{fig:models_ranked_binary} we can clearly see where the model estimations were problematic: Some values are outside of the bounds because model estimation often failed and therefore corresponding predictions were per default set to zero. This in turn leads to a very low binary prediction accuracy. We can also see clearly from the bottom plot of the figure, that no model was able to consistently beat the naive strategy of always predicting positive returns.
+Results are shown in figure \ref{fig:models_ranked} and should strongly discourage from trading merely on time series predictions. We first looked at the SSE for a variety of different models for all 10 stocks. To assess the performance of the different models, they were then given a rank according to their performance on a single stock (judged by SSE). Those ranks were summed up to produce the second plot in figure \ref{fig:models_ranked}. We can see that none of the models consistently beat ARMA(0,0). Even more interestingly, none of the models consistently beat the zero-prediction model. So even though many of the stocks actually exhibit some kind of positive long-term trend, a random walk without drift yields better predictions than a random walk with drift. 
 
 \begin{figure}[h!]
     \centering
@@ -357,4 +312,6 @@ In addition to the SSE as a criterion we also assessed performance in terms of b
     \end{adjustbox}
     \caption{The top plots show the binary prediction accuracy reached by the various models for every single stock. Then the different models were given a rank corresponding to their binary prediction accuracy for the different stocks. This bottom plot shows the sum of the ranks achieved by the model across all stocks. As we look at prediction accuracy, a higher value is better.}
     \label{fig:models_ranked_binary}
-\end{figure}{}
+\end{figure}
+
+In addition to the SSE, we also assessed performance in terms of binary predictions accuracy, as shown in figure \ref{fig:models_ranked_binary}. In the top plot one can clearly see where the model estimations were problematic: Some values are outside of the bounds because model estimation often failed and therefore corresponding predictions were per default set to zero, leading to a very low binary prediction accuracy. We can also see from the bottom plot of the figure, that no model was able to consistently beat the naive strategy of always predicting positive returns. 
