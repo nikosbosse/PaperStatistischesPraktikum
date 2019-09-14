@@ -105,28 +105,25 @@
 
 
 \section{Appendix to Chapter \ref{ch:ts}}
-% ============ GARCH Models =================%
+
+% ============ ARMAX Models =================%
 \begin{table}[h!]
     \centering
-    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of V}
+    \figuretitle{Full ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of Visa}
     \vspace{-2ex}
     \small
-    \input{figures/V_result_ARMAX00_raven.tex}
+    \input{figures/V_result_ARMAX00_raven2.tex}
     \vspace{1ex}
-        \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
+
+    \figuretitle{Full ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
     \vspace{-2ex}
     \small
-    \input{figures/V_result_ARMAX11_raven.tex}
-    \vspace{1ex}
-    \figuretitle{ARMAX(0,0) with Ravenpack sentiments fit to the log-returns of INTC}
-    \vspace{-2ex}
-    \small
-    \input{figures/INTC_result_ARMAX00_raven.tex}
+    \input{figures/INTC_result_ARMAX00_raven2.tex}
     \caption{Results for ARMAX(0,0), i.e. a regression with a constant and the Ravenpack sentiment data as external regressors.}
     \label{tab:result_ARMAX_ravenpack}
-\end{table}{}
+\end{table}
 
-
+% ============ GARCH Models =================%
 
 \begin{table}[h!]
     \centering
@@ -234,3 +231,45 @@
     \caption{}
     \label{tab:INTC_ARMA21_log_returns}
 \end{table}{}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER: Trading Strategies
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Appendix to Chapter \ref{ch:predictions}}
+
+\begin{figure}[h!]
+    \centering
+    \figuretitle{Mean-Reversion Strategy with Log-Returns of Single Stocks}
+    \begin{adjustbox}{width=.95\textwidth,center, scale={1}{0.8}}
+        \input{figures/all_returns_cum_mean_returns_strategy.pgf}
+    \end{adjustbox}  
+    \caption{Mean Reversion based on past returns of single stocks. The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
+    \label{fig:mean_reversion_returns}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+    \centering
+    \figuretitle{Performance of a Momentum Trading Portfolio}
+    \begin{adjustbox}{width=.95\textwidth,center}
+        \input{figures/momentum_portfolio_performance.pgf}
+    \end{adjustbox}  
+    \figuretitle{Momentum-Trading Log-Returns and 30d average}
+    \begin{adjustbox}{width=.95\textwidth,center}
+        \input{figures/momentum_30d_strategy.pgf}
+    \end{adjustbox}      
+    \caption{Momentum-Trading for portfolio (top) and for log-returns of single stocks (bottom). The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
+    \label{fig:momentum-trading}
+\end{figure}
+
+
+
+

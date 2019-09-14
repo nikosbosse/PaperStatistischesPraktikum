@@ -3,7 +3,7 @@ The following chapter will give an overview over different trading strategies an
 
 
 \section{\textcolor{red}{Trading Strategies - Theoretical Background}}
-#\subsection{\textcolor{red}{Idea and Process}}
+%\subsection{\textcolor{red}{Idea and Process}}
 %Many of the following strategies crucially depend on the time frame that is used. Some strategies are supposed to work over longer time frames like months and years, others over shorter ones like days or weeks. In this sense, the time frame of a trading strategy is a hyperparameter to be optimized. We decided to use a fixed time frame of one day for all strategies. On the one hand, this allows for direct comparisons and reduces the risk of overfitting. On the other hand, it was simply not feasible for us to do this hyperparameter optimization for every strategy. 
 
 \subsection{\textcolor{red}{Mean Reversion and Momentum Trading}}
@@ -14,7 +14,6 @@ In 1985 Bondt and Thaler \citet{bondt_does_1985} were one of the early scholars 
 
 \subsubsection{\textcolor{red}{Momentum Trading}}
 On the opposite side of the spectrum of trading strategies lies the idea of momentum. \citep{jegadeesh_returns_1993} were one of the first to describe "that strategies which buy stocks that have performed well in the past and sell stocks that have performed poorly in the past generate significant positive returns over 3- to 12-month holding periods."   Interestingly, for the same portfolios they also saw mean-reverting behavior over the longer time frame of 12 to 48 months. Indeed, many scholars agree that mean reversion and momentum behaviour are not necessarily contradictions, but that the time frame determines in which way a stock will behave (see \citep{balvers_momentum_2006}). 
-
 
 \subsection{\textcolor{red}{Pairs Trading}}
 A third strategy we have examined is called pairs trading. The idea is to trade on the fact that some stocks usually move together. CocaCola and Pepsi for example sell a similar product and therefore should be affected similarly by events in the market. Assuming that the price difference between the two stocks should be somewhat constant, one can construct a trading strategy that profits if the spread randomly diverges too much and then converges again. While there are many ways to do to identify assets that move together (for an overview see e.g. \cite{gatev_pairs_1999}, \cite{ganapathy_vidyamurthy_pairs_2004}, \cite{do_new_2006}) we rely on the idea of cointegration (introduced \cite{engle_co-integration_1987}) to find suitable stocks. 
@@ -57,7 +56,7 @@ While they found excessive returns of that strategy from 1932 to 1977 the result
 For single stocks, we have tried two different ways to implement a mean reversion strategy. The first strategy looks at whether the current stock price is above or below its past mean. The second one in spirit does the same thing, but with log-returns. 
 
 \subsubsection{Mean Reversion - Stock Prices}
-The idea behind this strategy is that there is a true fundamental value underlying the stock that is represented by the mean of past stock prices. The trading strategy looks like this: 
+The idea behind this strategy is that there is a true fundamental value underlying the stock that is represented by the mean of past stock prices. One naive implementation of the trading strategy, using the cumulative mean of the series, looks like this: 
 
 \vspace{2ex}
 \textbf{\small{Algorithm 2: Mean-Reversion - Cumulative Mean}}
@@ -94,14 +93,14 @@ One obvious problem with this strategy is that any trend in the time series will
     \label{fig:mean_reversion_cum_mean}
 \end{figure}{}
 
-One can try to alleviate this problem by not using the current value against the cumulative mean, but instead for example 30d and 60d averages. The strategy then looks like this: 
+One more sophisticaed approach to alleviate this problem is by comparing 30d and 60d averages. The strategy then looks like this: 
 
 \vspace{2ex}
 \textbf{\small{Algorithm 3: Mean-Reversion Moving Averages}}
 \vspace{-1ex}
 \begin{verbatim}
 for day in all_days: 
-    60d_mean = mean of stock values of the past 90 days
+    60d_mean = mean of stock values of the past 60 days
     30d_mean = mean of stock values of the past 30 days
     if 30d_mean > 60d_mean:
         sell (short) the stock
@@ -134,68 +133,64 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
 \end{figure}{}
 
 \subsubsection{Mean Reversion - Log-Returns}
-The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm just replaces the value of the stock in algorithm 2 with log-returns and the cumulative mean with the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in figure \ref{fig:mean_reversion_returns}. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
+The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm just replaces the value of the stock in algorithm 2 with log-returns and the cumulative mean with the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in figure \ref{fig:mean_reversion_returns} in the appendix. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
 
-\begin{figure}[h!]
-    \centering
-    \figuretitle{Mean-Reversion Strategy with Log-Returns of Single Stocks}
-    \begin{adjustbox}{width=.95\textwidth,center}
-        \input{figures/all_returns_cum_mean_returns_strategy.pgf}
-    \end{adjustbox}  
-    \caption{Mean Reversion based on past returns of single stocks. The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
-    \label{fig:mean_reversion_returns}
-\end{figure}{}
-
-\subsection{Momentum Based Trading}
-Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day and work analogous to algorithms 1 and 3, but only use log-returns and reverse buy and sell. Results are shown in figure \ref{fig:momentum-trading} and are even less convincing than the results for mean-reversion trading. 
-
-\begin{figure}[h!]
-    \centering
-    \begin{adjustbox}{width=.95\textwidth,center}
-        \input{figures/momentum_portfolio_performance.pgf}
-    \end{adjustbox}  
-    \figuretitle{Momentum-Trading Log-Returns and 30d average}
-    \begin{adjustbox}{width=.95\textwidth,center}
-        \input{figures/momentum_30d_strategy.pgf}
-    \end{adjustbox}      
-    \caption{Momentum-Trading for portfolio (top) and for log-returns of single stocks (bottom). The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
-    \label{fig:momentum-trading}
-\end{figure}{}
-
+\subsection{\textcolor{yellow}{Momentum Based Trading}}
+Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day. The momentum portfolio simply reverses algorithm 1. The strategy used for single stocks looks at whether the log-returns in time t are higher (lower) than the 30d mean of log-returns and use that as a buy (sell) signal. Results are shown in figure \ref{fig:momentum-trading} in the appendix and are even less convincing than the results for mean-reversion trading. 
 
 \subsection{\textcolor{red}{Pairs Trading}}
-Some authors (SOURCE) suggest trading on pairs of stocks. The idea is to find stocks that are cointegrated, i.e. that move together. One could for example assume that CocaCola and Pepsi sell a similar product and therefore should be affected similarly by events in the market. Assuming that the price difference between the two stocks should be somewhat constant, one can implement a strategy that buys one asset and shorts the other whenever the difference in price converges, and does the opposite when the difference diverges. The algorithm looks as follows: 
+\subsubsection{\textcolor{red}{Identifiying Suitable Time Series}}
+Many of our ten companies have overlapping areas of business (refer back to table \ref{tab:stocks}. Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in table \ref{tab:coint} had a p-value smaller than 0.05.
+
+\begin{table}[h!]
+    \centering
+\small
+\begin{tabular}{lrlr}
+\toprule
+companies &   p-values & companies & p-values \\
+\midrule
+JNJ, PG & 0.0129 & PG, JNJ & 0.0083  \\
+\vspace{1ex}
+JNJ, VZ & 0.0466 & VZ, JNJ & 0.0118 \\
+\vspace{0.2ex}
+VZ, MMM & 0.0305 & & \\
+\vspace{0.2ex}
+VZ, PG & 0.0393 & & \\
+\vspace{0.2ex}
+VZ, V & 0.0266  & & \\
+\vspace{0.2ex}
+V, MMM & 0.0415 & & \\
+\bottomrule
+\end{tabular}
+    \caption{Pairs of stocks tested for cointegration with a p-value < 0.05}
+    \label{tab:coint}
+\end{table}
+
+We went for PG and JNJ, as the p-values were smallest, the cointegration worked in both directions and the firms indeed operate in similar business areas. The left of figure \ref{fig:coint_PG_JNJ} shows the two time series. Note that even though the cointegration test was significant, we see that the two stocks slowly diverge in value. To see whether the strategy works nevertheless, we apply the following basic pairs trading algorithm \footnote{Note that dividing by the standard deviation only has an effect if one sets specific thresholds other than > 0, i.e. to trigger trades or stop-loss orders. The sd is included to illustrate how the algorithm can be adapted to accommodate more complex needs.}: 
 \vspace{2ex}
 \textbf{\small{Algorithm 4 - Pairs Trading}}
 \vspace{-1ex}
 %\begin{Verbatim}[frame=single]
 \begin{verbatim}
-for i in range((1509 - 1)): # no predictions for last day
-    if zscores[i] > 0:
-        signal_pairs_trading.loc[i + 1, 'PG'] = -1
-        signal_pairs_trading.loc[i + 1, 'JNJ'] = 1
-        #money += val['diff'][i]
-        #count -= 1
-    # Buy long if the z-score is < 1
-    elif zscores[i] < 0:
-        signal_pairs_trading.loc[i + 1, 'PG'] = 1
-        signal_pairs_trading.loc[i + 1, 'JNJ'] = -1
+for day in all_days: 
+    diff = stock price PG - stock price JNJ
+    mu = 90d average stock price PG - 90d average stock price JNJ
+    sd = standard devation of diff until day
+    zscore = (diff - mu) / sd
+    if zscore > 0:
+        sell (short) PG
+        buy JNJ
+    else:
+        buy PG
+        sell (short) JNJ
 \end{verbatim}
 %\end{Verbatim}
 
-To identify cointegrated series, one can either rely on theoretical considerations (like the similarity between Cola and Pepsi) or one can try to run formal cointegration tests [ERKLÄRNUG, QUELLE]. As we only had ten stocks to choose from, we did the latter. We therefore tested all pairwise combinations of the ten stocks for cointegration. From a statistics point of view, this is of course bad practice insofar as one runs into a multiple comparison problem. We nevertheless wanted to see how it turns out. From all tests, the following pairs had a p-value smaller than 0.05: 
-
-0.028312433093068277 JNJ PG
-0.0149658441809201 PG JNJ
-0.044162562247794815 VZ MMM
-0.02095132057684397 VZ JNJ
-0.039943528773524355 VZ V
-
-We went for PG and JNJ, as the p-values were smallest and the cointegration worked in both directions. Also from a theory point of view, Procter\&Gamble and Johnson\&Johnson are indeed the most similar firms. The left of figure \ref{fig:coint_PG_JNJ} shows the two time series. Even though the cointegration test was significant, we see that the two stocks slowly diverge in value. The right side of the figure shows the performance of the trading strategy on the sample. We can see that pairs trading, at least in the way we implemented it, did not work out. 
+The right side of figure \ref{fig:coint_PG_JNJ} shows the performance of the trading strategy on the sample. We can see that pairs trading, at least in the way we implemented it, did not work out. 
 
 \begin{figure}[h!]
     \centering
-    \figuretitle{Mean-Reversion Strategy with Log-Returns of Single Stocks}
+    \figuretitle{Pairs Trading with Cointegrated Series}
     \begin{adjustbox}{width=.95\textwidth,center}
         %\includegraphics[width = \linewidth]{figures/coint_PG_JNJ_plot.pdf}
         \input{figures/coint_PG_JNJ_plot.pgf}
