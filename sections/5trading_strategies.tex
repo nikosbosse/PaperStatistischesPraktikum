@@ -1,5 +1,5 @@
 \chapter{Trading Strategies}\label{ch:strategies}
-The following chapter will give an overview over different trading strategies and compare their effectiveness with regards to trading with our ten stocks. While this an interesting exercise in and of itself, we also intended these trading strategies to serve as a baseline for the comparison with our prediction based trading strategy against. As we have seen in the last two chapters, however generating predictions from machine learning and time series approaches has not shown to be effective. We will therefore simply explore some common strategies and see if they fare better. 
+The following chapter will give an overview over different trading strategies and compare their effectiveness with regards to trading with our ten stocks. While this an interesting exercise in and of itself, we also intended these trading strategies to serve as a baseline for the comparison with our prediction based trading strategy against. As we have seen in the last two chapters, however, generating predictions from machine learning and time series approaches has not shown to be effective. We will therefore simply explore some common strategies and see if they fare better. 
 
 
 \section{Trading Strategies - Theoretical Background}
@@ -18,7 +18,6 @@ On the opposite side of the spectrum of trading strategies lies the idea of mome
 \subsection{Pairs Trading}
 A third strategy we have examined is called pairs trading. The idea is to trade on the fact that some stocks usually move together. CocaCola and Pepsi for example sell a similar product and therefore should be affected similarly by events in the market. Assuming that the price difference between the two stocks should be somewhat constant, one can construct a trading strategy that profits if the spread randomly diverges too much and then converges again. While there are many ways to identify assets that move together (for an overview see e.g. \cite{gatev_pairs_1999}, \cite{ganapathy_vidyamurthy_pairs_2004}, \cite{do_new_2006}) we rely on the idea of cointegration (introduced \cite{engle_co-integration_1987}) to find suitable stocks. 
 
-\subsubsection{Cointegration}
 Cointegration means the following: If two time series $x_t, y_t$ are both integrated of order $d$ (i.e. they are stationary after applying d-th differences), then $x_t, y_t$ are cointegrated if there exists a linear combination $a x_t + b y_t$ that is integrated of order $d' < d$. Our stock prices (the log stock prices, to be more precise) are integrated of order one. One can therefore look for a time series  $y_t - \beta x_t = u_t$ and check whether $u_t$ is stationary. This leads to the two-step procedure developed by \cite{engle_co-integration_1987}, where in the first step $\beta$ is determined by least squares and in the second step $u_t$ is tested for stationarity using the Augmented Dickey-Fuller test (ADF)\footnotetext{The Philipps-Ouiliaris integration test (\citep{phillips_asymptotic_1990}) may be slightly more appropriate, but we stick with the formerly described cointegration test, as it can be easily implemented in python}. Note that this procedure does not produce symmetric results. The result will differ slightly depending on the order (e.g. PG, JNJ or JNJ, PG). 
 
 \section{Trading Strategies - Implementation}
@@ -26,6 +25,7 @@ As detailed earlier, the success of a trading strategy may depend on the time fr
 
 \subsection{Mean Reversion Portfolio}
 We replicate the basic idea from Bondt and Thaler \citet{bondt_does_1985} and use the following trading algorithm: 
+
 \vspace{2ex}
 \textbf{\small{Algorithm 1 - Mean-Reversion Portfolio}}
 \vspace{-1ex}
@@ -198,13 +198,3 @@ The right side of Figure \ref{fig:coint_PG_JNJ} shows the performance of the tra
     \caption{On the left the stock prices of Procter\&Gamble and Johnson\&Johnson are plotted over time. On the right the profits from applying a pairs trading strategy are shown.}
     \label{fig:coint_PG_JNJ}
 \end{figure}{}
-
-\section{A Note Trading on Strategies Based on Our Predictions}
-As mentioned earlier, our intention was to compare the trading strategies 
-We have two sources of predictions: the machine learning things and the time series. 
-
-As we have already established in chapter \ref{ch:ts} that none of our models was able to consistently beat a buy-and-hold strategy (equivalent to always predicting a positive return) we decided that using those for predictions is altogether futile. 
-
-
-
-

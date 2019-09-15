@@ -52,10 +52,11 @@ The general idea of LDA is that each document can be described as coming from a 
 
 \section{Cleaning of the Text Data}\label{cleaningText}
 In order to obtain useful results from our models, the data first has to be cleaned. The entire set of analyst reports contains 157380 unique words, characters and symbols. Many of them, however, do not really convey meaning or relevant information. To get reliable sentiment scores, the text data therefore has to be cleaned and preprocessed in order to remove noise and reduce the dimensionality of the unsupervised learning problem \citep{HADDI201326}. The preprocessing was done in four steps using \texttt{R} \citep{Rproject} and the \texttt{R} package \texttt{tidytext} \citep{tidytext}. At first, words where converted to lowercase and all words where saved as separate strings. Stop words (like 'the', 'in', 'at') were removed by using a custom stop word library. There exist a lot of readily available stop word libraries, both from the \textit{tidytext} package and from other sources. One problem, however, with many libraries is that they also contain many adjectives that might be important for the extraction of reasonable sentiments. We therefore created our own library of stop words by modifying the existing \texttt{tidytext} stop word library. This first step of removing stop words reduces the total number of words from 67M initially to 43M (see Figure \ref{fig:TotWord}). In the second step all special characters, links to websites, hyper-references, numbers, words with numbers and punctuation marks are removed as well. The result reduced the number of unique words and items by about 50\% from 157206 to 82525.  \\ 
-
 \begin{figure}[h]
 \centering
+\begin{adjustbox}{width = 0.75\textwidth}
 \includegraphics[width=\textwidth]{figures/ReductionInTotalNWords.png}
+\end{adjustbox}
 \caption{Reduction in total number of words due to preprocessing the data.}
 \label{fig:TotWord}
 \end{figure}
