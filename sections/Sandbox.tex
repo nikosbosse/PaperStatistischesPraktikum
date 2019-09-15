@@ -12,3 +12,117 @@
 2 -1729.428586 -1722.109497 -1721.583265
 3 -1722.111084 -1714.879466 -1710.283087
 4 -1714.984018 -1707.723436 -1702.993507, 'bic min order': (0, 0)
+
+
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \includegraphics[]{figures/all_qq_plot_fd_log_adjclose.pdf}
+    %\input{figures/all_qq_plot_fd_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{QQ-Plots}
+    \label{fig:all_qq_fd_log_adjclose}
+\end{figure}
+
+
+The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.9\textwidth,center}
+    \input{figures/all_fd_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{First difference of log adjusted closing prices}
+    \label{fig:all_fd_log_adjclose}
+\end{figure}{}
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{adjustbox}{width=.85\textwidth,center}
+    \input{figures/all_autocorr_log_adjclose.pgf}
+    \end{adjustbox}  
+    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for all stocks}
+    \label{fig:acf_pacf_log_adjclose}
+\end{figure}{}
+
+ (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:acf_pacf_log_adjclose} and  \ref{fig:all_autocorr_fd_log_adjclose})
+ 
+ 
+ 
+ 
+
+
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an AR(1) process fit to the log-returns of V}
+    \input{figures/V_result_AR1.tex}
+    \caption{}
+    \label{tab:V_AR1_log_returns}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an MA(1) process fit to the log-returns of V}
+    \input{figures/V_result_MA1.tex}
+    \caption{}
+    \label{tab:V_MA1_log_returns}
+\end{table}{}
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an ARMA(1,1) process fit to the log-returns of V}
+    \input{figures/V_result_ARMA11.tex}
+    \caption{}
+    \label{tab:V_ARMA11_log_returns2}
+\end{table}{}
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an ARMA(2,1) process fit to the log-returns of V}
+    \input{figures/V_result_ARMA21.tex}
+    \caption{}
+    \label{tab:V_ARMA21_log_returns}
+\end{table}{}
+
+
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an AR(1) process fit to the log-returns of INTC}
+    \input{figures/INTC_result_AR1.tex}
+    \caption{}
+    \label{tab:INTC_AR1_log_returns}
+\end{table}{}
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an MA(1) process fit to the log-returns of INTC}
+    \input{figures/INTC_result_MA1.tex}
+    \caption{}
+    \label{tab:INTC_MA1_log_returns}
+\end{table}{}
+
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an ARMA(1,1) process fit to the log-returns of INTC}
+    \input{figures/INTC_result_ARMA11.tex}
+    \caption{}
+    \label{tab:INTC_ARMA11_log_returns}
+\end{table}{}
+
+\begin{table}[h]
+    \centering
+    \figuretitle{Results for an ARMA(2,1) process fit to the log-returns of INTC}
+    \input{figures/INTC_result_ARMA21.tex}
+    \caption{}
+    \label{tab:INTC_ARMA21_log_returns}
+\end{table}{}
+
+

@@ -1,32 +1,31 @@
-\chapter{\textcolor{red}{Trading Strategies}}\label{ch:predictions}
-The following chapter will give an overview over different trading strategies and compare their effectiveness with regards to trading with our ten stocks. %While this an interesting exercise in and of itself, these trading strategies also serve as a baseline to compare our prediction based trading strategy against.
+\chapter{\textcolor{yellow}{Trading Strategies}}\label{ch:strategies}
+The following chapter will give an overview over different trading strategies and compare their effectiveness with regards to trading with our ten stocks. While this an interesting exercise in and of itself, we also intended these trading strategies to serve as a baseline for the comparison with our prediction based trading strategy against. As we have seen in the last two chapters, however generating predictions from machine learning and time series approaches has not shown to be effective. We will therefore simply explore some common strategies and see if they fare better. 
 
 
-\section{\textcolor{red}{Trading Strategies - Theoretical Background}}
+\section{\textcolor{yellow}{Trading Strategies - Theoretical Background}}
 %\subsection{\textcolor{red}{Idea and Process}}
 %Many of the following strategies crucially depend on the time frame that is used. Some strategies are supposed to work over longer time frames like months and years, others over shorter ones like days or weeks. In this sense, the time frame of a trading strategy is a hyperparameter to be optimized. We decided to use a fixed time frame of one day for all strategies. On the one hand, this allows for direct comparisons and reduces the risk of overfitting. On the other hand, it was simply not feasible for us to do this hyperparameter optimization for every strategy. 
 
-\subsection{\textcolor{red}{Mean Reversion and Momentum Trading}}
+\subsection{\textcolor{blue}{Mean Reversion and Momentum Trading}}
 A vast body of scientific literature has tried to develop models that allow to understand and explain movements in stock markets. An even vaster community of traders has tried to implement these theories to do actual forecasting. While many of the theories are much more complex, two basic ideas can be summarized as "Momentum Based Trading" and "Mean Reversion Based Trading". The former theory hypothesizes that stocks that do well now will likely continue to do so in the future. The latter states that especially good or past performances are an exception and that stocks will eventually return to their average performance. A third strategy, Pairs Trading, will be detailed later. 
 
-\subsubsection{\textcolor{red}{Mean-Reversion Trading}}
-In 1985 Bondt and Thaler \citet{bondt_does_1985} were one of the early scholars to analyze mean reversion behaviour when they examined the hypothesis that markets tend to overreact. They looked at monthly returns of assets listed on the New York Stock Exchange in between 1926 and 1982 and constructed portfolios  of winners and losers that were updated every three years. Winners (losers) were those stocks that had performed the best (worst) over the previous years. Their idea was that "if stock prices systematically overshoot, then their reversal should be predictable from past return data alone, with no use of any accounting data such as earnings. [...] Extreme movements in stock prices will be followed by subsequent price movements in the opposite direction" (\cite{bondt_does_1985}). Indeed they observed that the portfolio of losers outperformed the market significantly. While they focus on a very long time horizon of three years, \citep{jegadeesh_returns_1993} summarizes that this behaviour could also be observed in the shorter term: "[...] contrarian strategies that select stocks based on their returns in the previous week or month generate significant abnormal returns." Note that in their analysis, Bondt and Thaler assumed that the mean-reversion behaviour was due to the market overreacting, i.e. a market inefficiency. One can also look at mean-reversion from another angle: Economic theories like the famous model from Fama and French describe the return of the stocks of a company as the result of market properties like the baseline market return rate and inherent properties of that company, like for example its book-to-market-ratio  (see \citep{fama_cross-section_1992} and \citep{fama_common_1993}). If such a relationship exists than this in turn implies that the actual observed stock movements should be random fluctuations around some much more slowly changing true return rate. However, it is unclear whether this mean reversion should happen in the form of a pendulum that swings forth and back (implying some short-term predictability) or more in the form of coin tosses reverting to their equilibrium by flooding past observations with new random ones (implying short-term non-predictability). 
+\subsubsection{\textcolor{blue}{Mean-Reversion Trading}}
+In 1985 Bondt and Thaler \citet{bondt_does_1985} were one of the early scholars to analyze mean reversion behaviour when they examined the hypothesis that markets tend to overreact. They looked at monthly returns of assets listed on the New York Stock Exchange in between 1926 and 1982 and constructed portfolios  of winners and losers that were updated every three years. Winners (losers) were those stocks that had performed the best (worst) over the previous years. Their idea was that "if stock prices systematically overshoot, then their reversal should be predictable from past return data alone, with no use of any accounting data such as earnings. [...] Extreme movements in stock prices will be followed by subsequent price movements in the opposite direction" (\cite{bondt_does_1985}). Indeed they observed that the portfolio of losers outperformed the market significantly. While they focus on a very long time horizon of three years, \citep{jegadeesh_returns_1993} summarizes that this behaviour could also be observed in the shorter term: "[...] contrarian strategies that select stocks based on their returns in the previous week or month generate significant abnormal returns." Note that in their analysis, Bondt and Thaler assumed that the mean-reversion behaviour was due to the market overreacting, i.e. a market inefficiency. One can also look at mean-reversion from another angle: Economic theories like the famous model from Fama and French describe the return of the stocks of a company as the result of market properties like the baseline market return rate and inherent properties of that company, like for example its book-to-market-ratio  (see \citet{fama_cross-section_1992} and \citet{fama_common_1993}). If such a relationship exists than this in turn implies that the actual observed stock movements should be random fluctuations around some much more slowly changing true return rate. However, it is unclear whether this mean reversion should happen in the form of a pendulum that swings forth and back (implying some short-term predictability) or more in the form of coin tosses reverting to their equilibrium by flooding past observations with new random ones (implying short-term non-predictability). 
 
-\subsubsection{\textcolor{red}{Momentum Trading}}
-On the opposite side of the spectrum of trading strategies lies the idea of momentum. \citep{jegadeesh_returns_1993} were one of the first to describe "that strategies which buy stocks that have performed well in the past and sell stocks that have performed poorly in the past generate significant positive returns over 3- to 12-month holding periods."   Interestingly, for the same portfolios they also saw mean-reverting behavior over the longer time frame of 12 to 48 months. Indeed, many scholars agree that mean reversion and momentum behaviour are not necessarily contradictions, but that the time frame determines in which way a stock will behave (see \citep{balvers_momentum_2006}). 
+\subsubsection{\textcolor{blue}{Momentum Trading}}
+On the opposite side of the spectrum of trading strategies lies the idea of momentum. \cite{jegadeesh_returns_1993} were one of the first to describe "that strategies which buy stocks that have performed well in the past and sell stocks that have performed poorly in the past generate significant positive returns over 3- to 12-month holding periods."   Interestingly, for the same portfolios they also saw mean-reverting behavior over the longer time frame of 12 to 48 months. Indeed, many scholars agree that mean reversion and momentum behaviour are not necessarily contradictions, but that the time frame determines in which way a stock will behave (see \cite{balvers_momentum_2006}). 
 
-\subsection{\textcolor{red}{Pairs Trading}}
-A third strategy we have examined is called pairs trading. The idea is to trade on the fact that some stocks usually move together. CocaCola and Pepsi for example sell a similar product and therefore should be affected similarly by events in the market. Assuming that the price difference between the two stocks should be somewhat constant, one can construct a trading strategy that profits if the spread randomly diverges too much and then converges again. While there are many ways to do to identify assets that move together (for an overview see e.g. \cite{gatev_pairs_1999}, \cite{ganapathy_vidyamurthy_pairs_2004}, \cite{do_new_2006}) we rely on the idea of cointegration (introduced \cite{engle_co-integration_1987}) to find suitable stocks. 
+\subsection{\textcolor{blue}{Pairs Trading}}
+A third strategy we have examined is called pairs trading. The idea is to trade on the fact that some stocks usually move together. CocaCola and Pepsi for example sell a similar product and therefore should be affected similarly by events in the market. Assuming that the price difference between the two stocks should be somewhat constant, one can construct a trading strategy that profits if the spread randomly diverges too much and then converges again. While there are many ways to identify assets that move together (for an overview see e.g. \cite{gatev_pairs_1999}, \cite{ganapathy_vidyamurthy_pairs_2004}, \cite{do_new_2006}) we rely on the idea of cointegration (introduced \cite{engle_co-integration_1987}) to find suitable stocks. 
 
-\subsubsection{\textcolor{red}{Cointegration}}
-Cointegration means the following: If two time series $x_t, y_t$ are both integrated of order $d$ (i.e. they are stationary after applying d-th differences), then $x_t, y_t$ are cointegrated if there exists a linear combination $a x_t + b y_t$ that is integrated of order $d' < d$. Our stock prices (the log stock prices, to be more precise) are integrated of order one. One can therefore look for a time series  $y_t - \beta x_t = u_t$ and check whether $u_t$ is stationary. This leads to the two-step procedure developed by \cite{engle_co-integration_1987}, where in the first step $\beta$ is determined by least squares and in the second step $u_t$ is tested for stationarity using the Augmented Dickey-Fuller test (ADF)\footnotetext{The Philipps-Ouiliaris integration test (\citep{phillips_asymptotic_1990}) may be slightly more appropriate, but we stick with the formerly described cointegration test, as it can be easily implemented in python}. 
+\subsubsection{\textcolor{blue}{Cointegration}}
+Cointegration means the following: If two time series $x_t, y_t$ are both integrated of order $d$ (i.e. they are stationary after applying d-th differences), then $x_t, y_t$ are cointegrated if there exists a linear combination $a x_t + b y_t$ that is integrated of order $d' < d$. Our stock prices (the log stock prices, to be more precise) are integrated of order one. One can therefore look for a time series  $y_t - \beta x_t = u_t$ and check whether $u_t$ is stationary. This leads to the two-step procedure developed by \cite{engle_co-integration_1987}, where in the first step $\beta$ is determined by least squares and in the second step $u_t$ is tested for stationarity using the Augmented Dickey-Fuller test (ADF)\footnotetext{The Philipps-Ouiliaris integration test (\citep{phillips_asymptotic_1990}) may be slightly more appropriate, but we stick with the formerly described cointegration test, as it can be easily implemented in python}. Note that this procedure does not produce symmetric results. The result will differ slightly depending on the order (e.g. PG, JNJ or JNJ, PG). 
 
-\section{\textcolor{red}{Trading Strategies - Implementation}}
-As explained, the success of a trading strategy may depend on the time frame over which it is applied. In this sense, the time frame is a hyperparameter to be optimized. However, in the following we will use a fixed time frame of one day for all strategies. On the one hand, this allows for direct comparisons and reduces the risk of overfitting. On the other hand, it was simply not feasible for us to do this hyperparameter optimization for every strategy. 
+\section{\textcolor{yellow}{Trading Strategies - Implementation}}
+As detailed earlier, the success of a trading strategy may depend on the time frame over which it is applied. In this sense, the time frame is a hyperparameter to be optimized. However, in the following we will use a fixed time frame of one day for all strategies. This allows for direct comparisons and reduces the risk of overfitting. But above that, it was simply not feasible for us to do this hyperparameter optimization for every strategy. 
 
-\subsection{\textcolor{yellow}{Mean Reversion Portfolio}}
+\subsection{\textcolor{blue}{Mean Reversion Portfolio}}
 We replicate the basic idea from Bondt and Thaler \citet{bondt_does_1985} and use the following trading algorithm: 
-
 \vspace{2ex}
 \textbf{\small{Algorithm 1 - Mean-Reversion Portfolio}}
 \vspace{-1ex}
@@ -52,7 +51,7 @@ While they found excessive returns of that strategy from 1932 to 1977 the result
     \label{fig:mean reversion}
 \end{figure}{}
 
-\subsection{\textcolor{red}{Mean Reversion - single stocks}}
+\subsection{\textcolor{blue}{Mean Reversion - single stocks}}
 For single stocks, we have tried two different ways to implement a mean reversion strategy. The first strategy looks at whether the current stock price is above or below its past mean. The second one in spirit does the same thing, but with log-returns. 
 
 \subsubsection{Mean Reversion - Stock Prices}
@@ -92,7 +91,6 @@ One obvious problem with this strategy is that any trend in the time series will
     \caption{On the left the original time series are plotted against their cumulative average. On the right we see the returns from a simple buy-and-hold strategy (pale) against the returns from the trading strategy.}
     \label{fig:mean_reversion_cum_mean}
 \end{figure}{}
-
 One more sophisticaed approach to alleviate this problem is by comparing 30d and 60d averages. The strategy then looks like this: 
 
 \vspace{2ex}
@@ -109,7 +107,6 @@ for day in all_days:
 \end{verbatim}
 
 Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as the original time series on the left hand and the returns from the trading strategy on the right hand. While the plots on the left do look much better, the trading strategy is still not able to yield useful results. 
-
 \begin{figure}[h!]
     \centering
     \figuretitle{Mean Reversion with 30d and 60d Moving Averages}
@@ -132,14 +129,14 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
     \label{fig:30d_60d_plot}
 \end{figure}{}
 
-\subsubsection{Mean Reversion - Log-Returns}
-The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. The algorithm just replaces the value of the stock in algorithm 2 with log-returns and the cumulative mean with the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in figure \ref{fig:mean_reversion_returns} in the appendix. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
+\subsubsection{\textcolor{yellow}{Mean Reversion - Log-Returns}}
+The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. Analogous to algorithm 2 this algorithm just buys if the log-return of today are lower than the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in Figure \ref{fig:mean_reversion_returns} in the appendix. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
 
 \subsection{\textcolor{yellow}{Momentum Based Trading}}
-Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day. The momentum portfolio simply reverses algorithm 1. The strategy used for single stocks looks at whether the log-returns in time t are higher (lower) than the 30d mean of log-returns and use that as a buy (sell) signal. Results are shown in figure \ref{fig:momentum-trading} in the appendix and are even less convincing than the results for mean-reversion trading. 
+Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day. The momentum portfolio simply reverses algorithm 1. The strategy used for single stocks looks at whether the log-returns in time t are higher (lower) than the 30d mean of log-returns and use that as a buy (sell) signal. Results are shown in Figure \ref{fig:momentum-trading} in the appendix and are even less convincing than the results for mean-reversion trading. 
 
-\subsection{\textcolor{red}{Pairs Trading}}
-\subsubsection{\textcolor{red}{Identifiying Suitable Time Series}}
+\subsection{\textcolor{yellow}{Pairs Trading}}
+\subsubsection{\textcolor{yellow}{Identifiying Suitable Time Series}}
 Many of our ten companies have overlapping areas of business (refer back to table \ref{tab:stocks}. Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in table \ref{tab:coint} had a p-value smaller than 0.05.
 
 \begin{table}[h!]
@@ -166,7 +163,7 @@ V, MMM & 0.0415 & & \\
     \label{tab:coint}
 \end{table}
 
-We went for PG and JNJ, as the p-values were smallest, the cointegration worked in both directions and the firms indeed operate in similar business areas. The left of figure \ref{fig:coint_PG_JNJ} shows the two time series. Note that even though the cointegration test was significant, we see that the two stocks slowly diverge in value. To see whether the strategy works nevertheless, we apply the following basic pairs trading algorithm \footnote{Note that dividing by the standard deviation only has an effect if one sets specific thresholds other than > 0, i.e. to trigger trades or stop-loss orders. The sd is included to illustrate how the algorithm can be adapted to accommodate more complex needs.}: 
+We went for Procter\&Gamble and Johnson\&Johnson, as the p-values were smallest, the cointegration worked in both directions and the firms indeed operate in similar business areas. The left of figure \ref{fig:coint_PG_JNJ} shows the two time series. Note that even though the cointegration test was significant, we see that the two stocks slowly diverge in value. To see whether the strategy works nevertheless, we apply the following basic pairs trading algorithm \footnote{Note that dividing by the standard deviation only has an effect if one sets specific thresholds other than > 0, i.e. to trigger trades or stop-loss orders. The standard deviation is included to illustrate how the algorithm can be adapted to accommodate more complex needs.}: 
 \vspace{2ex}
 \textbf{\small{Algorithm 4 - Pairs Trading}}
 \vspace{-1ex}
@@ -197,11 +194,12 @@ The right side of figure \ref{fig:coint_PG_JNJ} shows the performance of the tra
         %\includegraphics[width = \linewidth]{figures/coint_PG_JNJ_plot.pdf}
         \input{figures/coint_PG_JNJ_returns.pgf}
     \end{adjustbox}  
-    \caption{On the left the stock prices of PG and JNJ are plotted over time. On the right the profits from applying a pairs trading strategy are shown.}
+    \caption{On the left the stock prices of Procter\&Gamble and Johnson\&Johnson are plotted over time. On the right the profits from applying a pairs trading strategy are shown.}
     \label{fig:coint_PG_JNJ}
 \end{figure}{}
 
-\section{Trading Strategies Based on Our Predictions}
+\section{\textcolor{red}{A Note Trading on Strategies Based on Our Predictions}}
+As mentioned earlier, our intention was to compare the trading strategies 
 We have two sources of predictions: the machine learning things and the time series. 
 
 As we have already established in chapter \ref{ch:ts} that none of our models was able to consistently beat a buy-and-hold strategy (equivalent to always predicting a positive return) we decided that using those for predictions is altogether futile. 
