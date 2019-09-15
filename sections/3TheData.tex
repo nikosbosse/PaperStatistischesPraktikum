@@ -1,29 +1,27 @@
-\chapter{\textcolor{yellow}{The Data}} \label{ch:data}
+\chapter{\textcolor{green}{The Data}} \label{ch:data}
 The following chapter gives an overview over the data on which we based our analysis. The firms we selected will be introduced as well as the Ravenpack Sentiment Data and the Analyst Reports. Lastly the stock data will be explored in detail and appropriate transformations of the data will be motivated. 
-
-
-\section{\textcolor{yellow}{Selection of Firms to be Analyzed - Nikos}}
-The stock data comprises 10 selected companies from the NASDAQ stock index. The choice was determined by our supervisor Jan Röder as those were the companies for which he could provide us with external data. Table \ref{tab:stocks} shows the companies and their associated stock tickers. 
-
+%\section{\textcolor{green}{Selection of Firms to be Analyzed - Nikos}}
+\section{\textcolor{green}{Stock Data}}
+This section presents the stock data and the necessary transformations applied to it. The data comprises financial data for 10 selected companies from the NASDAQ stock index. The choice was determined by our supervisor Jan Röder as those were the companies for which he could provide us with additional external data. Table \ref{tab:stocks} shows the companies and their associated stock tickers. Note that those are very large and well known companies that are traded very frequently. We therefore should expect the markets for those stocks to work very efficiently, leaving little (if any) room for the kind of market inefficiencies we would like to exploit. 
+%The stock data comprises 10 selected companies from the NASDAQ stock index. The choice was determined by our supervisor Jan Röder as those were the companies for which he could provide us with external data. Table \ref{tab:stocks} shows the companies and their associated stock tickers. Note that those are very large and well known companies that are traded very frequently. We therefore should expect the markets for those stocks to work very efficiently, leaving little (if any) room the kind of market inefficiencies we would like to exploit. 
 \begin{table}[h!]
     \figuretitle{Companies Analyzed}
     \centering
-    \begin{adjustbox}{width = 0.9\linewidth}
-    \setlength{\tabcolsep}{15pt}
-    \input{figures/identifier_df.tex}
+    \begin{adjustbox}{width = 0.4\linewidth}
+    %\setlength{\tabcolsep}{15pt}
+    \small
+    \input{figures/identifier_short_df2.tex}
     \end{adjustbox}
     \caption{List of company name and ticker of the companies we analyzed for this report.}
     \label{tab:stocks}
-\end{table}{}
+\end{table}
 
-
-\section{\textcolor{yellow}{Stock Data - Nikos}}
-This section presents the stock data and the necessary transformations applied to it. The stock prices were downloaded from Yahoo Finance (finance.yahoo.com). Table \ref{tab:stocks_overview} provides a small overview over the raw financial data provided. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the adjusted closing prices ('Adj Close', adjusted for e.g. dividends) of all assets. 
+The stock prices were downloaded from Yahoo Finance (finance.yahoo.com). Table \ref{tab:stocks_overview} provides a small representative overview over the raw financial data provided. Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} shows the adjusted closing prices ('Adj Close', adjusted for e.g. dividends) of all assets. 
 
 \begin{table}[h!]
     \figuretitle{Stock Data}
     \centering
-    \begin{adjustbox}{width = 0.9\linewidth}
+    \begin{adjustbox}{width = 0.95\linewidth}
     \setlength{\tabcolsep}{15pt}
     \input{figures/table_overview_stocks2.tex}
     \end{adjustbox}
@@ -31,8 +29,8 @@ This section presents the stock data and the necessary transformations applied t
     \label{tab:stocks_overview}
 \end{table}{}
 
-\subsection{\textcolor{yellow}{Stationarity - Nikos}}
-Time series analysis is usually done with data that are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see e.g. \cite{shumway_time_2011}). From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period (illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown). The data are therefore clearly not stationary. %We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. Applied to all time series, the test in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
+%\subsection{\textcolor{green}{Stationarity}}
+Time series analysis usually assumes that data are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see e.g. \cite{shumway_time_2011}). From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period (illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown). The data are therefore clearly not stationary. %We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. Applied to all time series, the test in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
 
 \begin{figure}[h!]
     \figuretitle{Stock Prices}
@@ -54,53 +52,51 @@ Time series analysis is usually done with data that are at least weakly stationa
     \label{fig:cum_sd_all}
 \end{figure}{}
 
-\subsection{Data Transformation}
-In order to obtain weakly stationary time series the data needs to be transformed. To ensure stationarity, economists usually work with either returns or log-returns, albeit the nomenclature is often used imprecisely. (Daily) returns can be calculated as
+\subsection{\textcolor{green}{Data Transformation}}
+In order to obtain weakly stationary time series the data needs to be transformed. To ensure stationarity, economists usually work with either returns or log-returns, albeit the nomenclature is sometimes used confusingly. Daily returns can be calculated as
 \begin{equation*}
-    r^{\scriptscriptstyle{(1)} }_t = \frac{r_t}{r_{t-1}} \qquad \text{or as} \qquad r^{\scriptscriptstyle{(2)}}_t = \frac{r_t - r_{t-1}}{r_{t-1}} = r^{\scriptscriptstyle{(1)}}_t - 1
+    r^{\scriptscriptstyle{(1)} }_t = \frac{r_t}{r_{t-1}} \qquad \text{or as} \qquad r^{\scriptscriptstyle{(2)}}_t = \frac{r_t - r_{t-1}}{r_{t-1}} = r^{\scriptscriptstyle{(1)}}_t - 1.
 \end{equation*}
-Usually economists use $r^{\scriptscriptstyle{(2)}}_t$ and call them either returns or more commonly log-returns, even though no logging takes place. in this report we will call $r^{\scriptscriptstyle{(1)}}_t$ returns and $\log{r^{\scriptscriptstyle{(1)}}_t}$ log-returns to increase conceptual clarity. However, calling either $\log{r^{\scriptscriptstyle{(1)}}_t}$ or $r^{\scriptscriptstyle{(2)}}_t$ 'log-returns' makes little difference in practice, as the difference is negligible as $ \log(r^{\scriptscriptstyle{(1)}}_t) \approx r^{\scriptscriptstyle{(1)}}_t - 1 = r^{\scriptscriptstyle{(2)}}_t$ for values of $r^{\scriptscriptstyle{(1)}}_t$ close to 1. Log-returns are computationally convenient and numerically stable. Using log-returns is also suitable to make the time series stationary. To support this idea, we can look a different route of transforming the data: We first take the log of the time series to transform any exponential trend into a linear one and to stabilizes the variance. Removing the linear trend altogether can then be achieved by differencing the time series (see \cite{shumway_time_2011}, p.61). We arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $.
+Usually economists use $r^{\scriptscriptstyle{(2)}}_t$ and call them either 'returns' or more commonly 'log-returns', even though no logging takes place. in this report we will call $r^{\scriptscriptstyle{(1)}}_t$ 'returns' and $\log{r^{\scriptscriptstyle{(1)}}_t}$ 'log-returns' to increase conceptual clarity. However, calling either $\log{r^{\scriptscriptstyle{(1)}}_t}$ or $r^{\scriptscriptstyle{(2)}}_t$ 'log-returns' makes little difference in practice, as the difference is negligible as $ \log(r^{\scriptscriptstyle{(1)}}_t) \approx r^{\scriptscriptstyle{(1)}}_t - 1 = r^{\scriptscriptstyle{(2)}}_t$ for values of $r^{\scriptscriptstyle{(1)}}_t$ close to 1. Log-returns are computationally convenient and numerically stable. Using log-returns is also suitable to make the time series stationary. To see why, we can look a different route of transforming the data: First we take the log of the time series to transform any exponential trend into a linear one and to stabilizes the variance. Removing the linear trend altogether can then be achieved by differencing the time series (see \cite{shumway_time_2011}, p.61). We arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $.
 
-\subsubsection{\textcolor{red}{Autocorrelation}}
-To better understand the effect of the transformation, we need to look at the autocorrelation and partial autocorrelation of the time series. The autocorrelation at lag j is defined as the correlation between an observation at time t with the observation at time t - j. For a stationary series, the autocorrelation does not depend on t, but only on the number of periods that lie between one observation $y_t$ and another $y_{t+h}$. The autocorrelation function (ACF) can then formally be expressed as 
+\subsubsection{\textcolor{green}{Autocorrelation and Partial Autocorrelation}}
+To better understand the effect of the transformation, we need to look at the autocorrelation and partial autocorrelation of the time series. The autocorrelation at lag j is defined as the correlation between an observation at time t with the observation at time t - j. For a stationary series, the autocorrelation does not depend on t, but only on the number of periods that lie between one observation $y_t$ and another observation $y_{t+h}$. The autocorrelation function (ACF) can then formally be expressed as 
 \begin{equation}
-    \text{ACF}(h) = corr(y_t, y_{t+h})
+    \text{ACF}(h) = corr(y_t, y_{t+h}).
 \end{equation}
 The partial autocorrelation between an observation $y_t$ and another observation $y_{t+1}$ is the correlation between $y_t$ and $y_{t+h}$ that is not already explained by a linear dependence on the observations in between $y_t$ and $y_{t+h}$. Formally the partial autocorrelation function (PACF) can be defined as
 \begin{equation}
-    \text{PACF}(h) = corr(y_t - \hat{y}_t, y_{t+h} - \hat{y}_{t+h})
+    \text{PACF}(h) = corr(y_t - \hat{y}_t, y_{t+h} - \hat{y}_{t+h}),
 \end{equation}
 \begin{flalign*}
     &\text{where} && \hat{y}_{t + h} = \beta_1 y_{t+h-1} + \beta_2 y_{t+h-2} + ... + \beta_{h-1} y_{t+1} &&\\
     &\text{and} && \hat{y_t} = \beta_1 y_{t+1} + \beta_2 y_{t+2} + ... + \beta_{h-1} y_{t+h-1} &&
 \end{flalign*}
 are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the mean squared error of a regression of $y_{t+h}$, and $y_t$ respectively, on $\{ y_{t+1}, ..., y_{t+h-1}\}$. Both $y_t - \hat{y_t}$ and  $y_{t+h} - \hat{y}_{t+h}$ are uncorrelated with $\{ y_{t+1}, ..., y_{t+h-1} \}$. 
-Representative of all, figure \ref{fig:acf_pacf_log_adjclose_PG} shows the ACF and PACF for the closing prices and log-returns of the stock of Procter\&Gamble (PG). One can see in the top two plots that ACF of the original time series very slowly decays and that the partial autocorrelation at lag 1 is very large and then cuts off. This again is a sign that differencing was an appropriate transformation (see Shumway and Stoffer 2011, p. 145) to make the series stationary. After the transformations (bottom plots) the partial autocorrelation at lag 1 has vanished and (partial) autocorrelation has also dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced.
-
+Representative of all, figure \ref{fig:acf_pacf_log_adjclose_PG} shows the ACF and PACF for the closing prices and log-returns of the stock of Procter\&Gamble (PG). One can see in the top two plots that the ACF of the original time series very slowly decays and that the partial autocorrelation at lag 1 is very large and then cuts off. This again is a sign that differencing was an appropriate transformation (see Shumway and Stoffer 2011, p. 145) to make the series stationary. After the transformations (bottom plots) the partial autocorrelation at lag 1 has vanished and the autocorrelation has mostly dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced.
 \begin{figure}[h!]
     \centering
-    \figuretitle{ACF and PACF for Closing prices of stock PG}
+    \figuretitle{ACF and PACF for Closing prices of Procter\&Gamble}
     \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_autocorr_log_adjclose.pgf}
     \end{adjustbox}  
     \hspace{3ex}
-    \figuretitle{ACF and PACF for log-returns of stock PG}
+    \figuretitle{ACF and PACF for log-returns of the stock of Procter\&Gamble}
     \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_autocorr_log_adjclose_fd.pgf}
     \end{adjustbox}
-    \caption{Autocorrelation function (ACF) and partial autocorrelation function (PACF) for the Adjusted Closing Prices (top) and log-returns (bottom) of PG. (For convenience, only one stock is shown. ACF and PACF for other stocks can be seen in the appendix in figure \ref{fig:acf_pacf_log_adjclose} and  \ref{fig:all_autocorr_fd_log_adjclose})}
+    \caption{Autocorrelation function (ACF) and partial autocorrelation function (PACF) for the Adjusted Closing Prices (top) and log-returns (bottom) of Procter\&Gamble. The ACF and PACF for the other stocks look very similar and are therefore not shown here.}
     \label{fig:acf_pacf_log_adjclose_PG}
-\end{figure}{}
-
-Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble. The trend has disappeared and the data visually looks similar to white noise. Also the means of the time series are very close to zero (as shown in table \ref{tab:log return means}). We can also perform a formal test whether our data is stationary or not, the augmented Dickey-Fuller test (ADF) \citep{said_testing_1984}. The null hypothesis of the ADF is the presence of a unit root, the alternative hypothesis is stationarity of the time series. P-values of the ADF applied to the log-returns of all 10 time series were smaller than $10^{-12}$ even after correcting for multiple testing, so we can safely assume the time series are stationary. 
+\end{figure}
+Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble (again, representative of all). The trend has disappeared and the data visually looks similar to white noise. Also the means of the time series are very close to zero (as shown in table \ref{tab:log return means}). In addition we have performed a formal test whether our data is stationary or not, the augmented Dickey-Fuller test (ADF) \citep{said_testing_1984}. The null hypothesis of the ADF is the presence of a unit root (implying non-stationarity), the alternative hypothesis then represents (weak) stationarity of the time series. P-values of the ADF applied to the log-returns of all 10 time series were smaller than $10^{-12}$ even after correcting for multiple testing, so we can safely assume the time series are stationary. 
 
 \begin{figure}[h!]
-    \figuretitle{Log-returns of stock PG}
+    \figuretitle{Log-returns of Procter\&Gamble}
     \centering
     \begin{adjustbox}{width=.9\textwidth,center}
     \input{figures/PG_fd_log_adjclose.pgf}
     \end{adjustbox}  
-    \caption{Log-returns (or equivalently, first differences of the log of adjusted closing prices) of the PG. Visually the data looks similar to white noise. The entire data can be seen in the appendix in figure \ref{fig:all_fd_log_adjclose}}
+    \caption{Log-returns of Procter\&Gamble. Visually the data looks similar to white noise. The log-returns of the other stocks look virtually identical and are therefore not shown.}
     \label{fig:PG_fd_log_adjclose}
 \end{figure}{}
 
@@ -112,62 +108,77 @@ Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble. Th
     \end{adjustbox}
     \caption{}
     \label{tab:log return means}
-\end{table}{}
+\end{table}
 
-\subsubsection{\textcolor{red}{Distribution of the Log-Returns}}
+\subsubsection{\textcolor{green}{Distribution of the Log-Returns and Conditional Heteroskedasticity}}
 The log-returns are, however, not normally distributed. By looking at figure \ref{fig:PG_qq_fd_log_adjclose} we can clearly see that the distribution has fat tails: extreme events appear more often than would be expected if the data was normally distributed. 
-
 \begin{figure}[h!]
     \centering
-    \figuretitle{QQ-plot of log-returns of stock PG}
+    \figuretitle{QQ-plot of log-returns of Procter\&Gamble}
     \begin{adjustbox}{width=.9\textwidth,center}
     \includegraphics[]{figures/PG_log_adjclose_fd_and_qq.pdf}
     %\input{figures/PG_log_adjclose_fd_and_qq.pgf}
     \end{adjustbox}  
-    \caption{QQ-Plot for log-returns of stock PG. QQ-plots for the other stocks can be seen in the Appendix in figure \ref{fig:all_qq_fd_log_adjclose}.}
+    \caption{QQ-Plot for log-returns of Procter\&Gamble. QQ-plots for the other stocks look virtually identical and are therefore not shown.}
     \label{fig:PG_qq_fd_log_adjclose}
 \end{figure}
-
-The time series are also not homoscedastic. While stationarity implies that the unconditional variance is constant over time, the variance of the time series may fluctuate conditional on past observations (see \citep{engle_autoregressive_1982}). Indeed, this conditional heteroskedasticity is quite common in financial data. The pattern can be observed in figure \ref{fig:PG_squared_log_returns} which shows the squared log-returns of Procter\&Gamble as an approximation of the time series' variance. One can try to model this volatility by assuming a time series model for the conditional variance. This will be discussed in chapter \ref{ch:ts}. 
+The time series are also not homoscedastic. While stationarity implies that the unconditional variance is constant over time, the variance of the time series may fluctuate conditional on past observations (see \citep{engle_autoregressive_1982}). Indeed, this so called conditional heteroskedasticity is quite common in financial data. The pattern can be observed in Figure \ref{fig:PG_squared_log_returns} which shows the squared log-returns of Procter\&Gamble as an approximation of the time series' variance. Figure \ref{fig:ACF_selected_squared_log_returns} shows the ACF and PACF of the squared log-returns of three selected stocks. One can see that all of them exhibit at least some autocorellation. In Chapter \ref{ch:ts}, we will try to model this volatility by assuming a time series model for the conditional variance. 
 
 \begin{figure}[h!]
     \centering
-    \figuretitle{Squared log-returns of Stock PG}
+    \figuretitle{Squared log-returns of Procter\&Gamble}
     \begin{adjustbox}{width=.95\textwidth,center}
     \input{figures/PG_squared_log_returns.pgf}
     \end{adjustbox}  
-    \caption{Plot of squared log returns of stock PG. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))]^2$ and the mean of the log returns is close to zero. The pattern looks similar for all stocks, therefore only one is shown. In the Appendix in figure \ref{fig:ACF_selected_squared_log_returns} the ACF and PACF of the squared log-returns of some selected time series can be seen.}
+    \caption{Plot of squared log returns of Procter\&Gamble. This serves as an approximation of the variance of the log returns, as $Var(x) = E [(x - E(x))]^2$ and the mean of the log returns is close to zero. The pattern looks rather similar for all stocks, therefore only one is shown.}
     \label{fig:PG_squared_log_returns}
 \end{figure}{}
+
+\begin{figure}[H]
+    \centering
+    \figuretitle{ACF and PACF of the Squared Log-Returns of
+    3M Co., General Electrics and Johnson\&Johnson}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/MMM_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/GE_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \begin{adjustbox}{width=.95\textwidth,center}
+    \input{figures/JNJ_autocorr_log_adjclose_fd_squared.pgf}
+    \end{adjustbox}  
+    \caption{ACF and PACF of squared log-returns of 3M Co., General Electrics and Johnson\&Johnson. We see that some of the squared log-returns exhibit indeed autocorrelation, while others do less so. Strong autocorrelation implies that there is information about the future in the time series that can be modeled.}
+    \label{fig:ACF_selected_squared_log_returns}
+\end{figure}
 
 %Using returns or log-returns instead of stock prices can make the time series stationary. Figure \ref{fig:PG_fd_log_adjclose} illustrates that the trends in the time series have vanished after looking at log-returns. The data visually now looks like white noise. 
 %However, the trend does not vanish and after the log-transformation, the log value of a stock at time t is still mostly determined by its log-value at time t - 1. To remove this effect, the time series needs to be differenced. To put this into a clearer perspective we can look at the autocorrelation and partial autocorrelation function of the series. 
 
+\section{\textcolor{green}{Analyst Reports}}
+As an addition to the financial time series, we were given information extracted from 17153 analyst reports provided by Thomson One. The reports are part of Thomson One's so called "company research" data. They were usually written by analysts employed by brokers like "Deutsche Bank Research" who have specialized in specific industries. Mostly, the reports contain general research documents like SWOT analyses or sector reports. Typically, they also include e.g. earnings per share prognoses or Buy-Hold-Sell-Recommendations. The reports were pre-processed before the data was given to us. Structuring elements like tables and graphs were discarded and the remaining text was broken up and saved in a \texttt{.csv}-file. This file formed the basis for our text analysis and the sentiment scores we have generated ourselves, see Chapter \ref{ch:predictions_ml}. 
 
-
-
-
-
-
-
-
-\section{\textcolor{red}{Ravenpack Sentiment Data - Felix}}
-Next to the financial time series data, sentiment data from the financial data provider RavenPack was acquired. According to their website RavenPack is a leading provider of big data analytics for financial services \citep{RavenPack}. Our specific data is from RavenPack News Analytics, a service providing actionable event and sentiment information from TIME to TIME. The sentiment information has intra day precision. As such events are recorded at their time of appearance and not just on a daily basis. The variables consist of an indicator for the estimated positive or negative sentiment score called ESS ranging from 0 to 100 where 50 is neutral. This goes along with an estimated novelty score called ENS (0-100) describing how 'new' the news are and a RELEVANCE (0-100) variable that shows how closely the information is related to the underlying news, this can be converged to the number of news per day. Additionally two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window (AES) and AEV is the sum of events over the past 90 days. All variables have substantial numbers of missing values ...
-
-\section{\textcolor{red}{Analyst Reports - Felix}}
-%
-As the second external data source for this analysis we used analyst reports provided by Thomson One. originally the aim was to use general financial news but we could not obtain such data. These reports are part of the "company research" data and contain general research documents like SWOT analyses or sector reports. Typical contents are earning per share prognosis or Buy-Hold-Sell-Recommendations. This data is either represented in a structured format or flowing text, mostly both. Analyst reports are written by analysts working for brokers like "Deutsche Bank Research" that are commonly specialized on a specific industry.  Each report is linked to a specific stock and was cleaned to obtain only the flowing text. All illustrations and tables where thereby disregarded. This was done using a PDF-tool which converts PDF to .xlsx based on specific rules like the relationship of words to numbers or special characters. \\ 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{figures/MissingDaysPlot.png}
 \caption{Missing Data on a daily base for selected stocks}
 \label{fig:MissingDays}
 \end{figure}
+The reports span the period from 2012-01-02 to 2017-12-28, but unfortunately there a lot of days without any reports (illustrated in figure \ref{fig:MissingDays}). Also the reports follow a seasonal structure: in figure \ref{fig:ClusterReport} one can see that starting with a gap around Christmas reports are released with quarterly peaks.
 
-We used reports in a period from 2012-01-02 to 2017-12-28, but there are a lot of periods of missing data in between. Figure \ref{fig:MissingDays} gives a rough overview of the severity of missing days. On the other hand the reports also follow a seasonal structure over the course of a year. In figure \ref{fig:ClusterReport} one can see that starting with a gap around Christmas reports are released with quarterly peaks.
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{figures/SeasonalityReports.png}
 \caption{Clustering of analyst reports around certain dates}
 \label{fig:ClusterReport}
 \end{figure}
+
+\section{\textcolor{green}{Ravenpack Sentiment Data}}
+As a second external data source for our analysis, we were given already pre-computed sentiment data by our supervisor. The data comes from the financial data provider RavenPack. According to their website (www.ravenpack.com), RavenPack is a leading provider of big data analytics for financial services\nocite{RavenPack}. Our data set comprises different scores that were computed based on the news recorded from various sources. The data comprises 1021520 observations that span the time frame from beginning of 2012 to the end of 2017. Information is provided with intra day precision. As such, news and events are recorded at their time of appearance and not just on a daily basis. Table \ref{tab:overview_ravenpack} shows an overview over the RavenPack data. The first variable provided is an indicator for the estimated positive or negative sentiment score called 'ess', ranging from 0 to 100, where 50 is neutral. This goes along with an estimated novelty score called 'ens' (0-100) describing how 'new' the news are and a 'relevance' (0-100) variable that shows how closely the information is related to the company analzyed. Additionally, two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window ('aes'). The other, 'aev' is the sum of events over the past 90 days. Some values are missing and for some of the trading days no information is provided at all. 
+\begin{table}[h!]
+    \figuretitle{Overview Over the RavenPack Data}
+    \centering
+    \small
+    \input{figures/table_overview_ravenpack.tex}
+    \caption{Some sample rows of the RavenPack data.}
+    \label{tab:overview_ravenpack}
+\end{table}
