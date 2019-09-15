@@ -38,7 +38,7 @@ for day in all_days:
 \end{verbatim}
 %\end{Verbatim}
 
-While they found excessive returns of that strategy from 1932 to 1977 the results shown in figure \ref{fig:mean reversion} cannot beat a simple buy-and-hold strategy. This may be due to the wrong time frame used, or to the fact that if the strategy had indeed once been profitable we would assume enough market participants to trade on it as to render it practically useless. 
+While they found excessive returns of that strategy from 1932 to 1977 the results shown in Figure \ref{fig:mean reversion} cannot beat a simple buy-and-hold strategy. This may be due to the wrong time frame used, or to the fact that if the strategy had indeed once been profitable we would assume enough market participants to trade on it as to render it practically useless. 
 
 %Interestingly, reverting the algorithm to buy the best performers and short the worst performers to produce a portfolio-based momentum strategy also does not work. 
 
@@ -137,7 +137,7 @@ Momentum based trading is essentially the reverse of mean-reversion trading (alb
 
 \subsection{\textcolor{yellow}{Pairs Trading}}
 \subsubsection{\textcolor{yellow}{Identifiying Suitable Time Series}}
-Many of our ten companies have overlapping areas of business (refer back to table \ref{tab:stocks}). Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in table \ref{tab:coint} had a p-value smaller than 0.05.
+Many of our ten companies have overlapping areas of business (refer back to Table \ref{tab:stocks}). Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in Table \ref{tab:coint} had a p-value smaller than 0.05.
 
 \begin{table}[h!]
     \centering
@@ -184,7 +184,7 @@ for day in all_days:
 \end{verbatim}
 %\end{Verbatim}
 
-The right side of figure \ref{fig:coint_PG_JNJ} shows the performance of the trading strategy on the sample. We can see that pairs trading, at least in the way we implemented it, did not work out. 
+The right side of Figure \ref{fig:coint_PG_JNJ} shows the performance of the trading strategy on the sample. We can see that pairs trading, at least in the way we implemented it, did not work out. 
 
 \begin{figure}[h!]
     \centering
