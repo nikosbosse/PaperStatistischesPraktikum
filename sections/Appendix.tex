@@ -3,71 +3,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER THE DATA
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Appendix to Chapter \ref{ch:data}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}[H]
-    \centering
-    \figuretitle{ACF / PACF of Squared log-returns of Stocks MMM, GE, JNJ}
-    \begin{adjustbox}{width=.95\textwidth,center}
-    \input{figures/MMM_autocorr_log_adjclose_fd_squared.pgf}
-    \end{adjustbox}
-    \begin{adjustbox}{width=.95\textwidth,center}
-    \input{figures/GE_autocorr_log_adjclose_fd_squared.pgf}
-    \end{adjustbox}  
-    \begin{adjustbox}{width=.95\textwidth,center}
-    \input{figures/JNJ_autocorr_log_adjclose_fd_squared.pgf}
-    \end{adjustbox}  
-    \caption{ACF and PACF of squared residuals of stocks MMM, GE and JNJ. We see that some of the squared log-returns exhibit indeed autocorrelation, while others do less so. Strong autocorrelation implies that there is information about the future in the time series that can be modeled.}
-    \label{fig:ACF_selected_squared_log_returns}
-\end{figure}{}
-
-\begin{figure}[h]
-    \centering
-    \begin{adjustbox}{width=.85\textwidth,center}
-    \input{figures/all_autocorr_log_adjclose.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the log of the adjusted closing prices for all stocks}
-    \label{fig:acf_pacf_log_adjclose}
-\end{figure}{}
-
-
-\begin{figure}[h]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/all_fd_log_adjclose.pgf}
-    \end{adjustbox}  
-    \caption{First difference of log adjusted closing prices}
-    \label{fig:all_fd_log_adjclose}
-\end{figure}{}
-
-
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \input{figures/all_autocorr_log_adjclose_fd.pgf}
-    \end{adjustbox}  
-    \caption{Autocorrelation and partial autocorrelation for the first difference of log adjusted closing prices for all stocks}
-    \label{fig:all_autocorr_fd_log_adjclose}
-\end{figure}{}
-
-
-\begin{figure}[h]
-    \centering
-    \begin{adjustbox}{width=.9\textwidth,center}
-    \includegraphics[]{figures/all_qq_plot_fd_log_adjclose.pdf}
-    %\input{figures/all_qq_plot_fd_log_adjclose.pgf}
-    \end{adjustbox}  
-    \caption{QQ-Plots}
-    \label{fig:all_qq_fd_log_adjclose}
-\end{figure}{}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER: Predicting Stocks Machine Learning
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Appendix to Chapter \ref{ch:predictions_ml}}
 
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
@@ -94,14 +37,15 @@
   14 & upon & financial & month & unless \\ 
   15 & subject & distribution & client & decision \\ 
    \hline
-\end{tabular}\label{tab:postProbSent2}
+\end{tabular}
+\label{tab:postProbSent2}
 \end{table}
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER: Predicting Stocks Time Series
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Appendix to Chapter \ref{ch:ts}}
@@ -120,7 +64,7 @@
     \small
     \input{figures/INTC_result_ARMAX00_raven2.tex}
     \caption{Results for ARMAX(0,0), i.e. a regression with a constant and the Ravenpack sentiment data as external regressors.}
-    \label{tab:result_ARMAX_ravenpack}
+    \label{tab:result_ARMAX_ravenpack_full}
 \end{table}
 
 % ============ GARCH Models =================%
@@ -138,13 +82,11 @@
     \input{figures/INTC_result_GARCH11_100_students.tex}
     \caption{}
     \label{tab:result_GARCH11_students_100}
-\end{table}{}
-
-
+\end{table}
 
 \begin{table}[h!]
     \centering
-    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (V)}
+    \figuretitle{Results for GJR-GARCH(1,1) with t-Distribution (Visa)}
     \vspace{-2ex}
     \small
     \input{figures/V_result_GARCH11_100_students_GJR.tex}
@@ -162,87 +104,11 @@
 %========================================================% 
 
 
-
-
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an AR(1) process fit to the log-returns of V}
-    \input{figures/V_result_AR1.tex}
-    \caption{}
-    \label{tab:V_AR1_log_returns}
-\end{table}{}
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an MA(1) process fit to the log-returns of V}
-    \input{figures/V_result_MA1.tex}
-    \caption{}
-    \label{tab:V_MA1_log_returns}
-\end{table}{}
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an ARMA(1,1) process fit to the log-returns of V}
-    \input{figures/V_result_ARMA11.tex}
-    \caption{}
-    \label{tab:V_ARMA11_log_returns2}
-\end{table}{}
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an ARMA(2,1) process fit to the log-returns of V}
-    \input{figures/V_result_ARMA21.tex}
-    \caption{}
-    \label{tab:V_ARMA21_log_returns}
-\end{table}{}
-
-
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an AR(1) process fit to the log-returns of INTC}
-    \input{figures/INTC_result_AR1.tex}
-    \caption{}
-    \label{tab:INTC_AR1_log_returns}
-\end{table}{}
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an MA(1) process fit to the log-returns of INTC}
-    \input{figures/INTC_result_MA1.tex}
-    \caption{}
-    \label{tab:INTC_MA1_log_returns}
-\end{table}{}
-
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an ARMA(1,1) process fit to the log-returns of INTC}
-    \input{figures/INTC_result_ARMA11.tex}
-    \caption{}
-    \label{tab:INTC_ARMA11_log_returns}
-\end{table}{}
-
-\begin{table}[h]
-    \centering
-    \figuretitle{Results for an ARMA(2,1) process fit to the log-returns of INTC}
-    \input{figures/INTC_result_ARMA21.tex}
-    \caption{}
-    \label{tab:INTC_ARMA21_log_returns}
-\end{table}{}
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER: Trading Strategies
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\section{Appendix to Chapter \ref{ch:predictions}}
+\section{Appendix to Chapter \ref{ch:strategies}}
 
 \begin{figure}[h!]
     \centering
@@ -253,8 +119,6 @@
     \caption{Mean Reversion based on past returns of single stocks. The returns achieved by the strategy are in bold color, while the return of a simple buy-and-hold strategy, (i.e. the return from a single share bought on the first day) is shown in pale}
     \label{fig:mean_reversion_returns}
 \end{figure}
-
-
 
 \begin{figure}[h!]
     \centering
