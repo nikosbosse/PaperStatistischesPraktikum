@@ -1,4 +1,4 @@
-\chapter{Predicting Stocks Using Sentiment Analysis - Felix} \label{ch:predictions_ml}
+\chapter{Stock Prediction Using Sentiment Analysis} \label{ch:predictions_ml}
 The value of stocks is affected by external events. But information that moves the markets is also captured for example in news articles, online posts on social media or detailed financial reports. One can try to exploit the information presented in the news before it is fully absorbed by the markets. To do so, text data is processed and sentiments are extracted to infer whether the text conveys rather positive or negative information (see \citet{HADDI201326}). Using this information one can either try to predict stocks directly or to forecast future volatility (see \citet{robertson2007news}). This chapter will explore ways to leverage information from news using machine learning to predict the movement of stocks. It will first extract sentiments from text data using two unsupervised learning methods. Secondly, these sentiments will be used for a binary classification of upwards or downwards movement of the ten stocks using XGBoost.
 
 % später
@@ -81,9 +81,7 @@ where FF is the absolute number of occurrences of that word in the document, N r
 \end{table}
 
 \section{Sentiment Extraction - Results}\label{SentimentExtract}
-In the following, we will present the results for the sentiment extraction performed with the sentiment library method and with JST. 
-
-Figure \ref{fig:BoWSentiment} shows the distribution of the sentiment scores we obtained after using the document feature matrix \citep{quanteda} with the sentiment library in \texttt{R}. The polarity score was then calculated like in equation \ref{eq:polarity}. The histogram shows an approximate normal distribution around zero. This indicates that the sentiment extraction has worked and that the the imbalance in the number of positive ($n = 218$) and negative ($n = 1282)$) words does not affect the results negatively. 
+In the following, we will present the results for the sentiment extraction performed with the sentiment library method and with JST. Figure \ref{fig:BoWSentiment} shows the distribution of the sentiment scores we obtained after using the document feature matrix \citep{quanteda} with the sentiment library in \texttt{R}. The polarity score was then calculated like in equation \ref{eq:polarity}. The histogram shows an approximate normal distribution around zero. This indicates that the sentiment extraction has worked and that the the imbalance in the number of positive ($n = 218$) and negative ($n = 1282)$) words does not affect the results negatively. 
 
 \begin{figure}[h]
 \centering
@@ -124,6 +122,7 @@ Table \ref{tab:postProbSent1} gives an overview over the words  with the highest
 \caption{Words for sentiment one with highest posterior probability per topic}
 \label{tab:postProbSent1}
 \end{table}
+
 Another way to evaluate the model is to take a closer look at the posterior probabilities for the sentiments of all documents. The histogram in Figure \ref{fig:JSTSentiment} displays a split between a documents associated with sentiment 1 and others associated with sentiment 2. Note that with only two sentiments, the probabilities for a single document of belonging to sentiment 1 and to sentiment 2 add up to one. One could therefore obtain a histogram of sentiment 2 by mirroring this histogram at 0.5. The calculated sentiments clearly seem to lean towards the left, which indicates that sentiment two was more prominent in the data. \\
 \begin{figure}[h]
 \centering
@@ -131,6 +130,7 @@ Another way to evaluate the model is to take a closer look at the posterior prob
 \caption{Histogram of the sentiment scores computed by the Joined Sentiment Topic model}
 \label{fig:JSTSentiment}
 \end{figure}
+
 The results of the unsupervised Joint Sentiment Models are difficult to evaluate and we have to be at least wary of the results we obtained. Problematic in this case could also be, that the JST views the documents as bag of words and therefore also ignores the ordering of words. Business language contains a lot of fixed phrases that are not considered here. Nonetheless they might be an informative feature for the estimation of stock price movements in the next section. 
 
 
@@ -173,6 +173,7 @@ Even though we tried different hyper parameters, none seemed to make a large dif
 \begin{equation} 
     \text{F1-measure} = \frac{2*\text{precision} * \text{recall}}{\text{precision} + \text{recall}}
 \end{equation}\label{eq:f1score}
+
 The results for the RavenPack data and our own sentiment scores can be found in Table \ref{tab:RavSentRes} and \ref{tab:OurSentRes}. By looking at the cross tables we also discovered that for some stocks class imbalances might cause the algorithm to mostly predict one class. 
 \begin{table}[h]
 \centering
