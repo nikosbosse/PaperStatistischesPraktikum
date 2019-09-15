@@ -30,7 +30,7 @@ The stock prices were downloaded from Yahoo Finance (finance.yahoo.com). Table \
 \end{table}{}
 
 %\subsection{\textcolor{green}{Stationarity}}
-Time series analysis usually assumes that data are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see e.g. \cite{shumway_time_2011}). From figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period (illustrated in figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown). The data are therefore clearly not stationary. %We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. Applied to all time series, the test in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
+Time series analysis usually assumes that data are at least weakly stationary. Weak stationarity implies that the mean of the time series is constant over time and that the covariance between two observations $y_t$ and $y_{t+h}$ depends only on h, not on t (see e.g. \cite{shumway_time_2011}). From Figure \ref{fig:Daily Stock Prices for all Stocks in the Data Set} it can be clearly seen that most of the stocks exhibit a strong trend. Also the variance of most stocks increases steadily with time over the observed period (illustrated in Figure \ref{fig:cum_sd_all} where the standard deviation of the time series is shown). The data are therefore clearly not stationary. %We can also formally test for stationarity using the augmented Dickey-Fuller test [REFERENCE]. Applied to all time series, the test in no case is able to reject the null hypothesis of a unit root (implying non-stationarity) at any reasonable confidence level. 
 
 \begin{figure}[h!]
     \figuretitle{Stock Prices}
@@ -73,7 +73,7 @@ The partial autocorrelation between an observation $y_t$ and another observation
     &\text{and} && \hat{y_t} = \beta_1 y_{t+1} + \beta_2 y_{t+2} + ... + \beta_{h-1} y_{t+h-1} &&
 \end{flalign*}
 are the linear combinations $\{ y_{t+1}, ..., y_{t+h-1} \}$ that minimize the mean squared error of a regression of $y_{t+h}$, and $y_t$ respectively, on $\{ y_{t+1}, ..., y_{t+h-1}\}$. Both $y_t - \hat{y_t}$ and  $y_{t+h} - \hat{y}_{t+h}$ are uncorrelated with $\{ y_{t+1}, ..., y_{t+h-1} \}$. 
-Representative of all, figure \ref{fig:acf_pacf_log_adjclose_PG} shows the ACF and PACF for the closing prices and log-returns of the stock of Procter\&Gamble (PG). One can see in the top two plots that the ACF of the original time series very slowly decays and that the partial autocorrelation at lag 1 is very large and then cuts off. This again is a sign that differencing was an appropriate transformation (see Shumway and Stoffer 2011, p. 145) to make the series stationary. After the transformations (bottom plots) the partial autocorrelation at lag 1 has vanished and the autocorrelation has mostly dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced.
+Representative of all, Figure \ref{fig:acf_pacf_log_adjclose_PG} shows the ACF and PACF for the closing prices and log-returns of the stock of Procter\&Gamble (PG). One can see in the top two plots that the ACF of the original time series very slowly decays and that the partial autocorrelation at lag 1 is very large and then cuts off. This again is a sign that differencing was an appropriate transformation (see Shumway and Stoffer 2011, p. 145) to make the series stationary. After the transformations (bottom plots) the partial autocorrelation at lag 1 has vanished and the autocorrelation has mostly dropped to insignificance. We can also see that we have not induced any negative autocorrelation, the data therefore is not overdifferenced.
 \begin{figure}[h!]
     \centering
     \figuretitle{ACF and PACF for Closing prices of Procter\&Gamble}
@@ -167,7 +167,9 @@ The reports span the period from 2012-01-02 to 2017-12-28, but unfortunately the
 
 \begin{figure}[h!]
 \centering
+\begin{adjustbox}{width=0.85\textwidth,center, scale={1}{0.9}}
 \includegraphics[width=\textwidth, height= 5in]{figures/SeasonalityReports.png}
+\end{adjustbox}
 \caption{Clustering of analyst reports around certain dates}
 \label{fig:ClusterReport}
 \end{figure}
