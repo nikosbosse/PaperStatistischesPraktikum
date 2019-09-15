@@ -1,7 +1,7 @@
-\chapter{\textcolor{green}{The Data}} \label{ch:data}
+\chapter{The Data} \label{ch:data}
 The following chapter gives an overview over the data on which we based our analysis. The firms we selected will be introduced as well as the Ravenpack Sentiment Data and the Analyst Reports. Lastly the stock data will be explored in detail and appropriate transformations of the data will be motivated. 
 %\section{\textcolor{green}{Selection of Firms to be Analyzed - Nikos}}
-\section{\textcolor{green}{Stock Data}}
+\section{Stock Data}
 This section presents the stock data and the necessary transformations applied to it. The data comprises financial data for 10 selected companies from the NASDAQ stock index. The choice was determined by our supervisor Jan Röder as those were the companies for which he could provide us with additional external data. Table \ref{tab:stocks} shows the companies and their associated stock tickers. Note that those are very large and well known companies that are traded very frequently. We therefore should expect the markets for those stocks to work very efficiently, leaving little (if any) room for the kind of market inefficiencies we would like to exploit. 
 %The stock data comprises 10 selected companies from the NASDAQ stock index. The choice was determined by our supervisor Jan Röder as those were the companies for which he could provide us with external data. Table \ref{tab:stocks} shows the companies and their associated stock tickers. Note that those are very large and well known companies that are traded very frequently. We therefore should expect the markets for those stocks to work very efficiently, leaving little (if any) room the kind of market inefficiencies we would like to exploit. 
 \begin{table}[h!]
@@ -52,14 +52,14 @@ Time series analysis usually assumes that data are at least weakly stationary. W
     \label{fig:cum_sd_all}
 \end{figure}{}
 
-\subsection{\textcolor{green}{Data Transformation}}
+\subsection{Data Transformation}
 In order to obtain weakly stationary time series the data needs to be transformed. To ensure stationarity, economists usually work with either returns or log-returns, albeit the nomenclature is sometimes used confusingly. Daily returns can be calculated as
 \begin{equation*}
     r^{\scriptscriptstyle{(1)} }_t = \frac{r_t}{r_{t-1}} \qquad \text{or as} \qquad r^{\scriptscriptstyle{(2)}}_t = \frac{r_t - r_{t-1}}{r_{t-1}} = r^{\scriptscriptstyle{(1)}}_t - 1.
 \end{equation*}
 Usually economists use $r^{\scriptscriptstyle{(2)}}_t$ and call them either 'returns' or more commonly 'log-returns', even though no logging takes place. in this report we will call $r^{\scriptscriptstyle{(1)}}_t$ 'returns' and $\log{r^{\scriptscriptstyle{(1)}}_t}$ 'log-returns' to increase conceptual clarity. However, calling either $\log{r^{\scriptscriptstyle{(1)}}_t}$ or $r^{\scriptscriptstyle{(2)}}_t$ 'log-returns' makes little difference in practice, as the difference is negligible as $ \log(r^{\scriptscriptstyle{(1)}}_t) \approx r^{\scriptscriptstyle{(1)}}_t - 1 = r^{\scriptscriptstyle{(2)}}_t$ for values of $r^{\scriptscriptstyle{(1)}}_t$ close to 1. Log-returns are computationally convenient and numerically stable. Using log-returns is also suitable to make the time series stationary. To see why, we can look a different route of transforming the data: First we take the log of the time series to transform any exponential trend into a linear one and to stabilizes the variance. Removing the linear trend altogether can then be achieved by differencing the time series (see \cite{shumway_time_2011}, p.61). We arrive again at the log-returns as $ \log{r^{\scriptscriptstyle{(1)}}_t} = \log{\frac{y_t}{y_{t-1}}} = \log{y_t} - \log{y_{t-1}} $.
 
-\subsubsection{\textcolor{green}{Autocorrelation and Partial Autocorrelation}}
+\subsubsection{Autocorrelation and Partial Autocorrelation}
 To better understand the effect of the transformation, we need to look at the autocorrelation and partial autocorrelation of the time series. The autocorrelation at lag j is defined as the correlation between an observation at time t with the observation at time t - j. For a stationary series, the autocorrelation does not depend on t, but only on the number of periods that lie between one observation $y_t$ and another observation $y_{t+h}$. The autocorrelation function (ACF) can then formally be expressed as 
 \begin{equation}
     \text{ACF}(h) = corr(y_t, y_{t+h}).
@@ -110,7 +110,7 @@ Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble (ag
     \label{tab:log return means}
 \end{table}
 
-\subsubsection{\textcolor{green}{Distribution of the Log-Returns and Conditional Heteroskedasticity}}
+\subsubsection{Distribution of the Log-Returns and Conditional Heteroskedasticity}
 The log-returns are, however, not normally distributed. By looking at figure \ref{fig:PG_qq_fd_log_adjclose} we can clearly see that the distribution has fat tails: extreme events appear more often than would be expected if the data was normally distributed. 
 \begin{figure}[h!]
     \centering
@@ -154,7 +154,7 @@ The time series are also not homoscedastic. While stationarity implies that the 
 %Using returns or log-returns instead of stock prices can make the time series stationary. Figure \ref{fig:PG_fd_log_adjclose} illustrates that the trends in the time series have vanished after looking at log-returns. The data visually now looks like white noise. 
 %However, the trend does not vanish and after the log-transformation, the log value of a stock at time t is still mostly determined by its log-value at time t - 1. To remove this effect, the time series needs to be differenced. To put this into a clearer perspective we can look at the autocorrelation and partial autocorrelation function of the series. 
 
-\section{\textcolor{green}{Analyst Reports}}
+\section{Analyst Reports}
 As an addition to the financial time series, we were given information extracted from 17153 analyst reports provided by Thomson One. The reports are part of Thomson One's so called "company research" data. They were usually written by analysts employed by brokers like "Deutsche Bank Research" who have specialized in specific industries. Mostly, the reports contain general research documents like SWOT analyses or sector reports. Typically, they also include e.g. earnings per share prognoses or Buy-Hold-Sell-Recommendations. The reports were pre-processed before the data was given to us. Structuring elements like tables and graphs were discarded and the remaining text was broken up and saved in a \texttt{.csv}-file. This file formed the basis for our text analysis and the sentiment scores we have generated ourselves, see Chapter \ref{ch:predictions_ml}. 
 
 \begin{figure}[h!]
@@ -167,12 +167,12 @@ The reports span the period from 2012-01-02 to 2017-12-28, but unfortunately the
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{figures/SeasonalityReports.png}
+\includegraphics[width=\textwidth, height= 6in]{figures/SeasonalityReports.png}
 \caption{Clustering of analyst reports around certain dates}
 \label{fig:ClusterReport}
 \end{figure}
 
-\section{\textcolor{green}{Ravenpack Sentiment Data}}
+\section{Ravenpack Sentiment Data}
 As a second external data source for our analysis, we were given already pre-computed sentiment data by our supervisor. The data comes from the financial data provider RavenPack. According to their website (www.ravenpack.com), RavenPack is a leading provider of big data analytics for financial services\nocite{RavenPack}. Our data set comprises different scores that were computed based on the news recorded from various sources. The data comprises 1021520 observations that span the time frame from beginning of 2012 to the end of 2017. Information is provided with intra day precision. As such, news and events are recorded at their time of appearance and not just on a daily basis. Table \ref{tab:overview_ravenpack} shows an overview over the RavenPack data. The first variable provided is an indicator for the estimated positive or negative sentiment score called 'ess', ranging from 0 to 100, where 50 is neutral. This goes along with an estimated novelty score called 'ens' (0-100) describing how 'new' the news are and a 'relevance' (0-100) variable that shows how closely the information is related to the company analzyed. Additionally, two variables contain a 90 day rolling summary of events. One displays the percentage of positive events over a 90 day rolling window ('aes'). The other, 'aev' is the sum of events over the past 90 days. Some values are missing and for some of the trading days no information is provided at all. 
 \begin{table}[h!]
     \figuretitle{Overview Over the RavenPack Data}
