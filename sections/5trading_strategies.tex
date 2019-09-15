@@ -129,15 +129,15 @@ Figure \ref{fig:30d_60d_plot} shows the 30d and 60d moving averages as well as t
     \label{fig:30d_60d_plot}
 \end{figure}{}
 
-\subsubsection{\textcolor{yellow}{Mean Reversion - Log-Returns}}
+\subsubsection{\textcolor{blue}{Mean Reversion - Log-Returns}}
 The second strategy looks at whether the current return is lower or higher than the cumulative mean of the time series. Analogous to algorithm 2 this algorithm just buys if the log-return of today are lower than the cumulative mean of log-returns. One can of course also easily replace the cumulative mean by e.g. the mean of the past 90, 60, or 30 days. The result for the cumulative mean is shown in Figure \ref{fig:mean_reversion_returns} in the appendix. Again our strategy is not able to perform better than a simple buy-and-hold strategy. 
 
-\subsection{\textcolor{yellow}{Momentum Based Trading}}
+\subsection{\textcolor{blue}{Momentum Based Trading}}
 Momentum based trading is essentially the reverse of mean-reversion trading (albeit time horizons are usually chosen differently). Our trading strategies stick with the time frame of 1 day. The momentum portfolio simply reverses algorithm 1. The strategy used for single stocks looks at whether the log-returns in time t are higher (lower) than the 30d mean of log-returns and use that as a buy (sell) signal. Results are shown in Figure \ref{fig:momentum-trading} in the appendix and are even less convincing than the results for mean-reversion trading. 
 
 \subsection{\textcolor{yellow}{Pairs Trading}}
 \subsubsection{\textcolor{yellow}{Identifiying Suitable Time Series}}
-Many of our ten companies have overlapping areas of business (refer back to table \ref{tab:stocks}. Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in table \ref{tab:coint} had a p-value smaller than 0.05.
+Many of our ten companies have overlapping areas of business (refer back to table \ref{tab:stocks}). Two obvious candidates are of course Visa (V) and American Express (AXP). United Technologies and General Electric are both producing electrical goods and Johnson\&Johnson and Procter\&Gamble both sell consumer goods. While this is somewhat problematic due to a multiple comparisons problem, we nevertheless checked all pairwise combinations of the ten stocks (log prices) for cointegration to see what comes out. From all tests, the pairs shown in table \ref{tab:coint} had a p-value smaller than 0.05.
 
 \begin{table}[h!]
     \centering
@@ -163,7 +163,8 @@ V, MMM & 0.0415 & & \\
     \label{tab:coint}
 \end{table}
 
-We went for Procter\&Gamble and Johnson\&Johnson, as the p-values were smallest, the cointegration worked in both directions and the firms indeed operate in similar business areas. The left of figure \ref{fig:coint_PG_JNJ} shows the two time series. Note that even though the cointegration test was significant, we see that the two stocks slowly diverge in value. To see whether the strategy works nevertheless, we apply the following basic pairs trading algorithm \footnote{Note that dividing by the standard deviation only has an effect if one sets specific thresholds other than > 0, i.e. to trigger trades or stop-loss orders. The standard deviation is included to illustrate how the algorithm can be adapted to accommodate more complex needs.}: 
+We went for Procter\&Gamble and Johnson\&Johnson, as the p-values were smallest, the cointegration worked in both directions and the firms indeed operate in similar business areas. The left of Figure \ref{fig:coint_PG_JNJ} shows the two time series. Note that even though the cointegration test was significant, we see that the two stocks slowly diverge in value. To see whether the strategy works nevertheless, we apply the following basic pairs trading algorithm \footnote{Note that dividing by the standard deviation only has an effect if one sets specific thresholds other than > 0, i.e. to trigger trades or stop-loss orders. The standard deviation is included to illustrate how the algorithm can be adapted to accommodate more complex needs.}: 
+
 \vspace{2ex}
 \textbf{\small{Algorithm 4 - Pairs Trading}}
 \vspace{-1ex}
