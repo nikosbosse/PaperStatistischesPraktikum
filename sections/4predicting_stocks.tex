@@ -56,7 +56,7 @@ The GARCH(p,q) model is specified as follows:
 \intertext{where $\upepsilon_t$ is Gaussian white noise with  $\upepsilon_t ~ \mathcal{N}(0,1)$ and}
     \sigma^2_t &= \alpha_0 + \underbrace{\alpha_1 r^2_{t-1} + ... + \alpha_p r^2_{t-p}}_\text{autoregressive part} + \underbrace{\beta_1 \sigma^2_{t-1} + ... + \beta_q \sigma^2_{t-q}}_\text{moving average part} \label{eq:garch2}
 \end{align}{}
-In equation \ref{eq:garch1} the returns $r_t$ are modelled as white noise with mean zero and variance variance $\sigma_t$. When compared to a white Gaussian noise with constant variance this can produce a leptokurtic (fat-tailed) distribution similar to what we observed in the QQ-Plots in figure XXXXX. Equation \ref{eq:garch1} is called the mean model of the GARCH(p,q) process. This mean model can also be altered as needed. The GARCH model can then be specified in the following way: 
+In equation \ref{eq:garch1} the returns $r_t$ are modelled as white noise with mean zero and variance variance $\sigma_t$. When compared to a white Gaussian noise with constant variance this can produce a leptokurtic (fat-tailed) distribution similar to what we observed in the QQ-Plots in Figure \textcolor{red}{XXXXX}. Equation \ref{eq:garch1} is called the mean model of the GARCH(p,q) process. This mean model can also be altered as needed. The GARCH model can then be specified in the following way: 
 \begin{equation}
     r_t = x_t + y_t
 \end{equation}{}

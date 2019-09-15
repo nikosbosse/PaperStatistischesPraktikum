@@ -88,7 +88,7 @@ Representative of all, figure \ref{fig:acf_pacf_log_adjclose_PG} shows the ACF a
     \caption{Autocorrelation function (ACF) and partial autocorrelation function (PACF) for the Adjusted Closing Prices (top) and log-returns (bottom) of Procter\&Gamble. The ACF and PACF for the other stocks look very similar and are therefore not shown here.}
     \label{fig:acf_pacf_log_adjclose_PG}
 \end{figure}
-Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble (again, representative of all). The trend has disappeared and the data visually looks similar to white noise. Also the means of the time series are very close to zero (as shown in table \ref{tab:log return means}). In addition we have performed a formal test whether our data is stationary or not, the augmented Dickey-Fuller test (ADF) \citep{said_testing_1984}. The null hypothesis of the ADF is the presence of a unit root (implying non-stationarity), the alternative hypothesis then represents (weak) stationarity of the time series. P-values of the ADF applied to the log-returns of all 10 time series were smaller than $10^{-12}$ even after correcting for multiple testing, so we can safely assume the time series are stationary. 
+Figure \ref{fig:PG_fd_log_adjclose} shows the log-returns of Procter\&Gamble (again, representative of all). The trend has disappeared and the data visually looks similar to white noise. Also the means of the time series are very close to zero (as shown in Table \ref{tab:log return means}). In addition we have performed a formal test whether our data is stationary or not, the augmented Dickey-Fuller test (ADF) \citep{said_testing_1984}. The null hypothesis of the ADF is the presence of a unit root (implying non-stationarity), the alternative hypothesis then represents (weak) stationarity of the time series. P-values of the ADF applied to the log-returns of all 10 time series were smaller than $10^{-12}$ even after correcting for multiple testing, so we can safely assume the time series are stationary. 
 
 \begin{figure}[h!]
     \figuretitle{Log-returns of Procter\&Gamble}
@@ -160,7 +160,7 @@ As an addition to the financial time series, we were given information extracted
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{figures/MissingDaysPlot.png}
-\caption{Missing Data on a daily base for selected stocks}
+\caption{Missing Data (blue) on a daily base, weekends excluded, for selected stocks}
 \label{fig:MissingDays}
 \end{figure}
 The reports span the period from 2012-01-02 to 2017-12-28, but unfortunately there a lot of days without any reports (illustrated in figure \ref{fig:MissingDays}). Also the reports follow a seasonal structure: in figure \ref{fig:ClusterReport} one can see that starting with a gap around Christmas reports are released with quarterly peaks.
