@@ -4,7 +4,7 @@ The value of stocks is affected by external events. But information that moves t
 % später
 %The news data would need to be as precise as possible, because \citet{gidofalvi2001using} mentions that an effect on the stocks can only be measured up to 20min after the news appear. 
 %In a paper by \citet{atkins2018financial} they compare the prediction of stock movement and volatility forecasts using naïve Bayes classifiers. They conclude that movement predictions with 49 Percent accuracy are not successful. 
-As we did not have access to good news data, we implemented our approach on the available analyst reports. In contrast to current news, the analyst reports are released much less frequently  and focus more on past performance of stocks than new information. As such they are not able to incorporate current events as quickly as the news. The reports also cluster around certain dates with long stretches of no or very few reports in between (Figure \ref{fig:Seasonality in the Reports}). This makes it unlikely that they are valuable for trading strategies.
+As we did not have access to good news data, we implemented our approach on the available analyst reports. In contrast to current news, the analyst reports are released much less frequently  and focus more on past performance of stocks than new information. As such they are not able to incorporate current events as quickly as the news. The reports also cluster around certain dates with long stretches of no or very few reports in between (Figure \ref{fig:ClusterReport}). This makes it unlikely that they are valuable for trading strategies.
 \\ 
 \section{Overview of Existing Methods for Sentiment Extraction}
 There exist several methods to obtain sentiment scores from text data. Most commonly procedures rely on a library of previously known positive and negative words or groups of words called 4-grams. The simplest method, called bag-of-words methods, simply counts the number of positive and negative words in the text. Other approaches extract parts of the text around the location of specific words and then use Support Vector Machines or Naive Bayes Classifier to generate sentiment scores (see \citet{westerski2007sentiment} for further references). Many of these more advanced sentiment classification techniques are supervised learning methods. As such they need a labelled data set for initial training. They are therefore not applicable to our 17153 analyst reports, because these are unstructured and not labelled. Also, the reports have a very specific format and language, therefore other pretrained models or other labelled training data sets could not be used. Other strategies for financial data rely on the availability of intra day trading and news data: By looking at the movement or volatility of the period close after the news release one can estimate approximate sentiment scores \citep{robertson2007news}. As the our stock data is only inter day we could not apply this method.
@@ -15,8 +15,9 @@ Two methods to estimate sentiment scores in an unsupervised way will be explored
 \subsection{Sentiment Library Method}\label{BoW}
 Our first method for extracting sentiments relies on a library that categorizes words as positive or negative. We can apply this library to the analyst report and obtain the number of positive (P) and the number of negative words (N) in the report. A sentiment or polarity score can then be calculated for each report from the relative frequencies of positive and negative words: 
 \begin{equation}
-    Polarity = \frac{P - N}{P + N}
-\end{equation}\label{eq:polarity}
+    Polarity = \frac{P - N}{P + N} \label{eq:polarity} 
+\end{equation} 
+
 Some more advanced libraries even measure the positiveness of each word with a numeric score (and not only 1 and -1), but we could not find any library appropriate for our purposes. Instead we used a library from \citet{sent_dictionary} as simple word list. An excerpt from the list can be found in Table \ref{tab:sent_dic}. 
 \begin{table}[ht]
 \centering
@@ -49,7 +50,7 @@ To better understand the procedure we will first have a closer look at LDA and t
 The general idea of LDA is that each document can be described as coming from a distribution of topics. A financial report could for example be classified as being 50\% about politics, 30\% about environment and 20\% about the chemical industry. To be more precise however, the topics are not assigned explicit names or meanings by the model. The classification would therefore rather look like 50\% topic 1, 30\% topic 2 etc. Each topic can itself be described by a distribution of words \citep{blei2003latent} that indicates how likely a word is to appear in a specific topic. This assumes that the words themselves are independent of each other which is in reality not the case, but for large data sets this assumption seems to be acceptable. The LDA has two Dirichlet priors containing hyperparameters $\alpha$ and $\beta$. A high $\alpha$ indicates that each document is likely to contain a mixture of many topics, while a low $\alpha$ indicates that one document is strongly associated with one or few topics. Similarly a high $\beta$ implies that the words contained in each topic have a high overlap, while a low $\beta$ means that words are strongly associated with only one topic. LDA backtracks from the document level to identify topics that are likely to have generated this specific corpus of words. The underlying optimisation of the model is done using a Gibbs-Sampler. In the first step, each word is assigned a probability to belong to each of the $T$ topics. Those probabilities of course sum up to one. each document also gets a probability to contain each of the $T$ topics. The algorithm then iterates over the words, topics and documents, updating the underlying probabilities. In the Joint Sentiment Topic model the LDA is extended by adding a layer in between the document and the topic layer that determines a sentiment \citep{lin2009joint}. The new sentiment layer can be associated with documents, followed by topics and then words. For a detailed mathematical definition see \citet{lin2009joint}. While the method is very good at estimating the association of words to the main topics that were present in the training data, it is ill prepared to deal with information that is very specific or completely new. If something happens, e.g. a data breach at Visa, that has never before occurred in the training data, the model cannot categorize it. The model is also not good in dealing with words that are too specific to really fit inside any of the pre-specified number of categories identified at the initial training stage. It may, however, be really good at capturing the general mood that is associated with words found across a large number of documents. 
 
 
-\section{Cleaning of the text data}\label{cleaningText}
+\section{Cleaning of the Text Data}\label{cleaningText}
 In order to obtain useful results from our models, the data first has to be cleaned. The entire set of analyst reports contains 157380 unique words, characters and symbols. Many of them, however, do not really convey meaning or relevant information. To get reliable sentiment scores, the text data therefore has to be cleaned and preprocessed in order to remove noise and reduce the dimensionality of the unsupervised learning problem \citep{HADDI201326}. The preprocessing was done in four steps using \texttt{R} \citep{Rproject} and the \texttt{R} package \texttt{tidytext} \citep{tidytext}. At first, words where converted to lowercase and all words where saved as separate strings. Stop words (like 'the', 'in', 'at') were removed by using a custom stop word library. There exist a lot of readily available stop word libraries, both from the \textit{tidytext} package and from other sources. One problem, however, with many libraries is that they also contain many adjectives that might be important for the extraction of reasonable sentiments. We therefore created our own library of stop words by modifying the existing \texttt{tidytext} stop word library. This first step of removing stop words reduces the total number of words from 67M initially to 43M (see Figure \ref{fig:TotWord}). In the second step all special characters, links to websites, hyper-references, numbers, words with numbers and punctuation marks are removed as well. The result reduced the number of unique words and items by about 50\% from 157206 to 82525.  \\ 
 
 \begin{figure}[h]
@@ -93,7 +94,7 @@ In the following, we will present the results for the sentiment extraction perfo
 The output of the JST models were generated using the \texttt{rJST} package in \texttt{R} \citep{rJST}. To improve the estimation, we have also added the sentiment dictionary used previously for the library method as prior information. From the model we obtained a set of posterior probabilities that link words, topics and documents together with sentiment scores. Based on a training data set that is large and diverse enough, those posterior probabilities can then be used to determine the topics and sentiment in a new document from the words used in them. 
 \\
 Because we do not have any labelled training data we cannot validate the results of the model externally, e.g. with the accuracy scores used in \citet{lin2009joint}. Instead we have to examine whether the association of words, topics, and sentiments proposed by the model look reasonable. We have always used two sentiments and tried different values for the number of topics to be estimated. We achieved the most reasonable results with 30 topics. Using the custom stop library as previously described and removing the top 0.05\% words as indicated by TF-IDF also improved the results. Due to the fact that we only have analyst reports for ten different stocks the results of the JST should still be regarded critically. 
-Table \ref{tab:postProbSent1} gives an overview over the words  with the highest posterior probability for sentiment one on the topics one, two, three and thirty (see Table \ref{tab:postProbSent2}) in the appendix for sentiment. It is still visible that the documents come from a business context, but there are few words that directly indicate a sentiment like 'good', 'growth' and 'high'. This makes it hard to tell if the calculated sentiment one means positive, negative or something completely different. \\
+Table \ref{tab:postProbSent1} gives an overview over the words  with the highest posterior probability for sentiment one on the topics one, two, three and thirty (see Table \ref{tab:postProbSent2}) in the appendix for sentiment two. It is still visible that the documents come from a business context, but there are few words that directly indicate a sentiment like 'good', 'growth' and 'high'. This makes it hard to tell if the calculated sentiment one means 'positive', 'negative' or something completely different. \\
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
 % Fri Sep 13 15:15:05 2019
 \begin{table}[ht]
@@ -123,7 +124,7 @@ Table \ref{tab:postProbSent1} gives an overview over the words  with the highest
 \label{tab:postProbSent1}
 \end{table}
 
-Another way to evaluate the model is to take a closer look at the posterior probabilities for the sentiments of all documents. The histogram in Figure \ref{fig:JSTSentiment} displays a split between a documents associated with sentiment 1 and others associated with sentiment 2. Note that with only two sentiments, the probabilities for a single document of belonging to sentiment 1 and to sentiment 2 add up to one. One could therefore obtain a histogram of sentiment 2 by mirroring this histogram at 0.5. The calculated sentiments clearly seem to lean towards the left, which indicates that sentiment two was more prominent in the data. \\
+Another way to evaluate the model is to take a closer look at the posterior probabilities for the sentiments of all documents. The histogram in Figure \ref{fig:JSTSentiment} displays a split between a documents associated with sentiment one and others associated with sentiment 2. Note that with only two sentiments, the probabilities for a single document of belonging to sentiment one and to sentiment two add up to one. One could therefore obtain a histogram of sentiment two by mirroring this histogram at 0.5. The calculated sentiments clearly seem to lean towards the left, which indicates that sentiment two was more prominent in the data. 
 \begin{figure}[h]
 \centering
 \includegraphics[width=4in]{figures/2SentimentsJST_Histogram.png}
@@ -134,7 +135,7 @@ Another way to evaluate the model is to take a closer look at the posterior prob
 The results of the unsupervised Joint Sentiment Models are difficult to evaluate and we have to be at least wary of the results we obtained. Problematic in this case could also be, that the JST views the documents as bag of words and therefore also ignores the ordering of words. Business language contains a lot of fixed phrases that are not considered here. Nonetheless they might be an informative feature for the estimation of stock price movements in the next section. 
 
 
-\subsection{XG-Boost on sentiment data}\label{sec:XGB}
+\subsection{XGBoost on Sentiment Data}\label{sec:XGB}
 Based on the RavenPack data and our own custom sentiment scores we tried to make predictions for the movement of the time series of different stocks. Inspired by different Kaggle competitions and \citep{li2018predicting} we decided to try this using XGBoost for binary classification of upwards of downwards movement (which largely ignores the special time dependent structure of the data). XGBoost is a gradient tree boosting method developed by \citet{Chen_2016} and has several beneficial properties. Next to the computational properties it scales well for large data sets and can handle missing values internally. A possible competitor would be LightGBM by \citet{Ke2017LightGBMAH} from Microsoft. The general idea behind tree boosting is that they split data leaf-wise with the best fit, whereas other boosting algorithms split the tree level-wise. Splits are done only at the position where the loss can be reduced the most. The model creates an ensemble of a predefined number of classification and regression trees (CART) that complement each other. This tree ensemble method was originally developed by \citet{friedman2001greedy}. XGBoost which stands for "Extreme Gradient Boosting" can be seen as an extension of this framework. \\ \\
 % good explanation: https://xgboost.readthedocs.io/en/latest/index.html
 % mehr mathe?
@@ -143,10 +144,10 @@ After applying the two previously described sentiment extraction methods, we obt
 From the RavenPack sentiment data we tried all the given variables together with "logR yest", "logR today" and "Volume". The RavenPack data has records for almost every day but some days have missing values when there was no sentiment recorded. Missing values are handled internally by XGBoost \citep{Chen_2016}. The model learns automatically where to go when a value is missing. For a large enough amount of data this is similar to imputing a value, but based on a reduction on training loss. 
 \begin{table}[h]
 \centering
+\small
 \begin{tabular}{lrrrrrrr}
 \toprule
-{} &  logR today &  Volume &  logR yest. &  sent1 &  sentBoW &  sent1 sd &  \dots \\
-utc\_date   &              &             &                     &             &               &           &                   \\
+utc\_date &  logR today &  Volume &  logR yest. &  sent1 &  sentBoW &  sent1 sd &  \dots \\
 \midrule
 2012-01-03 &       0.0000 &  45M &           0.0000 &      0.2790 &       -0.6190 &    0.0000 &         \dots \\
 2012-01-04 &       0.0230 &  48M &              0.0000 &      0.7019 &        0.2318 &    0.1843 &      \dots \\
@@ -177,10 +178,10 @@ Even though we tried different hyper parameters, none seemed to make a large dif
 The results for the RavenPack data and our own sentiment scores can be found in Table \ref{tab:RavSentRes} and \ref{tab:OurSentRes}. By looking at the cross tables we also discovered that for some stocks class imbalances might cause the algorithm to mostly predict one class. 
 \begin{table}[h]
 \centering
+\small
 \begin{tabular}{lrrrr}
 \toprule
-{} &  f1\_score &  accuracy &  precision &    recall \\
-ticker &           &           &            &           \\
+ticker &  f1\_score &  accuracy &  precision &    recall \\
 \midrule
 MMM    &  0.3604 &  0.5849 &   0.5740 &  0.2627 \\
 AXP    &  0.4100 &  0.5547 &   0.5061 &  0.3445 \\
@@ -202,10 +203,10 @@ mean & 0.4339 & 0.5226 & 0.5053 & 0.4003 \\
 %
 \begin{table}[h]
 \centering
+\small
 \begin{tabular}{lrrrr}
 \toprule
-{} &  f1\_score &  accuracy &  precision &    recall \\
-ticker &           &           &            &           \\
+ticker &  f1\_score &  accuracy &  precision &    recall \\
 \midrule
 MMM    &  0.2745 &  0.4788 &   0.4666 &  0.1944 \\
 AXP    &  0.5263 &  0.4943 &   0.4385 &  0.6578 \\
